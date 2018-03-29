@@ -1,0 +1,11 @@
+target
+.idea
+src/main/resources/local-config.properties
+.project
+.settings
+.classpath
+.settings/
+*.iml
+/src/main/resources/local-config.properties
+src/main/java/config.properties
+
