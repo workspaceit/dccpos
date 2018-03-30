@@ -17,7 +17,6 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan({"com.workspaceit.pos"})
 public class PersistenceConfig {
 
     @Autowired
@@ -27,7 +26,7 @@ public class PersistenceConfig {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(restDataSource());
         sessionFactory.setPackagesToScan(
-                new String[] { "com.workspaceit.pos.entity" });
+                new String[] { "com.workspaceit.pos.entity"});
         sessionFactory.setHibernateProperties(hibernateProperties());
 //        sessionFactory.setAnnotatedPackages(new String[] {"com.workspaceit.pos.entity"});
         return sessionFactory;
@@ -63,8 +62,8 @@ public class PersistenceConfig {
                 setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
                 setProperty("hibernate.globally_quoted_identifiers","true");
                 setProperty("hibernate.jdbc.batch_size","10");
-                setProperty("org.hibernate.envers.audit_table_prefix", "history_");
-                setProperty("org.hibernate.envers.audit_table_suffix", "");
+               /* setProperty("org.hibernate.envers.audit_table_prefix", "history_");
+                setProperty("org.hibernate.envers.audit_table_suffix", "");*/
     /*            setProperty("hibernate.cache.use_second_level_cache","true");
                 setProperty("hibernate.cache.region.factory_class","org.hibernate.cache.ehcache.EhCacheRegionFactory");*/
 /*                setProperty("hibernate.show_sql","true");
