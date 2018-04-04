@@ -19,7 +19,7 @@ public class LedgerEndpoint {
         this.ledgerService = ledgerService;
     }
 
-    @RequestMapping("/all")
+    @RequestMapping("/get-all")
     public ResponseEntity<?> getAll(){
         List<Ledger> ledgerList = this.ledgerService.getAll();
        return ResponseEntity.ok(ledgerList);

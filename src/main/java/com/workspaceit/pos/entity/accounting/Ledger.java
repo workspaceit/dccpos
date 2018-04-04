@@ -2,6 +2,7 @@ package com.workspaceit.pos.entity.accounting;
 
 import com.workspaceit.pos.constant.accounting.ENTRY_TYPE;
 import com.workspaceit.pos.constant.accounting.LEDGER_TYPE;
+import com.workspaceit.pos.entity.PersonalInformation;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -17,6 +18,10 @@ public class Ledger {
     @ManyToOne
     @JoinColumn(name = "group_id",referencedColumnName = "id",insertable = false,updatable = false)
     private GroupAccount groupAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "personal_info_id",referencedColumnName = "id",insertable = false,updatable = false)
+    private PersonalInformation personalInformation;
 
     @Column(name = "name")
     private String name;
@@ -60,6 +65,14 @@ public class Ledger {
 
     public void setGroupAccount(GroupAccount groupAccount) {
         this.groupAccount = groupAccount;
+    }
+
+    public PersonalInformation getPersonalInformation() {
+        return personalInformation;
+    }
+
+    public void setPersonalInformation(PersonalInformation personalInformation) {
+        this.personalInformation = personalInformation;
     }
 
     public String getName() {

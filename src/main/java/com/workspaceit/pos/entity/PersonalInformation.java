@@ -1,5 +1,7 @@
 package com.workspaceit.pos.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -16,6 +18,17 @@ public class PersonalInformation {
 
     @Column(name = "dob")
     private Date dob;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Date createdAt;
 
     public int getId() {
         return id;
@@ -41,6 +54,30 @@ public class PersonalInformation {
         this.dob = dob;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,7 +87,10 @@ public class PersonalInformation {
 
         if (id != that.id) return false;
         if (fullName != null ? !fullName.equals(that.fullName) : that.fullName != null) return false;
-        return dob != null ? dob.equals(that.dob) : that.dob == null;
+        if (dob != null ? !dob.equals(that.dob) : that.dob != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        return createdAt != null ? createdAt.equals(that.createdAt) : that.createdAt == null;
     }
 
     @Override
@@ -58,6 +98,9 @@ public class PersonalInformation {
         int result = id;
         result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
         result = 31 * result + (dob != null ? dob.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;
     }
 }
