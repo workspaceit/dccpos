@@ -1,5 +1,6 @@
 package com.workspaceit.pos.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class PersonalInformation {
     @Column(name = "full_name")
     private String fullName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "dob")
     private Date dob;
 

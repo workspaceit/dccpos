@@ -20,5 +20,8 @@ public class AuthCredentialService {
     public AuthCredential getByEmail(String email){
         return this.authCredentialDao.getByEmail(email);
     }
-
+    @Transactional(rollbackFor = Exception.class)
+    public void update(AuthCredential authCredential){
+         this.authCredentialDao.update(authCredential);
+    }
 }

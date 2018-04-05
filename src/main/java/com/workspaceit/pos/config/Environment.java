@@ -29,6 +29,32 @@ public class Environment {
     private String commonFilePath;
 
 
+    /**
+     * Email configuration
+     * */
+    @Value("${mail.driver}")
+    private String mailDriver;
+
+    @Value("${mail.host}")
+    private String mailHost;
+
+    @Value("${mail.port}")
+    private String mailPort;
+
+    @Value("${mail.username}")
+    private String mailUsername;
+
+    @Value("${mail.password}")
+    private String mailPassword;
+
+    @Value("${mail.sender.email}")
+    private String mailSenderEmail;
+
+    @Value("${mail.sender.password}")
+    private String mailSenderPassword;
+
+    @Value("${mail.server.link}")
+    private String mailServerLink;
 
 
 
@@ -69,4 +95,35 @@ public class Environment {
         this.commonFilePath = commonFilePath;
     }
 
+    public String getMailDriver() {
+        return mailDriver;
+    }
+
+    public String getMailHost() {
+        return mailHost;
+    }
+
+    public String getMailPort() {
+        return mailPort;
+    }
+
+    public String getMailUsername() {
+        return mailUsername;
+    }
+
+    public String getMailPassword() {
+        return mailPassword;
+    }
+
+    public String getMailSenderEmail() {
+        return mailSenderEmail;
+    }
+
+    public String getMailSenderPassword() {
+        return mailSenderPassword;
+    }
+
+    public String getMailServerLink() {
+        return mailServerLink;
+    }
 }

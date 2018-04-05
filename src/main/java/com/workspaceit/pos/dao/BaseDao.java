@@ -28,6 +28,10 @@ public class BaseDao {
         Session session = this.getCurrentSession();
         session.save(obj);
     }
+    public void insertOrUpdate(Object obj){
+        Session session = this.getCurrentSession();
+        session.saveOrUpdate(obj);
+    }
     public void insertAll(Collection<? extends Object> entities){
 
         Session session = this.getCurrentSession();
@@ -49,6 +53,9 @@ public class BaseDao {
     public void delete(Object obj){
         Session session = this.getCurrentSession();
         session.delete(obj);
+    }
+    public void commit(){
+        this.getCurrentSession().getTransaction().commit();
     }
     public void deleteAll(Collection<? extends Object> entities){
         Session session = this.getCurrentSession();

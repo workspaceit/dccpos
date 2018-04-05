@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "employee")
-public class Employee {
+@Table(name = "supplier")
+public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -16,17 +16,14 @@ public class Employee {
     @JoinColumn(name = "personal_info_id",referencedColumnName = "id",insertable = false,updatable = false)
     private PersonalInformation personalInformation;
 
-    @Column(name = "employee_id")
-    private String employeeId;
+    @Column(name = "supplier_id")
+    private String supplierId;
 
-    @Column(name = "salary")
-    private float salary;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Date createdAt;
-
 
     public int getId() {
         return id;
@@ -44,20 +41,12 @@ public class Employee {
         this.personalInformation = personalInformation;
     }
 
-    public String getEmployeeId() {
-        return employeeId;
+    public String getSupplierId() {
+        return supplierId;
     }
 
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public float getSalary() {
-        return salary;
-    }
-
-    public void setSalary(float salary) {
-        this.salary = salary;
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
     }
 
     public Date getCreatedAt() {
