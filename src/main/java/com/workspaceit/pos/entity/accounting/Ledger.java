@@ -1,6 +1,6 @@
 package com.workspaceit.pos.entity.accounting;
 
-import com.workspaceit.pos.constant.accounting.ENTRY_TYPE;
+import com.workspaceit.pos.constant.accounting.ACCOUNTING_ENTRY;
 import com.workspaceit.pos.constant.accounting.LEDGER_TYPE;
 import com.workspaceit.pos.entity.PersonalInformation;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,7 +34,7 @@ public class Ledger {
 
     @Enumerated(EnumType.STRING)
     @Column(name =  "op_balance_dc")
-    private ENTRY_TYPE openingEntryType;
+    private ACCOUNTING_ENTRY openingEntryType;
 
     @Enumerated(EnumType.STRING)
     @Column(name =  "type")
@@ -107,11 +107,11 @@ public class Ledger {
         this.openingBalance = openingBalance;
     }
 
-    public ENTRY_TYPE getOpeningEntryType() {
+    public ACCOUNTING_ENTRY getOpeningEntryType() {
         return openingEntryType;
     }
 
-    public void setOpeningEntryType(ENTRY_TYPE openingEntryType) {
+    public void setOpeningEntryType(ACCOUNTING_ENTRY openingEntryType) {
         this.openingEntryType = openingEntryType;
     }
 
