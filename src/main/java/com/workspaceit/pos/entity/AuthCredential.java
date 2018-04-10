@@ -4,6 +4,7 @@ import com.workspaceit.pos.constant.ENTITY_STATUS;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -28,6 +29,10 @@ public class AuthCredential {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ENTITY_STATUS status;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "auth_credential_id")
+    private Collection<AccessRole> accessRole;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -73,6 +78,14 @@ public class AuthCredential {
 
     public void setStatus(ENTITY_STATUS status) {
         this.status = status;
+    }
+
+    public Collection<AccessRole> getAccessRole() {
+        return accessRole;
+    }
+
+    public void setAccessRole(Collection<AccessRole> accessRole) {
+        this.accessRole = accessRole;
     }
 
     public Date getCreatedAt() {

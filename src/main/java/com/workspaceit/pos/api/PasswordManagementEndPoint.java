@@ -1,5 +1,6 @@
 package com.workspaceit.pos.api;
 
+import com.workspaceit.pos.constant.EndpointRequestUriPrefix;
 import com.workspaceit.pos.entity.AuthCredential;
 import com.workspaceit.pos.entity.ResetPasswordToken;
 import com.workspaceit.pos.exception.EntityNotFound;
@@ -7,22 +8,30 @@ import com.workspaceit.pos.helper.EmailHelper;
 import com.workspaceit.pos.service.AuthCredentialService;
 import com.workspaceit.pos.service.ResetPasswordTokenService;
 
+import com.workspaceit.pos.util.ServiceResponse;
+import com.workspaceit.pos.validation.form.PasswordResetForm;
+import com.workspaceit.pos.validation.validator.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 
 @RestController
+@RequestMapping(EndpointRequestUriPrefix.endPointPublic +"/reset-password")
 public class PasswordManagementEndPoint {
     private ResetPasswordTokenService resetPasswordTokenService;
     private AuthCredentialService authCredentialService;
     private EmailHelper emailHelper;
     private PasswordEncoder passwordEncoder;
+    private PasswordValidator passwordValidator;
 
     @Autowired
     public void setResetPasswordTokenService(ResetPasswordTokenService resetPasswordTokenService) {
@@ -44,32 +53,46 @@ public class PasswordManagementEndPoint {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @RequestMapping(value = "/request-reset-password",method = RequestMethod.POST)
+    @Autowired
+    public void setPasswordValidator(PasswordValidator passwordValidator) {
+        this.passwordValidator = passwordValidator;
+    }
+
+    @RequestMapping(value = "/request-new",method = RequestMethod.POST)
     public ResponseEntity<?> resetPasswordSubmit(@RequestParam("email") String email){
+        ServiceResponse serviceResponse = ServiceResponse.getInstance();
 
         ResetPasswordToken resetPasswordToken = null;
         try {
             resetPasswordToken = this.resetPasswordTokenService.create(email);
         } catch (EntityNotFound entityNotFound) {
-            entityNotFound.printStackTrace();
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse
+                    .setValidationError("email","Email not found")
+                    .getFormError());
         }
 
 
         this.emailHelper.sendPasswordResetMail(resetPasswordToken);
 
-        return ResponseEntity.ok(resetPasswordToken);
+        return ResponseEntity.ok(ServiceResponse.getMsgInMap("Password reset email is sent"));
     }
 
-    @RequestMapping(value = "/submit-reset-password",method = RequestMethod.POST)
-    public ResponseEntity<?> resetPasswordSubmit(@RequestParam("token") String token,
-                                                 @RequestParam("password") String password,
-                                                 @RequestParam("confirmPassword") String confirmPassword){
+    @RequestMapping(value = "/submit",method = RequestMethod.POST)
+    public ResponseEntity<?> resetPasswordSubmit(@Valid PasswordResetForm passwordResetForm,
+                                                 BindingResult bindingResult){
 
 
         /**
-         * Implement validation
+         * Validation Starts
          * */
+        String token = passwordResetForm.getToken();
+        ServiceResponse serviceResponse = ServiceResponse.getInstance();
+        this.passwordValidator.validateResetPassword(passwordResetForm,bindingResult);
 
+        if(bindingResult.hasErrors()){
+            serviceResponse.bindValidationError(bindingResult);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
+        }
 
 
 
@@ -77,20 +100,36 @@ public class PasswordManagementEndPoint {
         try {
             resetPasswordToken = this.resetPasswordTokenService.getByToken(token);
         } catch (EntityNotFound entityNotFound) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Token not found");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse
+                    .setValidationError("token","Invalid Token")
+                    .getFormError());
         }
+
         boolean isExpired = this.resetPasswordTokenService.isResetPasswordTokenExpired(resetPasswordToken);
-
         if(isExpired){
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Token not expired");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse
+                                                                                .setValidationError("token","Token is expired")
+                                                                                .getFormError());
         }
 
+        /*** Validation ends ***/
+
+
+        /**
+         * Get Auth credential
+         * */
         AuthCredential authCredential = resetPasswordToken.getAuthCredential();
-        authCredential.setPassword(this.passwordEncoder.encode(password));
+        authCredential.setPassword(this.passwordEncoder.encode(passwordResetForm.getPassword()));
 
+        /**
+         * Update Auth credential with new password
+         * And remove reset password token
+         * */
         this.authCredentialService.update(authCredential);
+        this.resetPasswordTokenService.remove(resetPasswordToken);
 
-        return ResponseEntity.ok("Password reset");
+
+        return ResponseEntity.ok(ServiceResponse.getMsgInMap("Password reset successfully"));
     }
 
 }

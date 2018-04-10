@@ -1,6 +1,7 @@
 package com.workspaceit.pos.config.security.details;
 
 import com.workspaceit.pos.constant.ENTITY_STATUS;
+import com.workspaceit.pos.entity.AccessRole;
 import com.workspaceit.pos.entity.AuthCredential;
 import com.workspaceit.pos.entity.PersonalInformation;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,14 +22,20 @@ public class AuthCredentialDetails extends AuthCredential implements UserDetails
         super.setCreatedAt(authCredential.getCreatedAt());
 
         super.setPersonalInformation(authCredential.getPersonalInformation());
+        super.setAccessRole(authCredential.getAccessRole());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new HashSet<>();
 
-        authorities.add(new SimpleGrantedAuthority("ROLE_pos"));
+        Collection<AccessRole> accessRoles =  super.getAccessRole();
+        System.out.println(accessRoles);
+        if(accessRoles==null || accessRoles.size()==0)return authorities;
 
+        for(AccessRole accessRole : accessRoles) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + accessRole.getAccessRole().name()));
+        }
         return authorities;
     }
 

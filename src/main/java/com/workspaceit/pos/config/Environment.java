@@ -28,6 +28,11 @@ public class Environment {
     @Value("${file.common.path}")
     private String commonFilePath;
 
+    @Value("${oauth.ClientId}")
+    private String oauthClientId;
+
+    @Value("${oauth.secret}")
+    private String oauthSecret;
 
     /**
      * Email configuration
@@ -125,5 +130,13 @@ public class Environment {
 
     public String getMailServerLink() {
         return mailServerLink;
+    }
+
+    public String getOauthClientId() {
+        return oauthClientId;
+    }
+
+    public String getOauthSecret() {
+        return oauthSecret;
     }
 }

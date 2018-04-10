@@ -33,7 +33,7 @@ public class Entry {
     @Column(name = "narration")
     private String   narration;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "entry_id")
     private List<EntryItem> entryItems;
 

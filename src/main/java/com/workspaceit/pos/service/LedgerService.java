@@ -1,6 +1,6 @@
 package com.workspaceit.pos.service;
 
-import com.workspaceit.pos.dao.LedgerDao;
+import com.workspaceit.pos.dao.accounting.LedgerDao;
 import com.workspaceit.pos.entity.accounting.Ledger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
-package com.workspaceit.pos.dao;
+package com.workspaceit.pos.dao.accounting;
 
+import com.workspaceit.pos.dao.BaseDao;
 import com.workspaceit.pos.entity.accounting.Ledger;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;

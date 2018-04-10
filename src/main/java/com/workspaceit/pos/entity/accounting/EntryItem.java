@@ -19,12 +19,13 @@ public class EntryItem {
     private int entryId;
 
     @ManyToOne
-    @Column(name = "ledger_id")
+    @JoinColumn(name = "ledger_id",referencedColumnName = "id")
     private Ledger ledger;
 
     @Column(name = "amount")
     private double amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "dc")
     private ACCOUNTING_ENTRY accountingEntry;
 

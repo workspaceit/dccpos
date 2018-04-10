@@ -1,6 +1,6 @@
 package com.workspaceit.pos.service;
 
-import com.workspaceit.pos.dao.GroupAccountDao;
+import com.workspaceit.pos.dao.accounting.GroupAccountDao;
 import com.workspaceit.pos.entity.accounting.GroupAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
