@@ -48,7 +48,7 @@ public class ResetPasswordTokenService {
         resetPasswordToken.setToken(token);
         resetPasswordToken.setCreatedAt(new Date());
 
-        this.resetPasswordTokenDao.insertOrUpdate(resetPasswordToken);
+        this.resetPasswordTokenDao.saveOrUpdate(resetPasswordToken);
 
         return resetPasswordToken;
     }

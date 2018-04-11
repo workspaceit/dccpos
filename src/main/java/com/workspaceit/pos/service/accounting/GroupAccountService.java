@@ -1,5 +1,6 @@
 package com.workspaceit.pos.service.accounting;
 
+import com.workspaceit.pos.constant.accounting.GROUP_CODE;
 import com.workspaceit.pos.dao.accounting.GroupAccountDao;
 import com.workspaceit.pos.entity.accounting.GroupAccount;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,13 @@ public class GroupAccountService {
         this.groupAccountDao = groupAccountDao;
     }
 
+    @Transactional
     public List<GroupAccount> getAll(){
-        return this.groupAccountDao.getAll();
+        return this.groupAccountDao.findAll();
+    }
+
+    @Transactional
+    public GroupAccount getByCode(GROUP_CODE groupCode){
+        return this.groupAccountDao.findByCode(groupCode);
     }
 }

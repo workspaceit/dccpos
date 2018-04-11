@@ -24,15 +24,16 @@ public class BaseDao {
         System.out.println(" ***** **** *** ** * SessionFactory Is Created * ** *** **** *****");
         this.sessionFactory = sessionFactory;
     }
-    public void insert(Object obj){
+    public void save(Object obj){
         Session session = this.getCurrentSession();
         session.save(obj);
+
     }
-    public void insertOrUpdate(Object obj){
+    public void saveOrUpdate(Object obj){
         Session session = this.getCurrentSession();
         session.saveOrUpdate(obj);
     }
-    public void insertAll(Collection<? extends Object> entities){
+    public void saveAll(Collection<? extends Object> entities){
 
         Session session = this.getCurrentSession();
         for (Object entity:entities) {
