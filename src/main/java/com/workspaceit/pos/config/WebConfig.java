@@ -3,16 +3,19 @@ package com.workspaceit.pos.config;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
@@ -20,10 +23,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.servlet.ServletContext;
+import java.net.URISyntaxException;
+import java.util.*;
 
 @Configuration
 @EnableWebMvc
@@ -37,8 +39,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void setEnv(Environment env) {
         this.env = env;
     }
-
-
 
 
     @Override
@@ -127,4 +127,29 @@ public class WebConfig implements WebMvcConfigurer {
         return messageConverter;
 
     }
+
+    @Bean
+    public TaskExecutor threadPoolTaskExecutor() {
+
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(1);
+        executor.setMaxPoolSize(1);
+        executor.setThreadNamePrefix("posTaskExecutor");
+        executor.initialize();
+
+        return executor;
+    }
+
+    @Bean
+    public VelocityEngine getVelocityEngine(){
+
+        VelocityEngine ve = new VelocityEngine();
+        Properties props = new Properties();
+        props.put("file.resource.loader.path", WebConfig.class.getResource("/email-template/").getPath());
+        props.setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogSystem");
+        ve.init(props);
+        return ve;
+    }
+
+
 }

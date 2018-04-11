@@ -2,7 +2,7 @@ package com.workspaceit.pos.api.accounting;
 
 import com.workspaceit.pos.constant.EndpointRequestUriPrefix;
 import com.workspaceit.pos.entity.accounting.Entry;
-import com.workspaceit.pos.service.EntryService;
+import com.workspaceit.pos.service.accounting.EntryService;
 import com.workspaceit.pos.validation.form.PasswordResetForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

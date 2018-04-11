@@ -7,10 +7,11 @@ import com.workspaceit.pos.exception.EntityNotFound;
 import com.workspaceit.pos.helper.EmailHelper;
 import com.workspaceit.pos.service.AuthCredentialService;
 import com.workspaceit.pos.service.ResetPasswordTokenService;
-
 import com.workspaceit.pos.util.ServiceResponse;
+import com.workspaceit.pos.util.VelocityUtil;
 import com.workspaceit.pos.validation.form.PasswordResetForm;
 import com.workspaceit.pos.validation.validator.PasswordValidator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ public class PasswordManagementEndPoint {
     private EmailHelper emailHelper;
     private PasswordEncoder passwordEncoder;
     private PasswordValidator passwordValidator;
+
 
     @Autowired
     public void setResetPasswordTokenService(ResetPasswordTokenService resetPasswordTokenService) {
@@ -70,7 +72,6 @@ public class PasswordManagementEndPoint {
                     .setValidationError("email","Email not found")
                     .getFormError());
         }
-
 
         this.emailHelper.sendPasswordResetMail(resetPasswordToken);
 

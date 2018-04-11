@@ -1,7 +1,7 @@
 package com.workspaceit.pos.api.accounting;
 
 import com.workspaceit.pos.entity.accounting.GroupAccount;
-import com.workspaceit.pos.service.GroupAccountService;
+import com.workspaceit.pos.service.accounting.GroupAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

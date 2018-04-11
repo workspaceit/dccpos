@@ -34,6 +34,9 @@ public class Environment {
     @Value("${oauth.secret}")
     private String oauthSecret;
 
+    @Value("${frontEndApp.baseUrl}")
+    private String frontEndAppBaseUrl;
+
     /**
      * Email configuration
      * */
@@ -138,5 +141,9 @@ public class Environment {
 
     public String getOauthSecret() {
         return oauthSecret;
+    }
+
+    public String getFrontEndAppBaseUrl() {
+        return frontEndAppBaseUrl;
     }
 }

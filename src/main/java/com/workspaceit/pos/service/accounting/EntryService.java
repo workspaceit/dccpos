@@ -1,4 +1,4 @@
-package com.workspaceit.pos.service;
+package com.workspaceit.pos.service.accounting;
 
 import com.workspaceit.pos.dao.accounting.EntryDao;
 import com.workspaceit.pos.entity.accounting.Entry;
