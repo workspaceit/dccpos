@@ -24,6 +24,10 @@ public class DateHelper {
 
         return processedTime;
     }
+    public static Date getCurrentSystemDate() {
+        return new Date();
+
+    }
     public static Timestamp getCurrentUtcDateTimeStamp() {
         Date local = new Date();
         DateTimeZone zone = DateTimeZone.getDefault();

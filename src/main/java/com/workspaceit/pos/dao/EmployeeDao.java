@@ -13,4 +13,11 @@ public class EmployeeDao extends BaseDao{
         return session.createQuery(" FROM Employee")
                 .list();
     }
+    public Employee getByEmployeeId(String employeeId){
+        Session session = this.getCurrentSession();
+        return (Employee)session.createQuery(" FROM Employee emp where emp.employeeId =:employeeId")
+                .setParameter("employeeId",employeeId)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
 }

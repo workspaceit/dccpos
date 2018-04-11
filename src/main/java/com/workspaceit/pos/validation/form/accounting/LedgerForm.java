@@ -4,9 +4,9 @@ import com.workspaceit.pos.constant.accounting.ACCOUNTING_ENTRY;
 
 public class LedgerForm {
     private String ledgerName;
-    private ACCOUNTING_ENTRY accountingEntry;
-    private Boolean bankOrCash;
-    private String note;
+    private ACCOUNTING_ENTRY ledgerAccountingEntry;
+    private Boolean ledgerBankOrCash;
+    private String ledgerNote;
 
     public String getLedgerName() {
         return ledgerName;
@@ -16,27 +16,27 @@ public class LedgerForm {
         this.ledgerName = ledgerName;
     }
 
-    public ACCOUNTING_ENTRY getAccountingEntry() {
-        return accountingEntry;
+    public ACCOUNTING_ENTRY getLedgerAccountingEntry() {
+        return ledgerAccountingEntry;
     }
 
-    public void setAccountingEntry(ACCOUNTING_ENTRY accountingEntry) {
-        this.accountingEntry = accountingEntry;
+    public void setLedgerAccountingEntry(ACCOUNTING_ENTRY ledgerAccountingEntry) {
+        this.ledgerAccountingEntry = ledgerAccountingEntry;
     }
 
     public Boolean isBankOrCash() {
-        return bankOrCash;
+        return ledgerBankOrCash;
     }
 
-    public void setBankOrCash(Boolean bankOrCash) {
-        this.bankOrCash = bankOrCash;
+    public void setLedgerBankOrCash(Boolean ledgerBankOrCash) {
+        this.ledgerBankOrCash = ledgerBankOrCash;
     }
 
-    public String getNote() {
-        return note;
+    public String getLedgerNote() {
+        return ledgerNote;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setLedgerNote(String ledgerNote) {
+        this.ledgerNote = ledgerNote;
     }
 }

@@ -46,8 +46,8 @@ public class LedgerService {
         ledger.setGroupAccount(groupAccount);
         ledger.setLedgerType(ledgerType);
         ledger.setOpeningBalance(0d);
-        ledger.setOpeningEntryType(ledgerForm.getAccountingEntry());
-        ledger.setNotes(ledgerForm.getNote());
+        ledger.setOpeningEntryType(ledgerForm.getLedgerAccountingEntry());
+        ledger.setNotes(ledgerForm.getLedgerNote());
         ledger.setPersonalInformation(personalInformation);
         ledger.setReconciliation(0);
 

@@ -27,6 +27,10 @@ public class PersonalInformation {
     @Column(name = "phone")
     private String phone;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id",referencedColumnName = "id")
+    private Address address;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
@@ -72,6 +76,14 @@ public class PersonalInformation {
         this.phone = phone;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -82,6 +94,7 @@ public class PersonalInformation {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -92,6 +105,7 @@ public class PersonalInformation {
         if (dob != null ? !dob.equals(that.dob) : that.dob != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        if (address != null ? !address.equals(that.address) : that.address != null) return false;
         return createdAt != null ? createdAt.equals(that.createdAt) : that.createdAt == null;
     }
 
@@ -102,6 +116,7 @@ public class PersonalInformation {
         result = 31 * result + (dob != null ? dob.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;
     }
