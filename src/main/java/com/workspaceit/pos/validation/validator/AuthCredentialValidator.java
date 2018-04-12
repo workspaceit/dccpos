@@ -10,7 +10,7 @@ import org.springframework.validation.Errors;
 
 @Component
 public class AuthCredentialValidator {
-    AuthCredentialService authCredentialService;
+    private AuthCredentialService authCredentialService;
 
     @Autowired
     public void setAuthCredentialService(AuthCredentialService authCredentialService) {
@@ -34,16 +34,13 @@ public class AuthCredentialValidator {
     public void validateUpdate(String prefix, AuthCredentialCreateForm authCredentialForm, Errors errors){
         prefix = ValidationHelper.preparePrefix(prefix);
 
-        if(!errors.hasFieldErrors(prefix+"email")){
-            this.validateUniqueEmail(prefix,authCredentialForm.getEmail(),errors);
-        }
+
         if(!errors.hasFieldErrors(prefix+"password")){
             this.validatePassword(prefix,authCredentialForm.getPassword(),errors);
         }
         if(!errors.hasFieldErrors(prefix+"password") && !errors.hasFieldErrors(prefix+"confirmPassword")){
             this.matchPassword(prefix,authCredentialForm.getPassword(),authCredentialForm.getConfirmPassword(),errors);
         }
-
     }
     public void validatePassword(String prefix, String password, Errors errors){
         if(password.length()<5){

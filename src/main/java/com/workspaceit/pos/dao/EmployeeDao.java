@@ -20,6 +20,14 @@ public class EmployeeDao extends BaseDao{
                 .setMaxResults(1)
                 .uniqueResult();
     }
+    public Employee getByEmployeeIdAndNotById(String employeeId,int id){
+        Session session = this.getCurrentSession();
+        return (Employee)session.createQuery(" FROM Employee emp where id!=:id and emp.employeeId =:employeeId")
+                .setParameter("employeeId",employeeId)
+                .setParameter("id",id)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
     public Employee getById(int id){
         Session session = this.getCurrentSession();
         return (Employee)session.createQuery(" FROM Employee emp where emp.id =:id")

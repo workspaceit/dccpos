@@ -7,8 +7,6 @@ import com.workspaceit.pos.service.EmployeeService;
 import com.workspaceit.pos.util.ServiceResponse;
 import com.workspaceit.pos.validation.form.employee.EmployeeCreateForm;
 import com.workspaceit.pos.validation.form.employee.EmployeeUpdateForm;
-import com.workspaceit.pos.validation.form.personalIformation.PersonalInfoCreateForm;
-import com.workspaceit.pos.validation.form.accounting.LedgerForm;
 import com.workspaceit.pos.validation.validator.EmployeeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -60,7 +57,7 @@ public class EmployeeEndPoint {
                                     @Valid EmployeeUpdateForm employeeForm, BindingResult bindingResult){
 
         ServiceResponse serviceResponse = ServiceResponse.getInstance();
-        this.employeeValidator.validateForUpdate(employeeForm,bindingResult);
+        this.employeeValidator.validateUpdate(id,employeeForm,bindingResult);
 
         if(bindingResult.hasErrors()){
             serviceResponse.bindValidationError(bindingResult);

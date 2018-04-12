@@ -9,7 +9,6 @@ import com.workspaceit.pos.validation.form.employee.EmployeeCreateForm;
 import com.workspaceit.pos.validation.form.employee.EmployeeUpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -64,7 +63,10 @@ public class EmployeeService {
     public Employee getByEmployeeId(String employeeId){
         return this.employeeDao.getByEmployeeId(employeeId);
     }
-
+    @Transactional
+    public Employee getByEmployeeIdAndNotById(String employeeId,int id){
+        return this.employeeDao.getByEmployeeIdAndNotById(employeeId,id);
+    }
     @Transactional(rollbackFor = Exception.class)
     public Employee create(EmployeeCreateForm employeeForm){
         PersonalInformation personalInfo = this.personalInformationService.create(employeeForm.getPersonalInfo());
@@ -72,7 +74,7 @@ public class EmployeeService {
 
         Employee employee = new Employee();
         employee.setEmployeeId(employeeForm.getEmployeeId());
-        employee.setSalary(employee.getSalary());
+        employee.setSalary(employeeForm.getSalary());
         employee.setPersonalInformation(personalInfo);
 
         this.save(employee);
@@ -95,7 +97,7 @@ public class EmployeeService {
 
         Employee employee = this.getEmployee(id);
         employee.setEmployeeId(employeeForm.getEmployeeId());
-        employee.setSalary(employee.getSalary());
+        employee.setSalary(employeeForm.getSalary());
 
         this.save(employee);
 

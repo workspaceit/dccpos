@@ -31,7 +31,7 @@ public class EmployeeValidator {
 
     public void validate(EmployeeCreateForm employeeForm, Errors error){
 
-        this.validateEmployeeId(employeeForm.getEmployeeId(),error);
+        this.validateUniqueEmployeeId(employeeForm.getEmployeeId(),error);
 
         if(employeeForm.getPersonalInfo()!=null){
             this.personalInfoValidator.validate("personalInfo",employeeForm.getPersonalInfo(),error);
@@ -41,13 +41,22 @@ public class EmployeeValidator {
             this.authCredentialValidator.validate("authCredential",employeeForm.getAuthCredential(),error);
         }
     }
-    public void validateForUpdate(EmployeeUpdateForm employeeForm, Errors error){
-
+    public void validateUpdate(int id, EmployeeUpdateForm employeeForm, Errors error){
+        this.validateEmployeeIdUsedByOthers(employeeForm.getEmployeeId(),id,error);
+        if(employeeForm.getPersonalInfo()!=null){
+            this.personalInfoValidator.validateUpdate("personalInfo",employeeForm.getPersonalInfo(),error);
+        }
     }
-    public void validateEmployeeId(String employeeId,Errors error){
+    public void validateUniqueEmployeeId(String employeeId, Errors error){
         Employee employee =  this.employeeService.getByEmployeeId(employeeId);
         if(employee!=null){
-            error.rejectValue("employeeId","Employee Id must be unique");
+            error.rejectValue("employeeId","Employee Id already been used by employee : "+employee.getPersonalInformation().getFullName());
+        }
+    }
+    public void validateEmployeeIdUsedByOthers(String employeeId,int id, Errors error){
+        Employee employee =  this.employeeService.getByEmployeeIdAndNotById(employeeId,id);
+        if(employee!=null){
+            error.rejectValue("employeeId","Employee Id already been used by employee : "+employee.getPersonalInformation().getFullName());
         }
     }
 }

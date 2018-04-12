@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 public class PersonalInfoForm {
@@ -15,8 +16,13 @@ public class PersonalInfoForm {
     @DateTimeFormat(pattern = "MM/dd/yyyy")
     private Date dob;
 
+    @Length(max=100,message = "Value is too large")
     private String email;
+
+    @Length(max=30,message = "Value is too large")
     private String phone;
+
+    @Length(max=200,message = "Value is too large")
     private String address;
 
 
