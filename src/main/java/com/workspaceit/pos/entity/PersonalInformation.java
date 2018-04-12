@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "personal_information")
@@ -26,6 +27,10 @@ public class PersonalInformation {
 
     @Column(name = "phone")
     private String phone;
+
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "personal_info_id",referencedColumnName = "id",nullable = false)
+    private Set<CompanyRole> companyRoles;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id",referencedColumnName = "id")
@@ -76,6 +81,14 @@ public class PersonalInformation {
         this.phone = phone;
     }
 
+    public Set<CompanyRole> getCompanyRoles() {
+        return companyRoles;
+    }
+
+    public void setCompanyRoles(Set<CompanyRole> companyRoles) {
+        this.companyRoles = companyRoles;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -92,9 +105,9 @@ public class PersonalInformation {
         this.createdAt = createdAt;
     }
 
+
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -105,6 +118,7 @@ public class PersonalInformation {
         if (dob != null ? !dob.equals(that.dob) : that.dob != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        if (companyRoles != null ? !companyRoles.equals(that.companyRoles) : that.companyRoles != null) return false;
         if (address != null ? !address.equals(that.address) : that.address != null) return false;
         return createdAt != null ? createdAt.equals(that.createdAt) : that.createdAt == null;
     }
@@ -116,6 +130,7 @@ public class PersonalInformation {
         result = 31 * result + (dob != null ? dob.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (companyRoles != null ? companyRoles.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;

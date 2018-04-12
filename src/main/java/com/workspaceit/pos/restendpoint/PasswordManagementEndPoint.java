@@ -1,15 +1,13 @@
-package com.workspaceit.pos.api;
+package com.workspaceit.pos.restendpoint;
 
 import com.workspaceit.pos.constant.EndpointRequestUriPrefix;
-import com.workspaceit.pos.entity.AuthCredential;
 import com.workspaceit.pos.entity.ResetPasswordToken;
 import com.workspaceit.pos.exception.EntityNotFound;
 import com.workspaceit.pos.helper.EmailHelper;
 import com.workspaceit.pos.service.AuthCredentialService;
 import com.workspaceit.pos.service.ResetPasswordTokenService;
 import com.workspaceit.pos.util.ServiceResponse;
-import com.workspaceit.pos.util.VelocityUtil;
-import com.workspaceit.pos.validation.form.PasswordResetForm;
+import com.workspaceit.pos.validation.form.authcredential.PasswordResetForm;
 import com.workspaceit.pos.validation.validator.PasswordValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,16 +115,15 @@ public class PasswordManagementEndPoint {
 
 
         /**
-         * Get Auth credential
-         * */
-        AuthCredential authCredential = resetPasswordToken.getAuthCredential();
-        authCredential.setPassword(this.passwordEncoder.encode(passwordResetForm.getPassword()));
-
-        /**
          * Update Auth credential with new password
          * And remove reset password token
          * */
-        this.authCredentialService.update(authCredential);
+        try {
+            this.authCredentialService.resetPassword(resetPasswordToken,passwordResetForm);
+        } catch (EntityNotFound entityNotFound) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ServiceResponse.getMsgInMap("Please try later"));
+        }
+
         this.resetPasswordTokenService.remove(resetPasswordToken);
 
 

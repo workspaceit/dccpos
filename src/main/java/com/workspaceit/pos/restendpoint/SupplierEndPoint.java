@@ -1,4 +1,4 @@
-package com.workspaceit.pos.api;
+package com.workspaceit.pos.restendpoint;
 
 import com.workspaceit.pos.entity.Supplier;
 import com.workspaceit.pos.service.SupplierService;

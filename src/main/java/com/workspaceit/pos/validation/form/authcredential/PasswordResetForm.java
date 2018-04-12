@@ -1,4 +1,4 @@
-package com.workspaceit.pos.validation.form;
+package com.workspaceit.pos.validation.form.authcredential;
 
 public class PasswordResetForm {
     private String token;

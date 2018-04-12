@@ -1,4 +1,4 @@
-package com.workspaceit.pos.api.accounting;
+package com.workspaceit.pos.restendpoint.accounting;
 
 import com.workspaceit.pos.entity.accounting.GroupAccount;
 import com.workspaceit.pos.service.accounting.GroupAccountService;

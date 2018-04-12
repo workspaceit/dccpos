@@ -12,7 +12,7 @@ public class AccessRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "auth_credential_id")
+    @Column(name = "auth_credential_id",insertable = false,updatable = false)
     private int authCredentialId;
 
     @Enumerated(EnumType.STRING)

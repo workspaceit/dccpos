@@ -1,11 +1,15 @@
-package com.workspaceit.pos.validation.form;
+package com.workspaceit.pos.validation.form.personalIformation;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class PersonalInfoForm {
 
+    @NotNull(message = "Full name required")
+    @Length(max = 50,message = "Value too large")
     private String fullName;
 
     @DateTimeFormat(pattern = "MM/dd/yyyy")

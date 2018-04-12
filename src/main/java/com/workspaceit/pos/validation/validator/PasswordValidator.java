@@ -1,6 +1,6 @@
 package com.workspaceit.pos.validation.validator;
 
-import com.workspaceit.pos.validation.form.PasswordResetForm;
+import com.workspaceit.pos.validation.form.authcredential.PasswordResetForm;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

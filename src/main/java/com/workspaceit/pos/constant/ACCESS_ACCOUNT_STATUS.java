@@ -1,5 +1,5 @@
 package com.workspaceit.pos.constant;
 
-public enum  ENTITY_STATUS {
+public enum ACCESS_ACCOUNT_STATUS {
     ACTIVE,DEACTIVE
 }

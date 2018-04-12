@@ -1,8 +1,6 @@
-package com.workspaceit.pos.api.accounting;
+package com.workspaceit.pos.restendpoint.accounting;
 
-import com.workspaceit.pos.entity.Supplier;
 import com.workspaceit.pos.entity.Wholesaler;
-import com.workspaceit.pos.service.SupplierService;
 import com.workspaceit.pos.service.WholesalerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

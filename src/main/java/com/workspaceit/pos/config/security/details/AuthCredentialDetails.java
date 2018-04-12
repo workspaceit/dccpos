@@ -1,6 +1,6 @@
 package com.workspaceit.pos.config.security.details;
 
-import com.workspaceit.pos.constant.ENTITY_STATUS;
+import com.workspaceit.pos.constant.ACCESS_ACCOUNT_STATUS;
 import com.workspaceit.pos.entity.AccessRole;
 import com.workspaceit.pos.entity.AuthCredential;
 import com.workspaceit.pos.entity.PersonalInformation;
@@ -46,22 +46,22 @@ public class AuthCredentialDetails extends AuthCredential implements UserDetails
 
     @Override
     public boolean isAccountNonExpired() {
-        return super.getStatus().equals(ENTITY_STATUS.ACTIVE);
+        return super.getStatus().equals(ACCESS_ACCOUNT_STATUS.ACTIVE);
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return super.getStatus().equals(ENTITY_STATUS.ACTIVE);
+        return super.getStatus().equals(ACCESS_ACCOUNT_STATUS.ACTIVE);
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return super.getStatus().equals(ENTITY_STATUS.ACTIVE);
+        return super.getStatus().equals(ACCESS_ACCOUNT_STATUS.ACTIVE);
     }
 
     @Override
     public boolean isEnabled() {
-        return super.getStatus().equals(ENTITY_STATUS.ACTIVE);
+        return super.getStatus().equals(ACCESS_ACCOUNT_STATUS.ACTIVE);
     }
 
     @Override

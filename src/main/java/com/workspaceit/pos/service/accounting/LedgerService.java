@@ -32,7 +32,11 @@ public class LedgerService {
 
     @Transactional
     public List<Ledger> getAll(){
-        return this.ledgerDao.getAll();
+        return this.ledgerDao.findAll();
+    }
+    @Transactional
+    public Ledger getPersonalInfoIdAndCode(int id, GROUP_CODE groupCode){
+        return this.ledgerDao.findByPersonalInfoIdAndCode(id,groupCode);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -71,7 +75,7 @@ public class LedgerService {
         this.save(ledger);
     }
     @Transactional(rollbackFor = Exception.class)
-    public void createEmployeeSalaryLedger(PersonalInformation personalInformation){
+    public Ledger createEmployeeSalaryLedger(PersonalInformation personalInformation){
         GroupAccount groupAccount = this.groupAccountService.getByCode(GROUP_CODE.SALARY);
         System.out.println(groupAccount.getId());
         Ledger ledger = new Ledger();
@@ -86,7 +90,8 @@ public class LedgerService {
         ledger.setReconciliation(0);
 
         this.save(ledger);
-        System.out.println(ledger.getId());
+
+        return ledger;
     }
     @Transactional(rollbackFor = Exception.class)
     public void createSupplierLedger(PersonalInformation personalInformation){
@@ -105,8 +110,22 @@ public class LedgerService {
 
         this.save(ledger);
     }
+    @Transactional(rollbackFor = Exception.class)
+    public Ledger editEmployeeSalaryLedger(PersonalInformation personalInformation){
 
+        Ledger ledger = this.getPersonalInfoIdAndCode(personalInformation.getId(),GROUP_CODE.SALARY);
+        this.updateLedgeName(ledger,personalInformation.getFullName());
+
+        return ledger;
+    }
+    private void updateLedgeName(Ledger ledger,String name){
+        ledger.setName(name);
+        this.update(ledger);
+    }
     private void save(Ledger ledger){
         this.ledgerDao.save(ledger);
+    }
+    private void update(Ledger ledger){
+        this.ledgerDao.update(ledger);
     }
 }

@@ -1,7 +1,6 @@
 package com.workspaceit.pos.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.validation.BindException;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,7 +13,7 @@ public class Employee {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "personal_info_id",referencedColumnName = "id")
+    @JoinColumn(name = "personal_info_id",referencedColumnName = "id",updatable = false)
     private PersonalInformation personalInformation;
 
     @Column(name = "employee_id")

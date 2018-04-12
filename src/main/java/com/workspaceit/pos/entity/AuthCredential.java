@@ -1,6 +1,7 @@
 package com.workspaceit.pos.entity;
 
-import com.workspaceit.pos.constant.ENTITY_STATUS;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.workspaceit.pos.constant.ACCESS_ACCOUNT_STATUS;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -17,21 +18,22 @@ public class AuthCredential {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "personal_info_id",referencedColumnName = "id",nullable = false,insertable = false, updatable = false)
+    @JoinColumn(name = "personal_info_id",referencedColumnName = "id",nullable = false,updatable = false)
     private PersonalInformation personalInformation;
 
     @Column(name = "email")
     private String email;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private ENTITY_STATUS status;
+    private ACCESS_ACCOUNT_STATUS status;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "auth_credential_id")
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "auth_credential_id",nullable = false)
     private Collection<AccessRole> accessRole;
 
     @CreationTimestamp
@@ -72,11 +74,11 @@ public class AuthCredential {
         this.password = password;
     }
 
-    public ENTITY_STATUS getStatus() {
+    public ACCESS_ACCOUNT_STATUS getStatus() {
         return status;
     }
 
-    public void setStatus(ENTITY_STATUS status) {
+    public void setStatus(ACCESS_ACCOUNT_STATUS status) {
         this.status = status;
     }
 

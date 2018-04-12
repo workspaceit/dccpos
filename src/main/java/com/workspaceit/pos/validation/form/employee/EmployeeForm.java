@@ -1,24 +1,19 @@
-package com.workspaceit.pos.validation.form;
+package com.workspaceit.pos.validation.form.employee;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class EmployeeForm {
-    @NotNull
-    @Valid
-    private PersonalInfoForm personalInfo;
 
-    @NotBlank(message = "Emp Id Required is required")
+
     @Length(max = 50,message = "Value too large")
-    private String employeeId;
+    protected String employeeId;
 
     @NotNull(message = "Salary required")
     @Min(value = 0,message = "Salary can't be less then zero")
-    private Float salary;
+    protected Float salary;
 
 
     public String getEmployeeId() {
@@ -37,11 +32,5 @@ public class EmployeeForm {
         this.salary = salary;
     }
 
-    public PersonalInfoForm getPersonalInfo() {
-        return personalInfo;
-    }
 
-    public void setPersonalInfo(PersonalInfoForm personalInfo) {
-        this.personalInfo = personalInfo;
-    }
 }
