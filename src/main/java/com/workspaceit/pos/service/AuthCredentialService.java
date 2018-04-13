@@ -8,6 +8,7 @@ import com.workspaceit.pos.entity.PersonalInformation;
 import com.workspaceit.pos.entity.ResetPasswordToken;
 import com.workspaceit.pos.exception.EntityNotFound;
 import com.workspaceit.pos.validation.form.authcredential.AuthCredentialCreateForm;
+import com.workspaceit.pos.validation.form.authcredential.ChangePasswordForm;
 import com.workspaceit.pos.validation.form.authcredential.PasswordResetForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +35,17 @@ public class AuthCredentialService {
     }
 
     @Transactional
+    public AuthCredential getAuthCredential(int id) throws EntityNotFound {
+        AuthCredential authCredential =  this.getById(id);
+
+        if(authCredential == null)throw new EntityNotFound("AuthCredential not found by id :"+id);
+        return authCredential;
+    }
+    @Transactional
+    public AuthCredential getById(int id){
+        return this.authCredentialDao.getById(id);
+    }
+    @Transactional
     public AuthCredential getByEmail(String email){
         return this.authCredentialDao.getByEmail(email);
     }
@@ -42,6 +54,7 @@ public class AuthCredentialService {
     public void update(AuthCredential authCredential){
          this.authCredentialDao.update(authCredential);
     }
+
     @Transactional(rollbackFor = Exception.class)
     public void resetPassword(ResetPasswordToken resetPasswordToken,PasswordResetForm passwordResetForm)throws EntityNotFound{
         AuthCredential authCredential = resetPasswordToken.getAuthCredential();
@@ -53,6 +66,15 @@ public class AuthCredentialService {
     }
 
 
+    @Transactional(rollbackFor = Exception.class)
+    public void changePassword(int id, ChangePasswordForm changePasswordForm)throws EntityNotFound{
+        AuthCredential authCredential = this.getAuthCredential(id);
+        if(authCredential==null){
+            throw new EntityNotFound("Entity not found");
+        }
+        authCredential.setPassword(this.passwordEncoder.encode(changePasswordForm.getPassword()));
+        this.authCredentialDao.update(authCredential);
+    }
     @Transactional(rollbackFor = Exception.class)
     public void create(AuthCredentialCreateForm authCredentialForm, PersonalInformation personalInfo){
         String encodedPassword = this.passwordEncoder.encode(authCredentialForm.getPassword());

@@ -13,4 +13,27 @@ public class SupplierDao extends BaseDao{
         return session.createQuery("FROM Supplier")
                 .list();
     }
+    public Supplier getById(int id){
+        Session session = this.getCurrentSession();
+        return (Supplier)session.createQuery(" FROM Supplier sp where sp.id =:id")
+                .setParameter("id",id)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+    public Supplier getBySupplierId(String supplierId){
+        Session session = this.getCurrentSession();
+        return (Supplier)session.createQuery(" FROM Supplier sp where sp.supplierId =:supplierId")
+                .setParameter("supplierId",supplierId)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+    public Supplier getBySupplierIdAndNotById(String supplierId,int id){
+        Session session = this.getCurrentSession();
+        return (Supplier)session.createQuery(" FROM Supplier sp where id!=:id and sp.supplierId =:supplierId")
+                .setParameter("supplierId",supplierId)
+                .setParameter("id",id)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+
 }

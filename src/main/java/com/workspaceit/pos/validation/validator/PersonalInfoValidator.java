@@ -7,7 +7,6 @@ import com.workspaceit.pos.validation.form.personalIformation.PersonalInfoUpdate
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import javax.mail.internet.InternetAddress;
 import java.util.Date;
 
 @Component

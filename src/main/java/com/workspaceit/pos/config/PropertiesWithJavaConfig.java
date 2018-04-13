@@ -10,6 +10,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
  */
 @Configuration
 @PropertySource("classpath:local-config.properties")
+//@PropertySource("classpath:live.config.properties")
 public class PropertiesWithJavaConfig {
 
     @Bean

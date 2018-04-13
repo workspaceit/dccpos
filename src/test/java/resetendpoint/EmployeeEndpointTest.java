@@ -55,7 +55,16 @@ public class EmployeeEndpointTest extends BaseTest{
                         )
                 .andExpect(status().isUnprocessableEntity()).andReturn();
     }
+    @Test
+    public void editEmployee() throws Exception {
 
+        MvcResult result = mockMvc.perform(
+                post(this.authUri+"/employee/update/1")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .content("")
+        )
+                .andExpect(status().isUnprocessableEntity()).andReturn();
+    }
     @Test
     public void allEmployee() throws Exception {
 

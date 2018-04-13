@@ -6,4 +6,5 @@ target
 .settings/
 *.iml
 src/main/resources/local-config.properties
+src/main/resources/live.config.properties
 

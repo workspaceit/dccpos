@@ -15,7 +15,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 @Component
-public class EmailHelper {
+public class MailHelper {
 
     private  String from;
     private  String username;

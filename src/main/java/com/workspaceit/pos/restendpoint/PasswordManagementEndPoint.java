@@ -3,7 +3,7 @@ package com.workspaceit.pos.restendpoint;
 import com.workspaceit.pos.constant.EndpointRequestUriPrefix;
 import com.workspaceit.pos.entity.ResetPasswordToken;
 import com.workspaceit.pos.exception.EntityNotFound;
-import com.workspaceit.pos.helper.EmailHelper;
+import com.workspaceit.pos.helper.MailHelper;
 import com.workspaceit.pos.service.AuthCredentialService;
 import com.workspaceit.pos.service.ResetPasswordTokenService;
 import com.workspaceit.pos.util.ServiceResponse;
@@ -28,7 +28,7 @@ import javax.validation.Valid;
 public class PasswordManagementEndPoint {
     private ResetPasswordTokenService resetPasswordTokenService;
     private AuthCredentialService authCredentialService;
-    private EmailHelper emailHelper;
+    private MailHelper emailHelper;
     private PasswordEncoder passwordEncoder;
     private PasswordValidator passwordValidator;
 
@@ -44,7 +44,7 @@ public class PasswordManagementEndPoint {
     }
 
     @Autowired
-    public void setEmailHelper(EmailHelper emailHelper) {
+    public void setEmailHelper(MailHelper emailHelper) {
         this.emailHelper = emailHelper;
     }
 

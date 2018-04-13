@@ -71,12 +71,6 @@ public class PersonalInformationService {
 
     public PersonalInformation edit(int id, PersonalInfoUpdateForm personalInfoForm) throws EntityNotFound {
 
-        CompanyRole companyRole = new CompanyRole();
-        companyRole.setCompanyRole(COMPANY_ROLE.EMPLOYEE);
-
-        Set<CompanyRole> companyRoles = new HashSet<>();
-        companyRoles.add(companyRole);
-
         PersonalInformation  personalInformation = this.getPersonalInformation(id);
         Address address = personalInformation.getAddress();
         address.setFormattedAddress(personalInfoForm.getAddress());
@@ -86,7 +80,6 @@ public class PersonalInformationService {
         personalInformation.setPhone(personalInfoForm.getPhone());
         personalInformation.setEmail(personalInfoForm.getEmail());
 
-        personalInformation.setCompanyRoles(companyRoles);
         personalInformation.setAddress(address);
 
         this.update(personalInformation);

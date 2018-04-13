@@ -13,8 +13,8 @@ public class Supplier {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "personal_info_id",referencedColumnName = "id",insertable = false,updatable = false)
-    private PersonalInformation personalInformation;
+    @JoinColumn(name = "company_id",referencedColumnName = "id",nullable = false)
+    private Company company;
 
     @Column(name = "supplier_id")
     private String supplierId;
@@ -33,12 +33,12 @@ public class Supplier {
         this.id = id;
     }
 
-    public PersonalInformation getPersonalInformation() {
-        return personalInformation;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setPersonalInformation(PersonalInformation personalInformation) {
-        this.personalInformation = personalInformation;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public String getSupplierId() {
