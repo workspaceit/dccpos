@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,10 +28,11 @@ public class Oauth2Configuration {
 
     private static InMemoryTokenStore tokenStore = new InMemoryTokenStore();
     private static final String SERVER_RESOURCE_ID = "oauth2-server";
-
+    private static final boolean ENABLE_OAUTH = false;
 
     @Configuration
     @EnableResourceServer
+    @EnableGlobalMethodSecurity(securedEnabled = true)
     protected static class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -38,10 +40,14 @@ public class Oauth2Configuration {
         }
         @Override
         public void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/aoauth/api/**")
+
+            String uri = (ENABLE_OAUTH)?"/auth/api/**":"/dummy-auth/api/**";
+            http.antMatcher(uri)
                     .authorizeRequests()
-                    .antMatchers("/aoauth/api/**").access("hasRole('"+ ACCESS_ROLE.ADMIN.name()+"')")
+                    .antMatchers(uri).authenticated()
                     .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler()).and().cors();
+
+            //.antMatchers("/auth/api/**").access("hasRole('"+ ACCESS_ROLE.POS_OPERATOR.name()+"')")
         }
 
 

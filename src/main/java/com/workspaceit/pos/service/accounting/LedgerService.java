@@ -4,6 +4,7 @@ import com.workspaceit.pos.constant.accounting.ACCOUNTING_ENTRY;
 import com.workspaceit.pos.constant.accounting.GROUP_CODE;
 import com.workspaceit.pos.constant.accounting.LEDGER_TYPE;
 import com.workspaceit.pos.dao.accounting.LedgerDao;
+import com.workspaceit.pos.entity.Company;
 import com.workspaceit.pos.entity.PersonalInformation;
 import com.workspaceit.pos.entity.accounting.GroupAccount;
 import com.workspaceit.pos.entity.accounting.Ledger;
@@ -39,6 +40,11 @@ public class LedgerService {
         return this.ledgerDao.findByPersonalInfoIdAndCode(id,groupCode);
     }
 
+    @Transactional
+    public Ledger getCompanyIdAndCode(int id, GROUP_CODE groupCode){
+        return this.ledgerDao.findByCompanyAndCode(id,groupCode);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void create(LedgerForm ledgerForm, PersonalInformation personalInformation, GROUP_CODE groupCode){
         GroupAccount groupAccount = this.groupAccountService.getByCode(groupCode);
@@ -57,23 +63,7 @@ public class LedgerService {
 
         this.save(ledger);
     }
-    @Transactional(rollbackFor = Exception.class)
-    public void createWholesalerLedger(PersonalInformation personalInformation){
-        GroupAccount groupAccount = this.groupAccountService.getByCode(GROUP_CODE.WHOLESALER);
 
-        Ledger ledger = new Ledger();
-
-        ledger.setName(personalInformation.getFullName());
-        ledger.setGroupAccount(groupAccount);
-        ledger.setLedgerType(LEDGER_TYPE.OTHER);
-        ledger.setOpeningBalance(0d);
-        ledger.setOpeningEntryType(ACCOUNTING_ENTRY.CR);
-        ledger.setNotes("");
-        ledger.setPersonalInformation(personalInformation);
-        ledger.setReconciliation(0);
-
-        this.save(ledger);
-    }
     @Transactional(rollbackFor = Exception.class)
     public Ledger createEmployeeSalaryLedger(PersonalInformation personalInformation){
         GroupAccount groupAccount = this.groupAccountService.getByCode(GROUP_CODE.SALARY);
@@ -94,21 +84,54 @@ public class LedgerService {
         return ledger;
     }
     @Transactional(rollbackFor = Exception.class)
-    public void createSupplierLedger(PersonalInformation personalInformation){
+    public void createSupplierLedger(Company company){
         GroupAccount groupAccount = this.groupAccountService.getByCode(GROUP_CODE.SUPPLIER);
 
         Ledger ledger = new Ledger();
 
-        ledger.setName(personalInformation.getFullName());
+        ledger.setName(company.getTitle());
         ledger.setGroupAccount(groupAccount);
         ledger.setLedgerType(LEDGER_TYPE.OTHER);
         ledger.setOpeningBalance(0d);
         ledger.setOpeningEntryType(ACCOUNTING_ENTRY.CR);
         ledger.setNotes("");
-        ledger.setPersonalInformation(personalInformation);
+        ledger.setCompany(company);
         ledger.setReconciliation(0);
 
         this.save(ledger);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void createWholesalerLedger(Company company){
+        GroupAccount groupAccount = this.groupAccountService.getByCode(GROUP_CODE.WHOLESALER);
+
+        Ledger ledger = new Ledger();
+
+        ledger.setName(company.getTitle());
+        ledger.setGroupAccount(groupAccount);
+        ledger.setLedgerType(LEDGER_TYPE.OTHER);
+        ledger.setOpeningBalance(0d);
+        ledger.setOpeningEntryType(ACCOUNTING_ENTRY.CR);
+        ledger.setNotes("");
+        ledger.setCompany(company);
+        ledger.setReconciliation(0);
+
+        this.save(ledger);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public Ledger editSupplierLedger(Company company){
+
+        Ledger ledger = this.getCompanyIdAndCode(company.getId(),GROUP_CODE.SUPPLIER);
+        this.updateLedgeName(ledger,company.getTitle());
+
+        return ledger;
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public Ledger editWholesalerLedger(Company company){
+
+        Ledger ledger = this.getCompanyIdAndCode(company.getId(),GROUP_CODE.WHOLESALER);
+        this.updateLedgeName(ledger,company.getTitle());
+
+        return ledger;
     }
     @Transactional(rollbackFor = Exception.class)
     public Ledger editEmployeeSalaryLedger(PersonalInformation personalInformation){

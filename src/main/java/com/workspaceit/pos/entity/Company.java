@@ -1,7 +1,10 @@
 package com.workspaceit.pos.entity;
 
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "company")
@@ -23,6 +26,11 @@ public class Company {
 
     @Column(name = "phone")
     private String phone;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Date createdAt;
 
     public int getId() {
         return id;
@@ -64,6 +72,14 @@ public class Company {
         this.phone = phone;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,7 +91,8 @@ public class Company {
         if (address != null ? !address.equals(company.address) : company.address != null) return false;
         if (title != null ? !title.equals(company.title) : company.title != null) return false;
         if (email != null ? !email.equals(company.email) : company.email != null) return false;
-        return phone != null ? phone.equals(company.phone) : company.phone == null;
+        if (phone != null ? !phone.equals(company.phone) : company.phone != null) return false;
+        return createdAt != null ? createdAt.equals(company.createdAt) : company.createdAt == null;
     }
 
     @Override
@@ -85,6 +102,7 @@ public class Company {
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;
     }
 }

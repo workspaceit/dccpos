@@ -1,6 +1,7 @@
 package com.workspaceit.pos.config.security.details;
 
 import com.workspaceit.pos.constant.ACCESS_ACCOUNT_STATUS;
+import com.workspaceit.pos.constant.security.SecurityRole;
 import com.workspaceit.pos.entity.AccessRole;
 import com.workspaceit.pos.entity.AuthCredential;
 import com.workspaceit.pos.entity.PersonalInformation;
@@ -34,7 +35,7 @@ public class AuthCredentialDetails extends AuthCredential implements UserDetails
         if(accessRoles==null || accessRoles.size()==0)return authorities;
 
         for(AccessRole accessRole : accessRoles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + accessRole.getAccessRole().name()));
+            authorities.add(new SimpleGrantedAuthority(SecurityRole.prefix_ + accessRole.getAccessRole().name()));
         }
         return authorities;
     }

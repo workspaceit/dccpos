@@ -2,6 +2,7 @@ package com.workspaceit.pos.entity.accounting;
 
 import com.workspaceit.pos.constant.accounting.ACCOUNTING_ENTRY;
 import com.workspaceit.pos.constant.accounting.LEDGER_TYPE;
+import com.workspaceit.pos.entity.Company;
 import com.workspaceit.pos.entity.PersonalInformation;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -22,6 +23,10 @@ public class Ledger {
     @ManyToOne
     @JoinColumn(name = "personal_info_id",referencedColumnName = "id")
     private PersonalInformation personalInformation;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id",referencedColumnName = "id")
+    private Company company;
 
     @Column(name = "name")
     private String name;
@@ -71,6 +76,14 @@ public class Ledger {
 
     public void setPersonalInformation(PersonalInformation personalInformation) {
         this.personalInformation = personalInformation;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public String getName() {
@@ -129,8 +142,10 @@ public class Ledger {
         this.notes = notes;
     }
 
+
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -142,6 +157,7 @@ public class Ledger {
             return false;
         if (personalInformation != null ? !personalInformation.equals(ledger.personalInformation) : ledger.personalInformation != null)
             return false;
+        if (company != null ? !company.equals(ledger.company) : ledger.company != null) return false;
         if (name != null ? !name.equals(ledger.name) : ledger.name != null) return false;
         if (openingBalance != null ? !openingBalance.equals(ledger.openingBalance) : ledger.openingBalance != null)
             return false;
@@ -156,6 +172,7 @@ public class Ledger {
         int result = id;
         result = 31 * result + (groupAccount != null ? groupAccount.hashCode() : 0);
         result = 31 * result + (personalInformation != null ? personalInformation.hashCode() : 0);
+        result = 31 * result + (company != null ? company.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (openingBalance != null ? openingBalance.hashCode() : 0);
         result = 31 * result + (openingEntryType != null ? openingEntryType.hashCode() : 0);

@@ -1,12 +1,13 @@
 package com.workspaceit.pos.validation.form.company;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 
 public class CompanyForm {
 
-    @NotNull(message = "Title name required")
+    @NotEmpty(message = "Title name required")
     @Length(max = 50,message = "Value too large")
     private String title;
 

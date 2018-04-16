@@ -5,6 +5,7 @@ import com.workspaceit.pos.entity.Company;
 import com.workspaceit.pos.entity.Employee;
 import com.workspaceit.pos.entity.Supplier;
 import com.workspaceit.pos.exception.EntityNotFound;
+import com.workspaceit.pos.service.accounting.LedgerService;
 import com.workspaceit.pos.util.DataFilterUtil;
 import com.workspaceit.pos.validation.form.employee.EmployeeUpdateForm;
 import com.workspaceit.pos.validation.form.supplier.SupplierCreateForm;
@@ -20,7 +21,7 @@ import java.util.List;
 public class SupplierService {
     private SupplierDao supplierDao;
     private CompanyService companyService;
-
+    private LedgerService ledgerService;
     @Autowired
     public void setSupplierDao(SupplierDao supplierDao) {
         this.supplierDao = supplierDao;
@@ -29,6 +30,11 @@ public class SupplierService {
     @Autowired
     public void setCompanyService(CompanyService companyService) {
         this.companyService = companyService;
+    }
+
+    @Autowired
+    public void setLedgerService(LedgerService ledgerService) {
+        this.ledgerService = ledgerService;
     }
 
     @Transactional
@@ -62,10 +68,16 @@ public class SupplierService {
     public Supplier create(SupplierCreateForm supplierCreateForm){
         Company company =  this.companyService.create(supplierCreateForm.getCompany());
 
+        /**
+         * Creating Supplier Ledger
+         * */
+        this.ledgerService.createSupplierLedger(company);
+
         Supplier supplier = new Supplier();
         supplier.setCompany(company);
         supplier.setSupplierId(supplierCreateForm.getSupplierId());
         this.save(supplier);
+
 
         return supplier;
     }
@@ -80,6 +92,10 @@ public class SupplierService {
 
         this.update(supplier);
 
+        /**
+         * Creating Supplier Ledger
+         * */
+        this.ledgerService.editSupplierLedger(company);
         return supplier;
     }
     private void save(Supplier supplier){

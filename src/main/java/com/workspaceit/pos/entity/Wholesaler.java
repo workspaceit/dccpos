@@ -13,8 +13,8 @@ public class Wholesaler {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "personal_info_id",referencedColumnName = "id",insertable = false,updatable = false)
-    private PersonalInformation personalInformation;
+    @JoinColumn(name = "company_id",referencedColumnName = "id",nullable = false,updatable = false)
+    private Company company;
 
     @Column(name = "wholesaler_id")
     private String wholesalerId;
@@ -33,12 +33,12 @@ public class Wholesaler {
         this.id = id;
     }
 
-    public PersonalInformation getPersonalInformation() {
-        return personalInformation;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setPersonalInformation(PersonalInformation personalInformation) {
-        this.personalInformation = personalInformation;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public String getWholesalerId() {
@@ -55,5 +55,27 @@ public class Wholesaler {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Wholesaler that = (Wholesaler) o;
+
+        if (id != that.id) return false;
+        if (company != null ? !company.equals(that.company) : that.company != null) return false;
+        if (wholesalerId != null ? !wholesalerId.equals(that.wholesalerId) : that.wholesalerId != null) return false;
+        return createdAt != null ? createdAt.equals(that.createdAt) : that.createdAt == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (company != null ? company.hashCode() : 0);
+        result = 31 * result + (wholesalerId != null ? wholesalerId.hashCode() : 0);
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+        return result;
     }
 }

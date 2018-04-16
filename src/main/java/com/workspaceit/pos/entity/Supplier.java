@@ -13,7 +13,7 @@ public class Supplier {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "company_id",referencedColumnName = "id",nullable = false)
+    @JoinColumn(name = "company_id",referencedColumnName = "id",nullable = false,updatable = false)
     private Company company;
 
     @Column(name = "supplier_id")
