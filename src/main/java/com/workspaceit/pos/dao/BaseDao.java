@@ -77,5 +77,15 @@ public class BaseDao {
             session.clear();
         }
     }
-
+    public void clearCurrentSessionFirstLevelCache(Object obj){
+        Session session =  this.getCurrentSession();
+        if(session!=null){
+            session.evict(obj);
+        }
+    }
+    public long findTotalRowCount(Class<?> cls){
+        String entityName = cls.getSimpleName();
+        long count =(Long)this.getCurrentSession().createQuery("select count(id) from "+entityName).uniqueResult();
+        return count;
+    }
 }

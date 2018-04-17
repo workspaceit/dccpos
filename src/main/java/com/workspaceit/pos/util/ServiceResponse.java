@@ -92,7 +92,12 @@ public class ServiceResponse {
     public List<Map<String, String>> getFormError() {
         return formError;
     }
-
+    public Map<String, Object> getResult(long totalResult,Object result){
+        Map<String, Object> map = new HashMap<>();
+        map.put("totalResult",totalResult);
+        map.put("result",result);
+        return map;
+    }
     public ServiceResponse setValidationError(String params, String msg){
         Map<String,String> errorObj = new HashMap<>();
         errorObj.put("params",params);

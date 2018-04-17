@@ -2,17 +2,13 @@ package com.workspaceit.pos.restendpoint;
 
 import com.workspaceit.pos.constant.EndpointRequestUriPrefix;
 import com.workspaceit.pos.entity.Product;
-import com.workspaceit.pos.entity.Wholesaler;
 import com.workspaceit.pos.exception.EntityNotFound;
 import com.workspaceit.pos.service.ProductService;
-import com.workspaceit.pos.service.WholesalerService;
 import com.workspaceit.pos.util.ServiceResponse;
+import com.workspaceit.pos.util.ValidationUtil;
 import com.workspaceit.pos.validation.form.product.ProductCreateForm;
 import com.workspaceit.pos.validation.form.product.ProductUpdateForm;
-import com.workspaceit.pos.validation.form.wholesaler.WholesalerCreateForm;
-import com.workspaceit.pos.validation.form.wholesaler.WholesalerUpdateForm;
 import com.workspaceit.pos.validation.validator.ProductValidator;
-import com.workspaceit.pos.validation.validator.WholesalerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.ws.Service;
 import java.util.List;
 
 @RestController
@@ -28,6 +25,7 @@ import java.util.List;
 public class ProductEndPoint {
     private ProductService productService;
     private ProductValidator productValidator;
+    private ValidationUtil validationUtil;
 
     @Autowired
     public void setProductService(ProductService productService) {
@@ -39,20 +37,51 @@ public class ProductEndPoint {
         this.productValidator = productValidator;
     }
 
-    @RequestMapping("/get-all")
-    public ResponseEntity<?> getAll(){
-        List<Product> productList = this.productService.getAll();
-        return ResponseEntity.ok(productList);
+    @Autowired
+    public void setValidationUtil(ValidationUtil validationUtil) {
+        this.validationUtil = validationUtil;
     }
+
+    @RequestMapping("/get-all/{limit}/{offset}")
+    public ResponseEntity<?> getAll(@PathVariable int limit, @PathVariable int offset){
+        ServiceResponse serviceResponse = this.validationUtil.limitOffsetValidation(limit,offset,10);
+        if(serviceResponse.hasErrors()){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
+        }
+
+        long totalRowCount = this.productService.getTotalRowCount();
+        List<Product> productList = this.productService.getAll(limit,offset);
+
+        return ResponseEntity.ok(serviceResponse.getResult(totalRowCount,productList));
+    }
+    @RequestMapping("/get-by-category-id/{categoryId}/{limit}/{offset}")
+    public ResponseEntity<?> getAll(@PathVariable("categoryId")int categoryId,
+                                    @PathVariable int limit, @PathVariable int offset){
+        ServiceResponse serviceResponse = this.validationUtil.limitOffsetValidation(limit,offset,10);
+        if(serviceResponse.hasErrors()){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
+        }
+
+        long totalRowCount = this.productService.getByCategoryIdCount(categoryId);
+        List<Product> productList = this.productService.getByCategoryId(categoryId,limit,offset);
+
+        return ResponseEntity.ok(serviceResponse.getResult(totalRowCount,productList));
+    }
+
     @RequestMapping(value = "/get-by-barcode",method = RequestMethod.GET)
     public ResponseEntity<?> getByBarcode(@RequestParam("barcode") String barcode){
         Product product = this.productService.getByBarcode(barcode);
         return ResponseEntity.ok(product);
     }
-    @RequestMapping("/get-by-name-fragment")
-    public ResponseEntity<?> getAll(@RequestParam("name") String name){
-        List<Product> productList = this.productService.getByNameLike(name);
-        return ResponseEntity.ok(productList);
+    @RequestMapping("/get-by-name-fragment/{limit}/{offset}")
+    public ResponseEntity<?> getAll(@PathVariable int limit, @PathVariable int offset,@RequestParam("name") String name){
+        ServiceResponse serviceResponse = this.validationUtil.limitOffsetValidation(limit,offset,10);
+        if(serviceResponse.hasErrors()){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
+        }
+        long totalRowCount = this.productService.getByNameLikeCount(name);
+        List<Product> productList = this.productService.getByNameLike(name,limit,offset);
+        return ResponseEntity.ok(serviceResponse.getResult(totalRowCount,productList));
     }
 
 
@@ -83,7 +112,7 @@ public class ProductEndPoint {
                                     @Valid ProductUpdateForm productUpdateForm, BindingResult bindingResult){
 
         ServiceResponse serviceResponse = ServiceResponse.getInstance();
-
+        this.productValidator.validateForUpdate(id,productUpdateForm,bindingResult);
 
         if(bindingResult.hasErrors()){
             serviceResponse.bindValidationError(bindingResult);

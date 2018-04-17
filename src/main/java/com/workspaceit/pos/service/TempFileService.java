@@ -22,7 +22,6 @@ import java.util.Map;
 public class TempFileService {
 	private FileUtil fileUtil;
 	private TempFileDao tempFileDao;
-	private TempFileService tempFileService;
 	private Environment env;
 
 
@@ -36,11 +35,6 @@ public class TempFileService {
     public void setTempFileDao(TempFileDao tempFileDao) {
         this.tempFileDao = tempFileDao;
     }
-
-	@Autowired
-	public void setTempFileService(TempFileService tempFileService) {
-		this.tempFileService = tempFileService;
-	}
 
 	@Autowired
     public void setEnv(Environment env) {

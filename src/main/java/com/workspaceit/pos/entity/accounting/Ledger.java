@@ -37,7 +37,14 @@ public class Ledger {
 
     @Enumerated(EnumType.STRING)
     @Column(name =  "op_balance_dc")
-    private ACCOUNTING_ENTRY openingEntryType;
+    private ACCOUNTING_ENTRY openingBalanceEntryType;
+
+    @Column(name =  "current_balance")
+    private Double currentBalance;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name =  "current_balance_dc")
+    private ACCOUNTING_ENTRY currentBalanceEntryType;
 
     @Enumerated(EnumType.STRING)
     @Column(name =  "type")
@@ -110,12 +117,28 @@ public class Ledger {
         this.openingBalance = openingBalance;
     }
 
-    public ACCOUNTING_ENTRY getOpeningEntryType() {
-        return openingEntryType;
+    public Double getCurrentBalance() {
+        return currentBalance;
     }
 
-    public void setOpeningEntryType(ACCOUNTING_ENTRY openingEntryType) {
-        this.openingEntryType = openingEntryType;
+    public void setCurrentBalance(Double currentBalance) {
+        this.currentBalance = currentBalance;
+    }
+
+    public ACCOUNTING_ENTRY getCurrentBalanceEntryType() {
+        return currentBalanceEntryType;
+    }
+
+    public void setCurrentBalanceEntryType(ACCOUNTING_ENTRY currentBalanceEntryType) {
+        this.currentBalanceEntryType = currentBalanceEntryType;
+    }
+
+    public ACCOUNTING_ENTRY getOpeningBalanceEntryType() {
+        return openingBalanceEntryType;
+    }
+
+    public void setOpeningBalanceEntryType(ACCOUNTING_ENTRY openingBalanceEntryType) {
+        this.openingBalanceEntryType = openingBalanceEntryType;
     }
 
     public LEDGER_TYPE getLedgerType() {
@@ -145,7 +168,6 @@ public class Ledger {
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -161,7 +183,10 @@ public class Ledger {
         if (name != null ? !name.equals(ledger.name) : ledger.name != null) return false;
         if (openingBalance != null ? !openingBalance.equals(ledger.openingBalance) : ledger.openingBalance != null)
             return false;
-        if (openingEntryType != ledger.openingEntryType) return false;
+        if (openingBalanceEntryType != ledger.openingBalanceEntryType) return false;
+        if (currentBalance != null ? !currentBalance.equals(ledger.currentBalance) : ledger.currentBalance != null)
+            return false;
+        if (currentBalanceEntryType != ledger.currentBalanceEntryType) return false;
         if (ledgerType != ledger.ledgerType) return false;
         if (notes != null ? !notes.equals(ledger.notes) : ledger.notes != null) return false;
         return createdAt != null ? createdAt.equals(ledger.createdAt) : ledger.createdAt == null;
@@ -175,7 +200,9 @@ public class Ledger {
         result = 31 * result + (company != null ? company.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (openingBalance != null ? openingBalance.hashCode() : 0);
-        result = 31 * result + (openingEntryType != null ? openingEntryType.hashCode() : 0);
+        result = 31 * result + (openingBalanceEntryType != null ? openingBalanceEntryType.hashCode() : 0);
+        result = 31 * result + (currentBalance != null ? currentBalance.hashCode() : 0);
+        result = 31 * result + (currentBalanceEntryType != null ? currentBalanceEntryType.hashCode() : 0);
         result = 31 * result + (ledgerType != null ? ledgerType.hashCode() : 0);
         result = 31 * result + reconciliation;
         result = 31 * result + (notes != null ? notes.hashCode() : 0);

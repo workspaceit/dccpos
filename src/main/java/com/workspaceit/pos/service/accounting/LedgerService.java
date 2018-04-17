@@ -56,7 +56,9 @@ public class LedgerService {
         ledger.setGroupAccount(groupAccount);
         ledger.setLedgerType(ledgerType);
         ledger.setOpeningBalance(0d);
-        ledger.setOpeningEntryType(ledgerForm.getLedgerAccountingEntry());
+        ledger.setOpeningBalanceEntryType(ledgerForm.getLedgerAccountingEntry());
+        ledger.setCurrentBalance(0d);
+        ledger.setCurrentBalanceEntryType(ledgerForm.getLedgerAccountingEntry());
         ledger.setNotes(ledgerForm.getLedgerNote());
         ledger.setPersonalInformation(personalInformation);
         ledger.setReconciliation(0);
@@ -67,14 +69,16 @@ public class LedgerService {
     @Transactional(rollbackFor = Exception.class)
     public Ledger createEmployeeSalaryLedger(PersonalInformation personalInformation){
         GroupAccount groupAccount = this.groupAccountService.getByCode(GROUP_CODE.SALARY);
-        System.out.println(groupAccount.getId());
+
         Ledger ledger = new Ledger();
 
         ledger.setName(personalInformation.getFullName());
         ledger.setGroupAccount(groupAccount);
         ledger.setLedgerType(LEDGER_TYPE.OTHER);
         ledger.setOpeningBalance(0d);
-        ledger.setOpeningEntryType(ACCOUNTING_ENTRY.DR);
+        ledger.setOpeningBalanceEntryType(ACCOUNTING_ENTRY.DR);
+        ledger.setCurrentBalance(0d);
+        ledger.setCurrentBalanceEntryType(ACCOUNTING_ENTRY.DR);
         ledger.setNotes("");
         ledger.setPersonalInformation(personalInformation);
         ledger.setReconciliation(0);
@@ -93,7 +97,9 @@ public class LedgerService {
         ledger.setGroupAccount(groupAccount);
         ledger.setLedgerType(LEDGER_TYPE.OTHER);
         ledger.setOpeningBalance(0d);
-        ledger.setOpeningEntryType(ACCOUNTING_ENTRY.CR);
+        ledger.setOpeningBalanceEntryType(ACCOUNTING_ENTRY.CR);
+        ledger.setCurrentBalance(0d);
+        ledger.setCurrentBalanceEntryType(ACCOUNTING_ENTRY.CR);
         ledger.setNotes("");
         ledger.setCompany(company);
         ledger.setReconciliation(0);
@@ -110,7 +116,9 @@ public class LedgerService {
         ledger.setGroupAccount(groupAccount);
         ledger.setLedgerType(LEDGER_TYPE.OTHER);
         ledger.setOpeningBalance(0d);
-        ledger.setOpeningEntryType(ACCOUNTING_ENTRY.CR);
+        ledger.setOpeningBalanceEntryType(ACCOUNTING_ENTRY.CR);
+        ledger.setCurrentBalance(0d);
+        ledger.setCurrentBalanceEntryType(ACCOUNTING_ENTRY.CR);
         ledger.setNotes("");
         ledger.setCompany(company);
         ledger.setReconciliation(0);

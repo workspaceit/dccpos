@@ -10,7 +10,7 @@ public class ProductForm {
     private Integer categoryId;
 
     @NotEmpty(message = "Product name required")
-    @Length(max = 50,message = "Value too large")
+    @Length(max = 200,message = "Value too large")
     private String name;
 
     @Min(value = 0,message = "Weight Can't less be zero")

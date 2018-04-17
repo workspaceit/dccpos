@@ -4,6 +4,7 @@ import com.workspaceit.pos.dao.ProductDao;
 import com.workspaceit.pos.entity.Category;
 import com.workspaceit.pos.entity.Product;
 import com.workspaceit.pos.exception.EntityNotFound;
+import com.workspaceit.pos.helper.FormFilterHelper;
 import com.workspaceit.pos.validation.form.product.ProductCreateForm;
 import com.workspaceit.pos.validation.form.product.ProductUpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,26 @@ public class ProductService {
     }
 
     @Transactional
+    public List<Product> getAll(int limit, int offset){
+        offset = (offset-1)*limit;
+        return this.productDao.findAll(limit,offset);
+    }
+    @Transactional
+    public List<Product> getByCategoryId(int categoryId,int limit, int offset){
+        offset = (offset-1)*limit;
+        return this.productDao.findByCategoryId(categoryId,limit,offset);
+    }
+    @Transactional
+    public long getByCategoryIdCount(int categoryId){
+        return this.productDao.findByCategoryIdCount(categoryId);
+    }
+
+    @Transactional
+    public long getTotalRowCount(){
+        return this.productDao.findTotalRowCount(Product.class);
+    }
+
+    @Transactional
     public Product getById(int id){
         return this.productDao.findById(id);
     }
@@ -56,12 +77,24 @@ public class ProductService {
     public Product  getByBarcode(String barcode){
         return this.productDao.findByBarcode(barcode);
     }
+    @Transactional
+    public Product  getByBarcodeAndNotById(int id,String barcode){
+        return this.productDao.findByBarcodeAndNotById(id,barcode);
+    }
+
 
     @Transactional
-    public List<Product> getByNameLike(String nameLike){
-        return this.productDao.findByNameLike(nameLike);
+    public List<Product> getByNameLike(String nameLike,int limit, int offset){
+        offset = (offset-1)*limit;
+        return this.productDao.findByNameLike(limit,offset,nameLike);
+    }
+    @Transactional
+    public long getByNameLikeCount(String nameLike){
+        return this.productDao.findByNameLikeCount(nameLike);
     }
     public Product create(ProductCreateForm productCreateForm) throws EntityNotFound {
+
+        FormFilterHelper.doBasicFiler(productCreateForm);
 
         Category category =(productCreateForm.getCategoryId()!=null)?
                             this.categoryService.getCategory(productCreateForm.getCategoryId()):null;
@@ -87,6 +120,7 @@ public class ProductService {
         return product;
     }
     public Product update(int id,ProductUpdateForm productUpdateForm) throws EntityNotFound {
+        FormFilterHelper.doBasicFiler(productUpdateForm);
 
         Product product = this.getProduct(id);
 
