@@ -12,7 +12,7 @@ TRUNCATE TABLE `personal_information`;
 TRUNCATE TABLE `company`;
 DELETE from `acc_ledgers` where `personal_info_id` IS NOT NULL OR `company_id` IS NOT NULL;
 SET FOREIGN_KEY_CHECKS =1;
-
+w
 /*Remove Personal Information*/
 SET FOREIGN_KEY_CHECKS =0;
 TRUNCATE TABLE  `product`;

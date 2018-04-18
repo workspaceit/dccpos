@@ -1,6 +1,6 @@
 package resetendpoint;
 
-import com.workspaceit.pos.constant.EndpointRequestUriPrefix;
+import com.workspaceit.dccpos.constant.EndpointRequestUriPrefix;
 
 public class BaseTest {
     protected final String authUri = EndpointRequestUriPrefix.endPointAuth;

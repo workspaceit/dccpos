@@ -1,7 +1,7 @@
 package resetendpoint;
-import com.workspaceit.pos.config.WebConfig;
+import com.workspaceit.dccpos.config.WebConfig;
 
-import com.workspaceit.pos.helper.FormToNameValuePair;
+import com.workspaceit.dccpos.helper.FormToNameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;

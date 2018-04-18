@@ -1,8 +1,8 @@
 package resetendpoint;
 
-import com.workspaceit.pos.config.WebConfig;
+import com.workspaceit.dccpos.config.WebConfig;
 
-import com.workspaceit.pos.helper.FormToNameValuePair;
+import com.workspaceit.dccpos.helper.FormToNameValuePair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
