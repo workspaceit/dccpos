@@ -14,8 +14,8 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToMany
-    @JoinColumn(name = "inventory_id",referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "inventory_id",referencedColumnName = "id",nullable = false)
     private List<InventoryDetails> inventoryDetails;
 
 
@@ -60,6 +60,14 @@ public class Inventory {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public List<InventoryDetails> getInventoryDetails() {
+        return inventoryDetails;
+    }
+
+    public void setInventoryDetails(List<InventoryDetails> inventoryDetails) {
+        this.inventoryDetails = inventoryDetails;
     }
 
     public Product getProduct() {
@@ -135,6 +143,7 @@ public class Inventory {
         this.createdAt = createdAt;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -147,6 +156,8 @@ public class Inventory {
         if (soldQuantity != inventory.soldQuantity) return false;
         if (availableQuantity != inventory.availableQuantity) return false;
         if (damagedQuantity != inventory.damagedQuantity) return false;
+        if (inventoryDetails != null ? !inventoryDetails.equals(inventory.inventoryDetails) : inventory.inventoryDetails != null)
+            return false;
         if (product != null ? !product.equals(inventory.product) : inventory.product != null) return false;
         if (shipment != null ? !shipment.equals(inventory.shipment) : inventory.shipment != null) return false;
         if (purchasePrice != null ? !purchasePrice.equals(inventory.purchasePrice) : inventory.purchasePrice != null)
@@ -158,6 +169,7 @@ public class Inventory {
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + (inventoryDetails != null ? inventoryDetails.hashCode() : 0);
         result = 31 * result + (product != null ? product.hashCode() : 0);
         result = 31 * result + (shipment != null ? shipment.hashCode() : 0);
         result = 31 * result + (purchasePrice != null ? purchasePrice.hashCode() : 0);

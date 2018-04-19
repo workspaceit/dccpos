@@ -26,8 +26,9 @@ public class InventoryDetails {
     @Column(name = "available_quantity")
     private int availableQuantity;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "condition")
-    PRODUCT_CONDITION condition;
+    private PRODUCT_CONDITION condition;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "shipment")
@@ -18,6 +19,11 @@ public class Shipment {
     @ManyToOne
     @JoinColumn(name = "supplier_id",referencedColumnName = "id")
     private Supplier supplier;
+
+
+    @OneToMany
+    @JoinColumn(name = "shipment_id",referencedColumnName = "id")
+    private List<Inventory> inventories;
 
     @Column(name = "cf_cost")
     private double cfCost;
@@ -66,6 +72,14 @@ public class Shipment {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public List<Inventory> getInventories() {
+        return inventories;
+    }
+
+    public void setInventories(List<Inventory> inventories) {
+        this.inventories = inventories;
     }
 
     public double getCfCost() {
@@ -124,6 +138,7 @@ public class Shipment {
         this.createdAt = createdAt;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -138,7 +153,10 @@ public class Shipment {
         if (Double.compare(shipment.otherCost, otherCost) != 0) return false;
         if (trackingId != null ? !trackingId.equals(shipment.trackingId) : shipment.trackingId != null) return false;
         if (supplier != null ? !supplier.equals(shipment.supplier) : shipment.supplier != null) return false;
-        if (purchasedBy != null ? !purchasedBy.equals(shipment.purchasedBy) : shipment.purchasedBy != null) return false;
+        if (inventories != null ? !inventories.equals(shipment.inventories) : shipment.inventories != null)
+            return false;
+        if (purchasedBy != null ? !purchasedBy.equals(shipment.purchasedBy) : shipment.purchasedBy != null)
+            return false;
         if (purchasedDate != null ? !purchasedDate.equals(shipment.purchasedDate) : shipment.purchasedDate != null)
             return false;
         return createdAt != null ? createdAt.equals(shipment.createdAt) : shipment.createdAt == null;
@@ -151,6 +169,7 @@ public class Shipment {
         result = id;
         result = 31 * result + (trackingId != null ? trackingId.hashCode() : 0);
         result = 31 * result + (supplier != null ? supplier.hashCode() : 0);
+        result = 31 * result + (inventories != null ? inventories.hashCode() : 0);
         temp = Double.doubleToLongBits(cfCost);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(carryingCost);

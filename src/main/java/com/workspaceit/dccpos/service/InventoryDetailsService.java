@@ -2,7 +2,8 @@ package com.workspaceit.dccpos.service;
 
 import com.workspaceit.dccpos.dao.InventoryDetailsDao;
 import com.workspaceit.dccpos.entity.InventoryDetails;
-import com.workspaceit.dccpos.validation.form.inventory.InventoryCreateFrom;
+import com.workspaceit.dccpos.validation.form.inventoryDetails.InventoryDetailsCreateForm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,22 +15,58 @@ import java.util.List;
 public class InventoryDetailsService {
     private InventoryDetailsDao inventoryDetailsDao;
 
-    public List<InventoryDetails> create(List<InventoryCreateFrom> inventoryCreateFroms){
-        List<InventoryDetails> inventoryDetailsList = new ArrayList<>();
-        InventoryDetails  inventoryDetails = new InventoryDetails();
-
-
-
-        return inventoryDetailsList;
-
+    @Autowired
+    public void setInventoryDetailsDao(InventoryDetailsDao inventoryDetailsDao) {
+        this.inventoryDetailsDao = inventoryDetailsDao;
     }
 
-    public InventoryDetails create(InventoryCreateFrom inventoryCreateFrom){
+    @Transactional(rollbackFor = Exception.class)
+    public List<InventoryDetails> create(InventoryDetailsCreateForm[] inventoryCreateFroms){
+        List<InventoryDetails> inventoryDetailsList = new ArrayList<>();
+
+        for(InventoryDetailsCreateForm  inventoryDetailsCreateForm :inventoryCreateFroms){
+            InventoryDetails inventoryDetails =  this.create(inventoryDetailsCreateForm);
+            inventoryDetailsList.add(inventoryDetails);
+        }
+
+        return inventoryDetailsList;
+    }
+
+    private InventoryDetails create(InventoryDetailsCreateForm inventoryCreateFrom){
         InventoryDetails  inventoryDetails = new InventoryDetails();
 
-
-
+        inventoryDetails.setCondition(inventoryCreateFrom.getStatus());
+        inventoryDetails.setPurchasedQuantity( inventoryCreateFrom.getPurchaseQuantity());
+        inventoryDetails.setSellingPrice(inventoryCreateFrom.getSellingPrice());
+        /**
+         * Initially all quantity are Available Quantity
+         * */
+        inventoryDetails.setAvailableQuantity(inventoryCreateFrom.getPurchaseQuantity());
         return inventoryDetails;
+    }
 
+    public void merge(InventoryDetails inventory, InventoryDetailsCreateForm inventoryFrom){
+        double sellingPrice = inventory.getSellingPrice();
+        int purchasedQuantity = inventory.getPurchasedQuantity();
+
+        double formSellingPrice = inventoryFrom.getSellingPrice()==null?0:inventoryFrom.getSellingPrice();
+        int formPurchasedQuantity = inventoryFrom.getPurchaseQuantity()==null?0:inventoryFrom.getPurchaseQuantity();
+
+
+        inventory.setSellingPrice(sellingPrice+formSellingPrice);
+        inventory.setPurchasedQuantity(purchasedQuantity+formPurchasedQuantity);
+
+    }
+    private void save(InventoryDetails inventoryDetails){
+        this.inventoryDetailsDao.save(inventoryDetails);
+    }
+    private void update(InventoryDetails inventoryDetails){
+        this.inventoryDetailsDao.update(inventoryDetails);
+    }
+    private void save(List<InventoryDetails> inventoryDetailsList){
+        this.inventoryDetailsDao.saveAll(inventoryDetailsList);
+    }
+    private void update(List<InventoryDetails> inventoryDetailsList){
+        this.inventoryDetailsDao.updateAll(inventoryDetailsList);
     }
 }

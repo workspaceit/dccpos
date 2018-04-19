@@ -32,6 +32,7 @@ public class InventoryValidator {
                 this.validateProduct(tmpPrefix,inventoryFrom.getProductId(),errors);
             }
         }
+        this.validateDuplicateProductId(prefix,inventoryFroms,errors);
     }
 
     private void validateProduct(String prefix,Integer productId,Errors errors){
@@ -42,16 +43,22 @@ public class InventoryValidator {
     }
 
     /**
-     * Not used
+     * Find duplicate in same array
      *
      * */
     public void validateDuplicateProductId(String prefix,InventoryFrom[] inventoryFroms,Errors errors){
       List<InventoryFrom> inventoryFromList =  Arrays.asList(inventoryFroms);
         for(int i=0;i<inventoryFroms.length;i++){
             InventoryFrom inventoryForm = inventoryFroms[i];
+            if(inventoryForm==null || inventoryForm.getProductId()==null || inventoryForm.getProductId()==0)
+                continue;
             boolean found  =   inventoryFromList.stream().anyMatch(
-                                      invFrom ->invFrom.getProductId().equals(inventoryForm.getProductId())
-                              );
+                                      invFrom ->{
+                                          if(invFrom==null || invFrom.getProductId()==null || invFrom.getProductId()==0)
+                                              return false;
+                                          return (invFrom!=inventoryForm) && invFrom.getProductId().equals(inventoryForm.getProductId());
+
+                                      });
             if(found){
                 String tmpPrefix = ValidationHelper.preparePrefix(prefix+"["+i+"]");
                 errors.rejectValue(tmpPrefix+"productId","Duplicate product id found");

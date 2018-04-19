@@ -12,18 +12,18 @@ import java.util.Arrays;
 public class PurchaseForm {
     @Valid
     @NotNull
-    private InventoryCreateFrom[] inventory;
+    private InventoryCreateFrom[] inventories;
 
     @Valid
     @NotNull
     private ShipmentCreateForm shipment;
 
-    public InventoryCreateFrom[] getInventory() {
-        return inventory;
+    public InventoryCreateFrom[] getInventories() {
+        return inventories;
     }
 
-    public void setInventory(InventoryCreateFrom[] inventory) {
-        this.inventory = inventory;
+    public void setInventories(InventoryCreateFrom[] inventories) {
+        this.inventories = inventories;
     }
 
     public ShipmentCreateForm getShipment() {
@@ -37,7 +37,7 @@ public class PurchaseForm {
     @Override
     public String toString() {
         return "PurchaseForm{" +
-                "inventory=" + Arrays.toString(inventory) +
+                "inventories=" + Arrays.toString(inventories) +
                 ", shipment=" + shipment +
                 '}';
     }

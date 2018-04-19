@@ -21,8 +21,8 @@ public class PurchaseValidator {
     }
 
     public void validate(PurchaseForm purchaseForm, Errors errors){
-        this.inventoryValidator.validate("inventory",purchaseForm.getInventory(),errors);
         this.shipmentValidator.validate("shipment",purchaseForm.getShipment(),errors);
+        this.inventoryValidator.validate("inventories",purchaseForm.getInventories(),errors);
     }
 
 }
