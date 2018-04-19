@@ -43,10 +43,16 @@ public class InventoryService {
     public List<Inventory> create(InventoryCreateFrom[] inventoryFroms) throws EntityNotFound {
         List<Inventory> inventories = new ArrayList<>();
         for(InventoryCreateFrom inventoryFrom:inventoryFroms){
+            List<InventoryDetails>  detailsList =  this.inventoryDetailsService.create(inventoryFrom.getDetails());
+
+            int totalQuantity = this.inventoryDetailsService.getTotalPurchasedQuantity(detailsList);
+
             Inventory inventory = this.getFromCreateFrom(inventoryFrom);
             inventories.add(inventory);
-            List<InventoryDetails>  detailsList =  this.inventoryDetailsService.create(inventoryFrom.getDetails());
             inventory.setInventoryDetails(detailsList);
+            inventory.setPurchaseQuantity(totalQuantity);
+            inventory.setAvailableQuantity(totalQuantity);
+
         }
 
 
@@ -62,15 +68,14 @@ public class InventoryService {
 
         inventory.setProduct(product);
         inventory.setPurchasePrice(inventoryFrom.getPurchasePrice());
+        inventory.setSoldQuantity(0);
 
         /**
          * Sum of Inventory details
          * */
         inventory.setPurchaseQuantity(0);
         inventory.setAvailableQuantity(0);
-        inventory.setDamagedQuantity(0);
-        inventory.setShipment(null);
-        inventory.setSoldQuantity(0);
+
         inventory.setStatus(INVENTORY_STATUS.IN_STOCK);
 
         return inventory;

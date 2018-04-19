@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.service;
 
+import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
 import com.workspaceit.dccpos.dao.InventoryDetailsDao;
 import com.workspaceit.dccpos.entity.InventoryDetails;
 import com.workspaceit.dccpos.validation.form.inventoryDetails.InventoryDetailsCreateForm;
@@ -57,6 +58,17 @@ public class InventoryDetailsService {
         inventory.setPurchasedQuantity(purchasedQuantity+formPurchasedQuantity);
 
     }
+    public int getTotalPurchasedQuantity(List<InventoryDetails> inventoryDetails ){
+       int totalQuantity = 0;
+
+       if(inventoryDetails==null || inventoryDetails.size()==0)return totalQuantity;
+
+       for(InventoryDetails inventoryDetail : inventoryDetails){
+           totalQuantity += inventoryDetail.getPurchasedQuantity();
+       }
+       return totalQuantity;
+    }
+
     private void save(InventoryDetails inventoryDetails){
         this.inventoryDetailsDao.save(inventoryDetails);
     }

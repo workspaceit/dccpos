@@ -39,9 +39,6 @@ public class Inventory {
     @Column(name = "available_quantity")
     private int availableQuantity;
 
-    @Column(name = "damaged_quantity")
-    private int damagedQuantity;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private INVENTORY_STATUS status;
@@ -118,13 +115,7 @@ public class Inventory {
         this.availableQuantity = availableQuantity;
     }
 
-    public int getDamagedQuantity() {
-        return damagedQuantity;
-    }
 
-    public void setDamagedQuantity(int damagedQuantity) {
-        this.damagedQuantity = damagedQuantity;
-    }
 
     public INVENTORY_STATUS getStatus() {
         return status;
@@ -143,7 +134,6 @@ public class Inventory {
         this.createdAt = createdAt;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -155,7 +145,6 @@ public class Inventory {
         if (purchaseQuantity != inventory.purchaseQuantity) return false;
         if (soldQuantity != inventory.soldQuantity) return false;
         if (availableQuantity != inventory.availableQuantity) return false;
-        if (damagedQuantity != inventory.damagedQuantity) return false;
         if (inventoryDetails != null ? !inventoryDetails.equals(inventory.inventoryDetails) : inventory.inventoryDetails != null)
             return false;
         if (product != null ? !product.equals(inventory.product) : inventory.product != null) return false;
@@ -176,7 +165,6 @@ public class Inventory {
         result = 31 * result + purchaseQuantity;
         result = 31 * result + soldQuantity;
         result = 31 * result + availableQuantity;
-        result = 31 * result + damagedQuantity;
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;
