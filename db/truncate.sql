@@ -5,7 +5,7 @@ TRUNCATE TABLE  `acess_role`;
 TRUNCATE TABLE `auth_credential`;
 TRUNCATE TABLE `wholesaler`;
 TRUNCATE TABLE `supplier`;
-TRUNCATE TABLE `employee`;
+TRUNCATE TABLE `purchasedBy`;
 TRUNCATE TABLE `company_role`;
 TRUNCATE TABLE `address`;
 TRUNCATE TABLE `personal_information`;

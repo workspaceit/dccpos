@@ -56,4 +56,26 @@ public class Supplier {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Supplier supplier = (Supplier) o;
+
+        if (id != supplier.id) return false;
+        if (company != null ? !company.equals(supplier.company) : supplier.company != null) return false;
+        if (supplierId != null ? !supplierId.equals(supplier.supplierId) : supplier.supplierId != null) return false;
+        return createdAt != null ? createdAt.equals(supplier.createdAt) : supplier.createdAt == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (company != null ? company.hashCode() : 0);
+        result = 31 * result + (supplierId != null ? supplierId.hashCode() : 0);
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+        return result;
+    }
 }

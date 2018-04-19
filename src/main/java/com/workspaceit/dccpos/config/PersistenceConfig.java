@@ -25,7 +25,7 @@ public class PersistenceConfig {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(restDataSource());
         sessionFactory.setPackagesToScan(
-                new String[] { "com.workspaceit.pos.entity"});
+                new String[] { "com.workspaceit.dccpos.entity"});
         sessionFactory.setHibernateProperties(hibernateProperties());
 //        sessionFactory.setAnnotatedPackages(new String[] {"com.workspaceit.pos.entity"});
         return sessionFactory;

@@ -121,7 +121,6 @@ public class ProductEndPoint {
         try {
             product = this.productService.update(id,productUpdateForm);
         } catch (EntityNotFound entityNotFound) {
-            serviceResponse.bindValidationError(bindingResult);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ServiceResponse.getMsgInMap(entityNotFound.getMessage()));
         }
 

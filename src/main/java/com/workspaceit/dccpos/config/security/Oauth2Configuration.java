@@ -1,6 +1,7 @@
 package com.workspaceit.dccpos.config.security;
 
 import com.workspaceit.dccpos.config.Environment;
+import com.workspaceit.dccpos.config.security.filter.CustomTokenEndpointAuthenticationFilter;
 import com.workspaceit.dccpos.constant.ACCESS_ROLE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,6 +20,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
@@ -60,7 +62,7 @@ public class Oauth2Configuration {
         private AuthenticationManager authenticationManager;
         private UserDetailsService authCredentialDetailsService;
         private Environment environment;
-
+        private OAuth2RequestFactory oAuth2RequestFactory;
 
 
         @Autowired
@@ -94,6 +96,8 @@ public class Oauth2Configuration {
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+            this.oAuth2RequestFactory = endpoints.getOAuth2RequestFactory();
+
             endpoints.tokenStore(tokenStore)
                     .authenticationManager(authenticationManager)
                     .userDetailsService(authCredentialDetailsService);
@@ -102,7 +106,9 @@ public class Oauth2Configuration {
         @Override
         public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
             oauthServer.allowFormAuthenticationForClients()
-                    .passwordEncoder(passwordEncoder);
+                    .passwordEncoder(passwordEncoder)
+                    .addTokenEndpointAuthenticationFilter(new CustomTokenEndpointAuthenticationFilter(this.authenticationManager,this.oAuth2RequestFactory ));
+
         }
 
 
