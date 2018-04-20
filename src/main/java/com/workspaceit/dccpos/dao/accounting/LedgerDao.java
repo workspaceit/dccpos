@@ -1,6 +1,7 @@
 package com.workspaceit.dccpos.dao.accounting;
 
 import com.workspaceit.dccpos.constant.accounting.GROUP_CODE;
+import com.workspaceit.dccpos.constant.accounting.LEDGER_CODE;
 import com.workspaceit.dccpos.dao.BaseDao;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
 import org.hibernate.Session;
@@ -16,7 +17,14 @@ public class LedgerDao extends BaseDao {
         return session.createQuery("FROM Ledger")
                 .list();
     }
-    public Ledger findByPersonalInfoIdAndCode(int personalInformationId, GROUP_CODE groupCode){
+    public Ledger findByCode( LEDGER_CODE ledgerCode){
+        Session session = this.getCurrentSession();
+        return (Ledger)session.createQuery(" FROM Ledger lg where lg.code =:ledgerCode ")
+                .setParameter("ledgerCode",ledgerCode)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+    public Ledger findByPersonalInfoIdAndGroupCode(int personalInformationId, GROUP_CODE groupCode){
         Session session = this.getCurrentSession();
         return (Ledger)session.createQuery(" FROM Ledger lg where lg.personalInformation.id =:personalInformationId " +
                                                 " and lg.groupAccount.code=:groupCode")
@@ -25,7 +33,7 @@ public class LedgerDao extends BaseDao {
                 .setMaxResults(1)
                 .uniqueResult();
     }
-    public Ledger findByCompanyAndCode(int companyId, GROUP_CODE groupCode){
+    public Ledger findByCompanyAndGroupCode(int companyId, GROUP_CODE groupCode){
         Session session = this.getCurrentSession();
         return (Ledger)session.createQuery(" FROM Ledger lg where lg.company.id =:companyId " +
                                         " and lg.groupAccount.code=:groupCode ")

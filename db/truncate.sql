@@ -23,4 +23,6 @@ SET FOREIGN_KEY_CHECKS =0;
 TRUNCATE TABLE `shipment`;
 TRUNCATE TABLE `inventory`;
 TRUNCATE TABLE `inventory_details`;
+TRUNCATE TABLE `acc_entries`;
+TRUNCATE TABLE `acc_entry_items`;
 SET FOREIGN_KEY_CHECKS =1;

@@ -101,7 +101,7 @@ public class ProductService {
         int weight =  productCreateForm.getWeight()!=null?productCreateForm.getWeight():0;
         String imagePath = "";
 
-        if(productCreateForm.getImageToken()!=null || productCreateForm.getImageToken()>0){
+        if(productCreateForm.getImageToken()!=null && productCreateForm.getImageToken()>0){
             imagePath = this.tempFileService.copyFileToCommonFolder(productCreateForm.getImageToken());
         }
 
@@ -157,10 +157,11 @@ public class ProductService {
 
         return product;
     }
+
     private void save(Product product){
         this.productDao.save(product);
     }
-    private void update(Product product){
+    public void update(Product product){
         this.productDao.update(product);
     }
 }

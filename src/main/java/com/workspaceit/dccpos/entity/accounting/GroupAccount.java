@@ -16,6 +16,7 @@ public class GroupAccount {
     @Column(name = "parent_id")
     private Integer parentId;
 
+
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id",referencedColumnName = "id")
     private List<GroupAccount> child;

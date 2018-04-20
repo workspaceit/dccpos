@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.service;
 
+import com.workspaceit.dccpos.constant.INVENTORY_ATTRS;
 import com.workspaceit.dccpos.dao.ShipmentDao;
 import com.workspaceit.dccpos.entity.Employee;
 import com.workspaceit.dccpos.entity.Inventory;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -37,6 +39,19 @@ public class ShipmentService {
     public void setSupplierService(SupplierService supplierService) {
         this.supplierService = supplierService;
     }
+
+    @Transactional
+    public Shipment getByShipment(int id) throws EntityNotFound {
+        Shipment shipment =  this.shipmentDao.getById(id);
+
+        if(shipment==null)throw new EntityNotFound("ENtity not found by id: "+id);
+        return shipment;
+    }
+    @Transactional
+    public Shipment getById(int id){
+        return this.shipmentDao.getById(id);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public Shipment create(Employee employee, PurchaseForm purchaseForm)throws EntityNotFound{
         ShipmentCreateForm shipmentCreateForm = purchaseForm.getShipment();
@@ -45,21 +60,31 @@ public class ShipmentService {
         double carryingCost = shipmentCreateForm.getCarryingCost()==null?0:shipmentCreateForm.getCarryingCost();
         double cfCost = shipmentCreateForm.getCfCost()==null?0:shipmentCreateForm.getCfCost();
         double laborCost = shipmentCreateForm.getLaborCost()==null?0:shipmentCreateForm.getLaborCost();
-
+        double otherCost = shipmentCreateForm.getOtherCost()==null?0:shipmentCreateForm.getOtherCost();
+        double totalCost = this.getTotalCost(shipmentCreateForm);
         /**
          * Create Inventory
          * */
         List<Inventory> inventories = this.inventoryService.create(purchaseForm.getInventories());
+        Map<INVENTORY_ATTRS,Double> priceCostMap = this.inventoryService.getTotalProductPriceAndQuantity(inventories);
 
         Shipment shipment = new Shipment();
 
         shipment.setSupplier(supplier);
+
         shipment.setCarryingCost(carryingCost);
         shipment.setCfCost(cfCost);
         shipment.setLaborCost(laborCost);
-        shipment.setPurchasedBy(employee);
-        shipment.setPurchasedDate(shipmentCreateForm.getPurchaseDate());
+        shipment.setOtherCost(otherCost);
+
         shipment.setInventories(inventories);
+
+        shipment.setTotalProductPrice(priceCostMap.get(INVENTORY_ATTRS.TOTAL_PRICE));
+        shipment.setTotalQuantity(priceCostMap.get(INVENTORY_ATTRS.TOTAL_QUANTITY).intValue());
+        shipment.setTotalCost(totalCost);
+
+        shipment.setPurchasedDate(shipmentCreateForm.getPurchaseDate());
+        shipment.setPurchasedBy(employee);
 
         this.save(shipment);
 
@@ -74,10 +99,34 @@ public class ShipmentService {
 
         return shipment;
     }
+    public double getTotalCost(Shipment shipment){
+        double totalCost = 0;
+        totalCost += shipment.getCarryingCost();
+        totalCost += shipment.getCfCost();
+        totalCost += shipment.getLaborCost();
+        totalCost += shipment.getTotalProductPrice();
+
+        return totalCost;
+    }
+    public void update(Shipment shipment){
+        this.shipmentDao.update(shipment);
+    }
+    public double getTotalCost(ShipmentCreateForm shipmentCreateForm){
+        double totalCost = 0;
+        double carryingCost = shipmentCreateForm.getCarryingCost()==null?0:shipmentCreateForm.getCarryingCost();
+        double cfCost = shipmentCreateForm.getCfCost()==null?0:shipmentCreateForm.getCfCost();
+        double laborCost = shipmentCreateForm.getLaborCost()==null?0:shipmentCreateForm.getLaborCost();
+        double otherCost = shipmentCreateForm.getOtherCost()==null?0:shipmentCreateForm.getOtherCost();
+
+
+        totalCost += carryingCost;
+        totalCost +=cfCost;
+        totalCost += laborCost;
+        totalCost +=otherCost;
+
+        return totalCost;
+    }
     private void save(Shipment shipment){
         this.shipmentDao.save(shipment);
-    }
-    private void update(Shipment shipment){
-        this.shipmentDao.update(shipment);
     }
 }

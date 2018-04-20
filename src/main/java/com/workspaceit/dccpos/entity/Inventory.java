@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.workspaceit.dccpos.constant.INVENTORY_STATUS;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -19,7 +20,8 @@ public class Inventory {
     private List<InventoryDetails> inventoryDetails;
 
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id",referencedColumnName = "id")
     private Product product;
 

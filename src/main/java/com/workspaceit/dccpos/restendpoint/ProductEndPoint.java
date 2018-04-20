@@ -1,8 +1,10 @@
 package com.workspaceit.dccpos.restendpoint;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.workspaceit.dccpos.constant.EndpointRequestUriPrefix;
 import com.workspaceit.dccpos.entity.Product;
 import com.workspaceit.dccpos.exception.EntityNotFound;
+import com.workspaceit.dccpos.jsonView.ProductOnCartView;
 import com.workspaceit.dccpos.service.ProductService;
 import com.workspaceit.dccpos.util.ServiceResponse;
 import com.workspaceit.dccpos.util.ValidationUtil;
@@ -41,6 +43,7 @@ public class ProductEndPoint {
         this.validationUtil = validationUtil;
     }
 
+
     @RequestMapping("/get-all/{limit}/{offset}")
     public ResponseEntity<?> getAll(@PathVariable int limit, @PathVariable int offset){
         ServiceResponse serviceResponse = this.validationUtil.limitOffsetValidation(limit,offset,10);
@@ -67,6 +70,11 @@ public class ProductEndPoint {
         return ResponseEntity.ok(serviceResponse.getResult(totalRowCount,productList));
     }
 
+    @RequestMapping(value = "/get/{id}",method = RequestMethod.GET)
+    public ResponseEntity<?> getByBarcode(@PathVariable("id") Integer id){
+        Product product = this.productService.getById(id);
+        return ResponseEntity.ok(product);
+    }
     @RequestMapping(value = "/get-by-barcode",method = RequestMethod.GET)
     public ResponseEntity<?> getByBarcode(@RequestParam("barcode") String barcode){
         Product product = this.productService.getByBarcode(barcode);

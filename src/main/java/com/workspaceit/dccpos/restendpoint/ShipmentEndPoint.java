@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -38,7 +35,13 @@ public class ShipmentEndPoint {
     }
 
 
+    @RequestMapping(value = "/get/{id}",method = RequestMethod.POST)
+    public ResponseEntity<?> create(@PathVariable("id") Integer id){
+        Shipment shipment  =  this.shipmentService.getById(id);
 
+
+        return ResponseEntity.ok(shipment);
+    }
 
 
 

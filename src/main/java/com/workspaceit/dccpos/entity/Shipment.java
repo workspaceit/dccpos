@@ -1,10 +1,12 @@
 package com.workspaceit.dccpos.entity;
 
+import com.workspaceit.dccpos.entity.accounting.Entry;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "shipment")
@@ -20,6 +22,9 @@ public class Shipment {
     @JoinColumn(name = "supplier_id",referencedColumnName = "id")
     private Supplier supplier;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "entry_id",referencedColumnName = "id")
+    private Entry entry;
 
     @OneToMany
     @JoinColumn(name = "shipment_id",referencedColumnName = "id")
@@ -36,6 +41,16 @@ public class Shipment {
 
     @Column(name = "other_cost")
     private double otherCost;
+
+
+    @Column(name = "total_quantity")
+    private int totalQuantity;
+
+    @Column(name = "total_product_price")
+    private double totalProductPrice;
+
+    @Column(name = "total_cost")
+    private double totalCost;
 
     @ManyToOne
     @JoinColumn(name = "purchased_by")
@@ -72,6 +87,14 @@ public class Shipment {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public Entry getEntry() {
+        return entry;
+    }
+
+    public void setEntry(Entry entry) {
+        this.entry = entry;
     }
 
     public List<Inventory> getInventories() {
@@ -114,6 +137,31 @@ public class Shipment {
         this.otherCost = otherCost;
     }
 
+
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(int totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
+    public double getTotalProductPrice() {
+        return totalProductPrice;
+    }
+
+    public void setTotalProductPrice(double totalProductPrice) {
+        this.totalProductPrice = totalProductPrice;
+    }
+
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
+
     public Employee getPurchasedBy() {
         return purchasedBy;
     }
@@ -138,7 +186,6 @@ public class Shipment {
         this.createdAt = createdAt;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -151,8 +198,12 @@ public class Shipment {
         if (Double.compare(shipment.carryingCost, carryingCost) != 0) return false;
         if (Double.compare(shipment.laborCost, laborCost) != 0) return false;
         if (Double.compare(shipment.otherCost, otherCost) != 0) return false;
+        if (totalQuantity != shipment.totalQuantity) return false;
+        if (Double.compare(shipment.totalProductPrice, totalProductPrice) != 0) return false;
+        if (Double.compare(shipment.totalCost, totalCost) != 0) return false;
         if (trackingId != null ? !trackingId.equals(shipment.trackingId) : shipment.trackingId != null) return false;
         if (supplier != null ? !supplier.equals(shipment.supplier) : shipment.supplier != null) return false;
+        if (entry != null ? !entry.equals(shipment.entry) : shipment.entry != null) return false;
         if (inventories != null ? !inventories.equals(shipment.inventories) : shipment.inventories != null)
             return false;
         if (purchasedBy != null ? !purchasedBy.equals(shipment.purchasedBy) : shipment.purchasedBy != null)
@@ -169,6 +220,7 @@ public class Shipment {
         result = id;
         result = 31 * result + (trackingId != null ? trackingId.hashCode() : 0);
         result = 31 * result + (supplier != null ? supplier.hashCode() : 0);
+        result = 31 * result + (entry != null ? entry.hashCode() : 0);
         result = 31 * result + (inventories != null ? inventories.hashCode() : 0);
         temp = Double.doubleToLongBits(cfCost);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
@@ -177,6 +229,11 @@ public class Shipment {
         temp = Double.doubleToLongBits(laborCost);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(otherCost);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + totalQuantity;
+        temp = Double.doubleToLongBits(totalProductPrice);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(totalCost);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (purchasedBy != null ? purchasedBy.hashCode() : 0);
         result = 31 * result + (purchasedDate != null ? purchasedDate.hashCode() : 0);

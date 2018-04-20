@@ -33,8 +33,7 @@ public class Entry {
     @Column(name = "narration")
     private String   narration;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "entry_id")
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "entry")
     private List<EntryItem> entryItems;
 
     @CreationTimestamp

@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.service;
 
+import com.workspaceit.dccpos.constant.INVENTORY_ATTRS;
 import com.workspaceit.dccpos.constant.INVENTORY_STATUS;
 import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
 import com.workspaceit.dccpos.dao.InventoryDao;
@@ -13,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -59,6 +58,27 @@ public class InventoryService {
         this.save(inventories);
 
         return inventories;
+    }
+    public Map<INVENTORY_ATTRS,Double> getTotalProductPriceAndQuantity(List<Inventory> inventories){
+        Map<INVENTORY_ATTRS,Double> map = new HashMap<>();
+        map.put(INVENTORY_ATTRS.TOTAL_PRICE,0d);
+        map.put(INVENTORY_ATTRS.TOTAL_QUANTITY,0d);
+
+        double totalPrice = 0;
+        double totalQuantity = 0;
+
+        if(inventories==null || inventories.size()==0)return map;
+
+        for(Inventory inventory:inventories){
+            totalPrice += inventory.getPurchasePrice()*(double)inventory.getPurchaseQuantity();
+            totalQuantity +=inventory.getPurchaseQuantity();
+        }
+
+        map.put(INVENTORY_ATTRS.TOTAL_PRICE,totalPrice);
+        map.put(INVENTORY_ATTRS.TOTAL_QUANTITY,totalQuantity);
+
+        return map;
+
     }
     private Inventory getFromCreateFrom(InventoryFrom inventoryFrom) throws EntityNotFound {
         Inventory inventory = new Inventory();

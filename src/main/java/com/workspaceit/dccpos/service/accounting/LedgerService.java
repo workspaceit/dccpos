@@ -2,6 +2,7 @@ package com.workspaceit.dccpos.service.accounting;
 
 import com.workspaceit.dccpos.constant.accounting.ACCOUNTING_ENTRY;
 import com.workspaceit.dccpos.constant.accounting.GROUP_CODE;
+import com.workspaceit.dccpos.constant.accounting.LEDGER_CODE;
 import com.workspaceit.dccpos.constant.accounting.LEDGER_TYPE;
 import com.workspaceit.dccpos.dao.accounting.LedgerDao;
 import com.workspaceit.dccpos.entity.Company;
@@ -37,12 +38,15 @@ public class LedgerService {
     }
     @Transactional
     public Ledger getPersonalInfoIdAndCode(int id, GROUP_CODE groupCode){
-        return this.ledgerDao.findByPersonalInfoIdAndCode(id,groupCode);
+        return this.ledgerDao.findByPersonalInfoIdAndGroupCode(id,groupCode);
     }
-
     @Transactional
-    public Ledger getCompanyIdAndCode(int id, GROUP_CODE groupCode){
-        return this.ledgerDao.findByCompanyAndCode(id,groupCode);
+    public Ledger getByCode(LEDGER_CODE ledgerCode){
+        return this.ledgerDao.findByCode(ledgerCode);
+    }
+    @Transactional
+    public Ledger getByCompanyIdAndCode(int id, GROUP_CODE groupCode){
+        return this.ledgerDao.findByCompanyAndGroupCode(id,groupCode);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -128,7 +132,7 @@ public class LedgerService {
     @Transactional(rollbackFor = Exception.class)
     public Ledger editSupplierLedger(Company company){
 
-        Ledger ledger = this.getCompanyIdAndCode(company.getId(),GROUP_CODE.SUPPLIER);
+        Ledger ledger = this.getByCompanyIdAndCode(company.getId(),GROUP_CODE.SUPPLIER);
         this.updateLedgeName(ledger,company.getTitle());
 
         return ledger;
@@ -136,7 +140,7 @@ public class LedgerService {
     @Transactional(rollbackFor = Exception.class)
     public Ledger editWholesalerLedger(Company company){
 
-        Ledger ledger = this.getCompanyIdAndCode(company.getId(),GROUP_CODE.WHOLESALER);
+        Ledger ledger = this.getByCompanyIdAndCode(company.getId(),GROUP_CODE.WHOLESALER);
         this.updateLedgeName(ledger,company.getTitle());
 
         return ledger;

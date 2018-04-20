@@ -1,12 +1,15 @@
 package com.workspaceit.dccpos.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.workspaceit.dccpos.constant.WEIGHT_UNIT;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "product")
 public class Product {
@@ -36,7 +39,11 @@ public class Product {
 
 
     @Column(name = "total_available_quantity")
-    private Integer totalAvailableQuantity;
+    private int totalAvailableQuantity;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id",referencedColumnName = "id")
+    List<Inventory> inventories;
 
     @JsonIgnore
     @CreationTimestamp
@@ -100,12 +107,20 @@ public class Product {
         this.barcode = barcode;
     }
 
-    public Integer getTotalAvailableQuantity() {
+    public int getTotalAvailableQuantity() {
         return totalAvailableQuantity;
     }
 
-    public void setTotalAvailableQuantity(Integer totalAvailableQuantity) {
+    public void setTotalAvailableQuantity(int totalAvailableQuantity) {
         this.totalAvailableQuantity = totalAvailableQuantity;
+    }
+
+    public List<Inventory> getInventories() {
+        return inventories;
+    }
+
+    public void setInventories(List<Inventory> inventories) {
+        this.inventories = inventories;
     }
 
     public Date getCreatedAt() {
@@ -116,6 +131,7 @@ public class Product {
         this.createdAt = createdAt;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -125,13 +141,13 @@ public class Product {
 
         if (id != product.id) return false;
         if (weight != product.weight) return false;
+        if (totalAvailableQuantity != product.totalAvailableQuantity) return false;
         if (category != null ? !category.equals(product.category) : product.category != null) return false;
         if (name != null ? !name.equals(product.name) : product.name != null) return false;
         if (weightUnit != product.weightUnit) return false;
         if (image != null ? !image.equals(product.image) : product.image != null) return false;
         if (barcode != null ? !barcode.equals(product.barcode) : product.barcode != null) return false;
-        if (totalAvailableQuantity != null ? !totalAvailableQuantity.equals(product.totalAvailableQuantity) : product.totalAvailableQuantity != null)
-            return false;
+        if (inventories != null ? !inventories.equals(product.inventories) : product.inventories != null) return false;
         return createdAt != null ? createdAt.equals(product.createdAt) : product.createdAt == null;
     }
 
@@ -144,7 +160,8 @@ public class Product {
         result = 31 * result + (weightUnit != null ? weightUnit.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);
         result = 31 * result + (barcode != null ? barcode.hashCode() : 0);
-        result = 31 * result + (totalAvailableQuantity != null ? totalAvailableQuantity.hashCode() : 0);
+        result = 31 * result + totalAvailableQuantity;
+        result = 31 * result + (inventories != null ? inventories.hashCode() : 0);
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;
     }

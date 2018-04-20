@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.entity.accounting;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.workspaceit.dccpos.constant.accounting.ACCOUNTING_ENTRY;
 import com.workspaceit.dccpos.entity.Employee;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,8 +16,10 @@ public class EntryItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "entry_id")
-    private int entryId;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn( name = "entry_id",referencedColumnName = "id")
+    private Entry entry;
 
     @ManyToOne
     @JoinColumn(name = "ledger_id",referencedColumnName = "id")
@@ -50,12 +53,12 @@ public class EntryItem {
         this.id = id;
     }
 
-    public int getEntryId() {
-        return entryId;
+    public Entry getEntry() {
+        return entry;
     }
 
-    public void setEntryId(int entryId) {
-        this.entryId = entryId;
+    public void setEntry(Entry entry) {
+        this.entry = entry;
     }
 
     public Ledger getLedger() {
