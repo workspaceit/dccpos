@@ -6,7 +6,7 @@
       "type": "Project",
       "description": "",
       "id": "c4226841-a12e-441a-b046-9b49f4080e2d",
-      "lastModified": "2018-04-20T18:24:48.282+06:00",
+      "lastModified": "2018-04-20T20:01:29.095+06:00",
       "name": "POS"
     },
     {
@@ -21,12 +21,13 @@
       "type": "Scenario",
       "description": "",
       "id": "28508267-c995-4a6a-9e04-19a0c55423ca",
-      "lastModified": "2018-04-20T18:24:48.283+06:00",
-      "name": "Create-Update",
+      "lastModified": "2018-04-20T19:53:22.393+06:00",
+      "name": "Endpoints",
       "requestOrder": [
-        "Employee-Create-No-Param",
-        "Copy of Employee-Create-No-Param",
+        "AUTHENTICATION",
+        "Employee-Create-No-Param (1)",
         "Employee-Create-All-EMPTY_VALUE",
+        "Employee-Create-No-Param",
         "Employee-Create",
         "Employee-Create-Duplicate",
         "Employee-Update-ALL-Null",
@@ -59,7 +60,6 @@
       "parentId": "bd8b3e61-d30e-4350-8631-704fabab67dc"
     },
     {
-      "uriEditor": true,
       "type": "Request",
       "method": {
         "requestBody": true,
@@ -68,25 +68,60 @@
       },
       "body": {
         "formBody": {
+          "overrideContentType": true,
           "encoding": "application/x-www-form-urlencoded",
-          "items": []
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "client_id",
+              "value": "pos-app-client"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "client_secret",
+              "value": "f6c3d96bc05036e738f0899ba149f447924b3a09"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "grant_type",
+              "value": "password"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "username",
+              "value": "admin@admin.com"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "password",
+              "value": "12345"
+            }
+          ]
         },
         "bodyType": "Form",
-        "autoSetLength": true,
-        "textBody": ""
+        "autoSetLength": true
       },
       "headersType": "Form",
       "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
         "scheme": {
           "name": "http",
           "version": "V11"
         },
         "host": "localhost:8080",
-        "path": "/auth/api/employee/create"
+        "path": "/oauth/token"
       },
-      "id": "28acf101-ca4a-4304-aaef-e395f6d517e4",
-      "lastModified": "2018-04-20T18:19:30.950+06:00",
-      "name": "Employee-Create-No-Param",
+      "id": "315d1b54-899e-440c-9604-4895e5e649c3",
+      "lastModified": "2018-04-20T19:50:08.097+06:00",
+      "name": "AUTHENTICATION",
       "headers": [
         {
           "enabled": true,
@@ -94,16 +129,8 @@
           "value": "application/x-www-form-urlencoded"
         }
       ],
-      "assertions": [
-        {
-          "comparison": "Equals",
-          "subject": "ResponseStatus",
-          "path": "code",
-          "value": "422"
-        }
-      ],
       "metaInfo": {
-        "IS_FROM_HISTORY": null
+        "IS_FROM_HISTORY": "06575797-9aa7-4485-bef0-644e1d370e35"
       },
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
@@ -131,7 +158,7 @@
         "autoSetLength": true,
         "textBody": ""
       },
-      "headersType": "Form",
+      "headersType": "Raw",
       "uri": {
         "scheme": {
           "name": "http",
@@ -141,13 +168,18 @@
         "path": "/auth/api/employee/create"
       },
       "id": "1c387a6f-b4bc-40af-8b89-802bac393ab5",
-      "lastModified": "2018-04-20T18:19:05.762+06:00",
-      "name": "Copy of Employee-Create-No-Param",
+      "lastModified": "2018-04-20T20:01:29.096+06:00",
+      "name": "Employee-Create-No-Param (1)",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -235,7 +267,7 @@
         "autoSetLength": true,
         "textBody": ""
       },
-      "headersType": "Form",
+      "headersType": "Raw",
       "uri": {
         "query": {
           "delimiter": "&",
@@ -249,13 +281,77 @@
         "path": "/auth/api/employee/create"
       },
       "id": "2032f74d-79ef-4c4d-a795-5c7ae2ee4358",
-      "lastModified": "2018-04-13T18:53:46.707+06:00",
+      "lastModified": "2018-04-20T19:57:23.181+06:00",
       "name": "Employee-Create-All-EMPTY_VALUE",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "422"
+        }
+      ],
+      "metaInfo": {
+        "IS_FROM_HISTORY": null
+      },
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "uriEditor": true,
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Raw",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        },
+        "host": "{local-url}",
+        "path": "/auth/api/employee/create"
+      },
+      "id": "28acf101-ca4a-4304-aaef-e395f6d517e4",
+      "lastModified": "2018-04-20T19:57:26.261+06:00",
+      "name": "Employee-Create-No-Param",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -357,13 +453,18 @@
         "path": "/auth/api/employee/create"
       },
       "id": "c1e98b24-4ac3-4de7-ab32-9f510cface42",
-      "lastModified": "2018-04-13T18:53:27.902+06:00",
+      "lastModified": "2018-04-20T19:57:50.348+06:00",
       "name": "Employee-Create",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -465,13 +566,18 @@
         "path": "/auth/api/employee/create"
       },
       "id": "651f4ed1-6e34-44dd-8164-f99e8d5a0569",
-      "lastModified": "2018-04-13T18:55:01.761+06:00",
+      "lastModified": "2018-04-20T19:57:52.987+06:00",
       "name": "Employee-Create-Duplicate",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -518,13 +624,18 @@
         "path": "/auth/api/employee/update/1"
       },
       "id": "c3a5d8d2-b4dc-4606-8f46-82cdbda4797a",
-      "lastModified": "2018-04-13T19:02:49.783+06:00",
+      "lastModified": "2018-04-20T19:57:55.508+06:00",
       "name": "Employee-Update-ALL-Null",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -626,13 +737,18 @@
         "path": "/auth/api/employee/update/1"
       },
       "id": "fb4ab2da-0299-42d9-b0f1-4724b28a5ae5",
-      "lastModified": "2018-04-13T19:02:43.219+06:00",
+      "lastModified": "2018-04-20T19:57:58.772+06:00",
       "name": "Employee-Update-ALL-Empty",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -689,30 +805,6 @@
               "type": "Text",
               "name": "personalInfo.address",
               "value": "Road 84, House 16. Nikunja 2,Dhaka"
-            },
-            {
-              "enabled": true,
-              "type": "Text",
-              "name": "authCredential.email",
-              "value": "admin3@admin.com"
-            },
-            {
-              "enabled": true,
-              "type": "Text",
-              "name": "authCredential.password",
-              "value": "12345"
-            },
-            {
-              "enabled": true,
-              "type": "Text",
-              "name": "authCredential.accessRole",
-              "value": "POS_OPERATOR"
-            },
-            {
-              "enabled": true,
-              "type": "Text",
-              "name": "authCredential.confirmPassword",
-              "value": "12345"
             }
           ]
         },
@@ -731,16 +823,21 @@
           "version": "V11"
         },
         "host": "localhost:8080",
-        "path": "/auth/api/employee/update/1"
+        "path": "/auth/api/employee/update/2"
       },
       "id": "7d3abacd-0880-41f3-9adc-9759772d8dc6",
-      "lastModified": "2018-04-13T19:02:34.756+06:00",
+      "lastModified": "2018-04-20T19:58:01.378+06:00",
       "name": "Employee-Update",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -833,9 +930,15 @@
         "path": "/auth/api/employee/get-all"
       },
       "id": "f5e04dc5-9f92-4697-914b-4d9ae85c3f20",
-      "lastModified": "2018-04-13T19:02:26.030+06:00",
+      "lastModified": "2018-04-20T19:58:03.808+06:00",
       "name": "Employee-Get-All",
-      "headers": [],
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
       "assertions": [
         {
           "comparison": "Equals",
@@ -910,13 +1013,18 @@
         "path": "/auth/api/supplier/create"
       },
       "id": "71c17161-e7c3-4fe3-a012-ae16ecd213f0",
-      "lastModified": "2018-04-16T12:17:24.069+06:00",
+      "lastModified": "2018-04-20T19:58:10.015+06:00",
       "name": "Supplier-Create",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "metaInfo": {},
@@ -984,13 +1092,18 @@
         "path": "/auth/api/supplier/update/1"
       },
       "id": "8cd29387-db47-46ac-9eff-20132388c49a",
-      "lastModified": "2018-04-16T14:49:52.398+06:00",
+      "lastModified": "2018-04-20T19:58:12.260+06:00",
       "name": "Supplier-Update",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "metaInfo": {
@@ -1022,20 +1135,26 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
+          "secure": true,
+          "name": "https",
           "version": "V11"
         },
-        "host": "localhost:8080",
+        "host": "{local-url}",
         "path": "/auth/api/supplier/get-all"
       },
       "id": "b99d92f2-eb5f-43cb-a99e-97123283f4ba",
-      "lastModified": "2018-04-16T10:41:27.054+06:00",
+      "lastModified": "2018-04-20T19:58:14.864+06:00",
       "name": "Supplier-Get-All",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -1113,13 +1232,18 @@
         "path": "/auth/api/wholesaler/create"
       },
       "id": "59e7f921-08b8-4361-988b-167283a86d34",
-      "lastModified": "2018-04-16T11:09:40.497+06:00",
+      "lastModified": "2018-04-20T19:58:17.517+06:00",
       "name": "Wholesaler-Create",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [],
@@ -1190,13 +1314,18 @@
         "path": "/auth/api/wholesaler/update/1"
       },
       "id": "c48e6089-3ce1-41ea-becb-1eadd7a5fcac",
-      "lastModified": "2018-04-16T15:26:05.116+06:00",
+      "lastModified": "2018-04-20T19:58:20.289+06:00",
       "name": "Wholesaler-Update",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "metaInfo": {
@@ -1234,9 +1363,15 @@
         "path": "/auth/api/wholesaler/get-all"
       },
       "id": "327ac2c2-c4e6-4490-9bf2-8fa80fc0142c",
-      "lastModified": "2018-04-16T12:26:57.353+06:00",
+      "lastModified": "2018-04-20T19:58:24.617+06:00",
       "name": "Wholesaler-Get-All",
-      "headers": [],
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
       "assertions": [
         {
           "comparison": "Equals",
@@ -1311,7 +1446,7 @@
         "path": "/oauth/token"
       },
       "id": "06575797-9aa7-4485-bef0-644e1d370e35",
-      "lastModified": "2018-04-19T16:53:40.694+06:00",
+      "lastModified": "2018-04-20T19:30:30.632+06:00",
       "name": "Oauth Login",
       "headers": [
         {
@@ -1354,13 +1489,18 @@
         "path": "/auth/api/supplier/create"
       },
       "id": "905c23ee-75e9-4c2e-bccc-7aa62a2521a5",
-      "lastModified": "2018-04-16T12:30:59.103+06:00",
+      "lastModified": "2018-04-20T19:58:29.240+06:00",
       "name": "Supplier-Create:ALL NULL",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -1413,13 +1553,18 @@
         "path": "/auth/api/wholesaler/create"
       },
       "id": "a559a7e8-43a7-45d5-b437-5b94f3d6e0ca",
-      "lastModified": "2018-04-16T12:25:49.067+06:00",
+      "lastModified": "2018-04-20T19:58:31.663+06:00",
       "name": "Wholesaler-Create:All Null",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -1462,9 +1607,15 @@
         "path": "/auth/api/ledger/get-all"
       },
       "id": "6980b5eb-fadb-40c0-8440-668339a9ffd7",
-      "lastModified": "2018-04-20T15:43:42.601+06:00",
+      "lastModified": "2018-04-20T19:58:34.867+06:00",
       "name": "Ledger Get All",
-      "headers": [],
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer  ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
       "assertions": [
         {
           "comparison": "Equals",
@@ -1512,13 +1663,18 @@
         "path": "/auth/api/upload/temp-file/product-image"
       },
       "id": "54af63bb-5d7d-48a3-8db6-0d2075e96df0",
-      "lastModified": "2018-04-20T15:54:15.442+06:00",
+      "lastModified": "2018-04-20T19:58:38.264+06:00",
       "name": "File Upload",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "multipart/form-data"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -1561,9 +1717,15 @@
         "path": "/api/product/get-all/1/1"
       },
       "id": "c4820942-448b-4b42-8a21-e7005750bd8f",
-      "lastModified": "2018-04-20T15:52:41.392+06:00",
+      "lastModified": "2018-04-20T19:58:41.509+06:00",
       "name": "Product Get All",
-      "headers": [],
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
       "assertions": [
         {
           "comparison": "Equals",
@@ -1611,9 +1773,15 @@
         "path": "/api/product/get-by-barcode"
       },
       "id": "2dc0cc36-5574-406f-a150-779c8edc8f22",
-      "lastModified": "2018-04-20T15:52:41.393+06:00",
+      "lastModified": "2018-04-20T19:58:44.961+06:00",
       "name": "Product Get By Bar code",
-      "headers": [],
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
       "assertions": [
         {
           "comparison": "Equals",
@@ -1654,9 +1822,15 @@
         "path": "/api/product/get-by-category-id/1/3/1"
       },
       "id": "b823ff1e-24ac-47b5-bc18-c4f459f3ee99",
-      "lastModified": "2018-04-20T15:52:41.393+06:00",
+      "lastModified": "2018-04-20T19:58:47.239+06:00",
       "name": "Product Get By Category",
-      "headers": [],
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
       "assertions": [
         {
           "comparison": "Equals",
@@ -1697,9 +1871,15 @@
         "path": "/api/product/get/1"
       },
       "id": "8cf1bec2-521f-4dc2-a937-93134ef34c0e",
-      "lastModified": "2018-04-20T15:52:41.393+06:00",
+      "lastModified": "2018-04-20T19:58:49.278+06:00",
       "name": "Product Get By Id",
-      "headers": [],
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
       "assertions": [
         {
           "comparison": "Equals",
@@ -1746,9 +1926,15 @@
         "path": "/api/product/get-by-name-fragment/1/1"
       },
       "id": "fe597ebe-edc7-48c0-a173-c89056133e05",
-      "lastModified": "2018-04-20T15:52:41.393+06:00",
+      "lastModified": "2018-04-20T19:58:51.717+06:00",
       "name": "Product by Name fragment",
-      "headers": [],
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
       "assertions": [
         {
           "comparison": "Equals",
@@ -1821,13 +2007,18 @@
         "path": "/api/product/create"
       },
       "id": "5a36a643-390e-48d7-9aaa-831bb547b40a",
-      "lastModified": "2018-04-20T15:57:38.384+06:00",
+      "lastModified": "2018-04-20T19:58:54.668+06:00",
       "name": "Product create ",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -1871,13 +2062,18 @@
         "path": "/api/product/create"
       },
       "id": "986bf3d7-27fc-48de-9372-172d67df1eb9",
-      "lastModified": "2018-04-20T15:57:06.719+06:00",
+      "lastModified": "2018-04-20T19:58:57.068+06:00",
       "name": "Product create",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -1952,13 +2148,18 @@
         "path": "/api/product/update/1"
       },
       "id": "f85848a6-5d5f-4625-b676-937a3cb3f91e",
-      "lastModified": "2018-04-20T15:58:11.668+06:00",
+      "lastModified": "2018-04-20T19:59:08.514+06:00",
       "name": "Product update",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "assertions": [
@@ -2033,13 +2234,18 @@
         "path": "/api/product/create"
       },
       "id": "5a37ed3b-48cd-4c47-9252-3d56128ad90d",
-      "lastModified": "2018-04-20T16:53:48.164+06:00",
+      "lastModified": "2018-04-20T19:26:22.666+06:00",
       "name": "Product create (1)",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer {access_token}"
         }
       ],
       "assertions": [
@@ -2114,13 +2320,18 @@
         "path": "/api/product/create"
       },
       "id": "2060978f-5be7-47de-988c-a921875c237d",
-      "lastModified": "2018-04-20T16:54:44.916+06:00",
+      "lastModified": "2018-04-20T19:26:26.453+06:00",
       "name": "Product create (2)",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer {access_token}"
         }
       ],
       "assertions": [
@@ -2166,13 +2377,18 @@
         "path": "/api/shipment/create"
       },
       "id": "6a314f92-460c-4385-a666-0897eac1db00",
-      "lastModified": "2018-04-20T18:24:48.283+06:00",
+      "lastModified": "2018-04-20T19:26:38.333+06:00",
       "name": "Shipment Create",
       "headers": [
         {
           "enabled": true,
           "name": "Content-Type",
           "value": "application/json"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer {access_token}"
         }
       ],
       "assertions": [
@@ -2220,7 +2436,7 @@
               "enabled": true,
               "type": "Text",
               "name": "username",
-              "value": "admin3@admin.com"
+              "value": "admin@admin.com"
             },
             {
               "enabled": true,
@@ -2247,7 +2463,7 @@
         "path": "/oauth/token"
       },
       "id": "de789cb8-0449-4f90-9bbc-c63abfe46a01",
-      "lastModified": "2018-04-19T15:49:24.873+06:00",
+      "lastModified": "2018-04-20T19:30:47.738+06:00",
       "name": "Oauth Login",
       "headers": [
         {
@@ -3414,6 +3630,24 @@
         "IS_FROM_HISTORY": null
       },
       "parentId": "c4226841-a12e-441a-b046-9b49f4080e2d"
+    },
+    {
+      "type": "Context",
+      "id": "1e271b29-f1ad-4501-8920-55a46a23fa6b",
+      "lastModified": "2018-04-20T20:00:01.650+06:00",
+      "name": "Local",
+      "variables": [
+        {
+          "enabled": true,
+          "name": "local-url",
+          "value": "http://localhost:8080"
+        },
+        {
+          "enabled": true,
+          "name": "access_token",
+          "value": "\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\""
+        }
+      ]
     }
   ]
 }

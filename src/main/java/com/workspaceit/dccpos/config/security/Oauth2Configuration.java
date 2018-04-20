@@ -30,7 +30,7 @@ public class Oauth2Configuration {
 
     private static InMemoryTokenStore tokenStore = new InMemoryTokenStore();
     private static final String SERVER_RESOURCE_ID = "oauth2-server";
-    private static final boolean ENABLE_OAUTH = false;
+    private static final boolean ENABLE_OAUTH = true;
 
     @Configuration
     @EnableResourceServer
