@@ -52,6 +52,13 @@ public class Shipment {
     @Column(name = "total_cost")
     private double totalCost;
 
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "shipment_id")
+    private Set<ShipmentTransaction> transactions;
+
+    @Column(name = "total_paid")
+    private double totalPaid;
+
     @ManyToOne
     @JoinColumn(name = "purchased_by")
     private Employee purchasedBy;
@@ -162,6 +169,22 @@ public class Shipment {
         this.totalCost = totalCost;
     }
 
+    public Set<ShipmentTransaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<ShipmentTransaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public double getTotalPaid() {
+        return totalPaid;
+    }
+
+    public void setTotalPaid(double totalPaid) {
+        this.totalPaid = totalPaid;
+    }
+
     public Employee getPurchasedBy() {
         return purchasedBy;
     }
@@ -186,6 +209,7 @@ public class Shipment {
         this.createdAt = createdAt;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -201,10 +225,13 @@ public class Shipment {
         if (totalQuantity != shipment.totalQuantity) return false;
         if (Double.compare(shipment.totalProductPrice, totalProductPrice) != 0) return false;
         if (Double.compare(shipment.totalCost, totalCost) != 0) return false;
+        if (Double.compare(shipment.totalPaid, totalPaid) != 0) return false;
         if (trackingId != null ? !trackingId.equals(shipment.trackingId) : shipment.trackingId != null) return false;
         if (supplier != null ? !supplier.equals(shipment.supplier) : shipment.supplier != null) return false;
         if (entry != null ? !entry.equals(shipment.entry) : shipment.entry != null) return false;
         if (inventories != null ? !inventories.equals(shipment.inventories) : shipment.inventories != null)
+            return false;
+        if (transactions != null ? !transactions.equals(shipment.transactions) : shipment.transactions != null)
             return false;
         if (purchasedBy != null ? !purchasedBy.equals(shipment.purchasedBy) : shipment.purchasedBy != null)
             return false;
@@ -234,6 +261,9 @@ public class Shipment {
         temp = Double.doubleToLongBits(totalProductPrice);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(totalCost);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (transactions != null ? transactions.hashCode() : 0);
+        temp = Double.doubleToLongBits(totalPaid);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (purchasedBy != null ? purchasedBy.hashCode() : 0);
         result = 31 * result + (purchasedDate != null ? purchasedDate.hashCode() : 0);

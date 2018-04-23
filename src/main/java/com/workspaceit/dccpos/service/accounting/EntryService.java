@@ -11,6 +11,8 @@ import com.workspaceit.dccpos.entity.accounting.EntryItem;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.service.ShipmentService;
 import com.workspaceit.dccpos.service.SupplierService;
+import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
+import com.workspaceit.dccpos.validation.form.purchase.PurchasePaymentForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +60,98 @@ public class EntryService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Entry createShipmentEntryOnDue(Shipment shipment){
+    public Entry createShipmentEntry(Shipment shipment, PurchaseForm purchaseForm){
+        List<EntryItem> entryItems = new ArrayList<>();
+        PurchasePaymentForm paymentForm = purchaseForm.getPayment();
+
+        double totalShippingCost = shipment.getTotalCost();
+        double totalInventoryPrice = shipment.getTotalProductPrice();
+
+
+        double paidShippingCostAmount = paymentForm.getPaidCostAmount();
+        double paidProductPrice = paymentForm.getPaidProductPriceAmount();
+
+        double totalEntryDcAmount = totalShippingCost+totalInventoryPrice;
+
+        Supplier supplier = shipment.getSupplier();
+
+        Ledger  supplierLedger = this.ledgerService.getByCompanyIdAndCode(supplier.getCompany().getId(), GROUP_CODE.SUPPLIER);
+
+        Entry entry = new Entry();
+        entry.setDrTotal(totalEntryDcAmount);
+        entry.setCrTotal(totalEntryDcAmount);
+        entry.setEntryType(null);
+        entry.setCreatedBy(shipment.getPurchasedBy());
+        entry.setEntryItems(entryItems);
+        entry.setDate(shipment.getPurchasedDate());
+        entry.setNarration("Purchased  product");
+
+        /**
+         * Shipping Cost
+         *  - Full due
+         *  - Full paid
+         *  - Partially paid
+         * */
+        EntryItem entryItemShipmentCost = this.getShipmentEntryItem(totalShippingCost,LEDGER_CODE.SHIPMENT_COST,ACCOUNTING_ENTRY.DR);
+        EntryItem entryItemCash = this.getShipmentEntryItem(0d,LEDGER_CODE.CASH,ACCOUNTING_ENTRY.CR);
+
+        entryItems.add(entryItemShipmentCost);
+
+        if(paidShippingCostAmount==0){
+            EntryItem entryItemDueShipmentCost = this.getShipmentEntryItem(totalShippingCost,LEDGER_CODE.DUE_SHIPMENT_COST,ACCOUNTING_ENTRY.CR);
+            entryItems.add(entryItemDueShipmentCost);
+        }else if(totalShippingCost==paidShippingCostAmount){
+            entryItemCash.setAmount(totalShippingCost);
+            entryItems.add(entryItemCash);
+        }else if(totalShippingCost>paidShippingCostAmount){
+            EntryItem entryItemDueShipmentCost = this.getShipmentEntryItem(totalShippingCost-paidShippingCostAmount,LEDGER_CODE.DUE_SHIPMENT_COST,ACCOUNTING_ENTRY.CR);
+            entryItemCash.setAmount(paidShippingCostAmount);
+
+            entryItems.add(entryItemDueShipmentCost);
+            entryItems.add(entryItemCash);
+        }
+
+
+
+        EntryItem entryItemInventory = this.getShipmentEntryItem(totalInventoryPrice,LEDGER_CODE.INVENTORY,ACCOUNTING_ENTRY.DR);
+        entryItems.add(entryItemInventory);
+
+
+        double cashAmount = entryItemCash.getAmount();
+
+        /**
+         * Product price
+         *  - Full due
+         *  - Full paid
+         *  - Partially paid
+         * */
+        if(paidProductPrice == 0){
+            EntryItem entryItemSupplier = this.getSupplierEntryItem(totalInventoryPrice,supplierLedger,ACCOUNTING_ENTRY.CR);
+
+            entryItems.add(entryItemSupplier);
+        }else if(totalInventoryPrice == paidProductPrice){
+            entryItemCash.setAmount(cashAmount+totalInventoryPrice);
+
+            if(!entryItems.contains(entryItemCash))entryItems.add(entryItemCash);
+
+        }else if(totalInventoryPrice > paidProductPrice){
+            double priceBalance = totalInventoryPrice-paidProductPrice;
+
+            EntryItem entryItemSupplier = this.getSupplierEntryItem(priceBalance,supplierLedger,ACCOUNTING_ENTRY.CR);
+            entryItemCash.setAmount(cashAmount+paidProductPrice);
+
+            entryItems.add(entryItemSupplier);
+            if(!entryItems.contains(entryItemCash))entryItems.add(entryItemCash);
+        }
+
+        this.entryDao.save(entry);
+
+
+        return entry;
+
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public Entry createShipmentEntryOnCash(Shipment shipment){
         List<EntryItem> entryItems = new ArrayList<>();
 
         double totalCost = shipment.getTotalCost();
@@ -66,11 +159,6 @@ public class EntryService {
 
         double totalEntryDcAmount = totalCost+totalInventoryPrice;
 
-        Supplier supplier = shipment.getSupplier();
-        Ledger  supplierLedger = this.ledgerService.getByCompanyIdAndCode(supplier.getCompany().getId(), GROUP_CODE.SUPPLIER);
-        Ledger inventoryLedger = this.ledgerService.getByCode(LEDGER_CODE.INVENTORY);
-        Ledger cashLedger = this.ledgerService.getByCode(LEDGER_CODE.CASH);
-        Ledger shipmentCostLedger = this.ledgerService.getByCode(LEDGER_CODE.SHIPMENT_COST);
 
         Entry entry = new Entry();
         entry.setDrTotal(totalEntryDcAmount);
@@ -82,46 +170,43 @@ public class EntryService {
         entry.setNarration("Purchased  product");
 
 
-        EntryItem entryItemInventory = new EntryItem();
+        EntryItem entryItemInventory = this.getShipmentEntryItem(totalInventoryPrice,LEDGER_CODE.INVENTORY,ACCOUNTING_ENTRY.DR);
+        EntryItem entryItemShipmentCost = this.getShipmentEntryItem(totalCost,LEDGER_CODE.SHIPMENT_COST,ACCOUNTING_ENTRY.DR);
+        EntryItem entryItemCash = this.getShipmentEntryItem(totalInventoryPrice+totalInventoryPrice,LEDGER_CODE.CASH,ACCOUNTING_ENTRY.CR);
 
-        entryItemInventory.setEntry(entry);
-        entryItemInventory.setLedger(inventoryLedger);
-        entryItemInventory.setAccountingEntry(ACCOUNTING_ENTRY.DR);
-        entryItemInventory.setAmount(totalInventoryPrice);
-
-        EntryItem entryItemSupplier = new EntryItem();
-
-        entryItemInventory.setEntry(entry);
-        entryItemSupplier.setLedger(supplierLedger);
-        entryItemSupplier.setAccountingEntry(ACCOUNTING_ENTRY.CR);
-        entryItemSupplier.setAmount(totalInventoryPrice);
-
-
-        EntryItem entryItemShipmentCost = new EntryItem();
-
-        entryItemInventory.setEntry(entry);
-        entryItemShipmentCost.setLedger(shipmentCostLedger);
-        entryItemShipmentCost.setAccountingEntry(ACCOUNTING_ENTRY.DR);
-        entryItemShipmentCost.setAmount(totalInventoryPrice);
-
-        EntryItem entryItemCash = new EntryItem();
-
-        entryItemInventory.setEntry(entry);
-        entryItemCash.setLedger(cashLedger);
-        entryItemCash.setAccountingEntry(ACCOUNTING_ENTRY.CR);
-        entryItemCash.setAmount(totalInventoryPrice);
 
 
         entryItems.add(entryItemInventory);
-        entryItems.add(entryItemSupplier);
-
         entryItems.add(entryItemShipmentCost);
+
         entryItems.add(entryItemCash);
         this.entryDao.save(entry);
-        //this.entryItemService.create(entryItems);
+
 
         return entry;
 
+    }
+    private EntryItem getShipmentEntryItem(double amount ,LEDGER_CODE ledgerCode,ACCOUNTING_ENTRY accountingEntry){
+        Ledger ledger = this.ledgerService.getByCode(ledgerCode);
+
+        EntryItem entryItem = new EntryItem();
+
+        entryItem.setLedger(ledger);
+        entryItem.setAccountingEntry(accountingEntry);
+        entryItem.setAmount(amount);
+
+        return entryItem;
+    }
+    private EntryItem getSupplierEntryItem(double amount ,Ledger ledger,ACCOUNTING_ENTRY accountingEntry){
+
+
+        EntryItem entryItem = new EntryItem();
+
+        entryItem.setLedger(ledger);
+        entryItem.setAccountingEntry(accountingEntry);
+        entryItem.setAmount(amount);
+
+        return entryItem;
     }
     private void save(Entry entry){
         this.entryDao.save(entry);

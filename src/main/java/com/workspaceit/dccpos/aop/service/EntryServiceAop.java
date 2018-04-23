@@ -5,6 +5,8 @@ import com.workspaceit.dccpos.entity.Shipment;
 import com.workspaceit.dccpos.entity.accounting.Entry;
 import com.workspaceit.dccpos.service.ShipmentService;
 import com.workspaceit.dccpos.service.accounting.EntryService;
+import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +29,25 @@ public class EntryServiceAop {
     }
 
     @AfterReturning(pointcut = "execution(* com.workspaceit.dccpos.service.ShipmentService.create(..))",returning="shipmentReturnObj")
-    public void purchase(Object shipmentReturnObj){
+    public void purchase(JoinPoint joinPoint, Object shipmentReturnObj){
+        System.out.println("AOP HERE");
         Shipment shipment = null;
+        Object[] args = joinPoint.getArgs();
+        PurchaseForm purchaseForm = null;
+
         if(shipmentReturnObj instanceof Shipment){
             shipment =   ((Shipment)shipmentReturnObj);
         }
 
-        if(shipment==null)return;
+        if(args!=null && args.length==2){
+            System.out.println("AOP HERE args");
+            purchaseForm =(PurchaseForm)  args[1];
+        }
+        System.out.println("AOP HERE "+args.length);
+        if(shipment==null || purchaseForm==null)return;
+        System.out.println("AOP HERE");
 
-
-
-        Entry  entry = entryService.createShipmentEntryOnDue(shipment);
+        Entry  entry = entryService.createShipmentEntry(shipment,purchaseForm);
 
         shipment.setEntry(entry);
         this.shipmentService.update(shipment);

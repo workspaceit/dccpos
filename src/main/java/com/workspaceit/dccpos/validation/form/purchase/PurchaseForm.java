@@ -16,6 +16,10 @@ public class PurchaseForm {
 
     @Valid
     @NotNull
+    private PurchasePaymentForm payment;
+
+    @Valid
+    @NotNull
     private ShipmentCreateForm shipment;
 
     public InventoryCreateFrom[] getInventories() {
@@ -34,10 +38,19 @@ public class PurchaseForm {
         this.shipment = shipment;
     }
 
+    public PurchasePaymentForm getPayment() {
+        return payment;
+    }
+
+    public void setPayment(PurchasePaymentForm payment) {
+        this.payment = payment;
+    }
+
     @Override
     public String toString() {
         return "PurchaseForm{" +
                 "inventories=" + Arrays.toString(inventories) +
+                ", payment=" + payment +
                 ", shipment=" + shipment +
                 '}';
     }
