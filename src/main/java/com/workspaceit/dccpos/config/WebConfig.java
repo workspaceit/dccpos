@@ -74,6 +74,7 @@ public class WebConfig implements WebMvcConfigurer {
         List<MediaType> list = new ArrayList<>();
         list.add(MediaType.IMAGE_PNG);
         list.add(MediaType.IMAGE_JPEG);
+        list.add(MediaType.APPLICATION_JSON);
         return list;
     }
     @Bean

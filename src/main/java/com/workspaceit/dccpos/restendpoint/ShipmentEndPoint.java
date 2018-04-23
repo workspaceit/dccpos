@@ -10,6 +10,7 @@ import com.workspaceit.dccpos.validation.validator.PurchaseValidator;
 import com.workspaceit.dccpos.validation.validator.ShipmentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(EndpointRequestUriPrefix.endPointPublic+"/shipment")
+@RequestMapping(EndpointRequestUriPrefix.endPointAuth+"/shipment")
 public class ShipmentEndPoint {
 
     private PurchaseValidator purchaseValidator;
@@ -45,8 +46,9 @@ public class ShipmentEndPoint {
 
 
 
-    @RequestMapping(value = "/create",method = RequestMethod.POST)
-    public ResponseEntity<?> create(Authentication authentication, @Valid @RequestBody PurchaseForm purchaseForm, BindingResult bindingResult){
+    @RequestMapping(value = "/create",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> create(Authentication authentication,
+                                    @Valid @RequestBody PurchaseForm purchaseForm, BindingResult bindingResult){
         System.out.println(purchaseForm);
         ServiceResponse serviceResponse = ServiceResponse.getInstance();
         this.purchaseValidator.validate(purchaseForm,bindingResult);

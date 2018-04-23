@@ -23,7 +23,6 @@ public class CustomTokenEndpointAuthenticationFilter extends TokenEndpointAuthen
                 /* before authentication check for condition if true then process to authenticate */
         HttpServletResponse httpServletResponse = (HttpServletResponse)res;
         httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
-
         super.doFilter(req, res, chain);
     }
 }

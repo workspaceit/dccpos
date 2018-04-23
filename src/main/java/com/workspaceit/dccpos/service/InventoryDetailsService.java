@@ -1,6 +1,6 @@
 package com.workspaceit.dccpos.service;
 
-import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
+import com.workspaceit.dccpos.constant.INVENTORY_CYCLE;
 import com.workspaceit.dccpos.dao.InventoryDetailsDao;
 import com.workspaceit.dccpos.entity.InventoryDetails;
 import com.workspaceit.dccpos.validation.form.inventoryDetails.InventoryDetailsCreateForm;
@@ -26,19 +26,21 @@ public class InventoryDetailsService {
         List<InventoryDetails> inventoryDetailsList = new ArrayList<>();
 
         for(InventoryDetailsCreateForm  inventoryDetailsCreateForm :inventoryCreateFroms){
-            InventoryDetails inventoryDetails =  this.create(inventoryDetailsCreateForm);
+            InventoryDetails inventoryDetails =  this.getFromInventoryDetailsCreateForm(inventoryDetailsCreateForm);
             inventoryDetailsList.add(inventoryDetails);
         }
 
         return inventoryDetailsList;
     }
 
-    private InventoryDetails create(InventoryDetailsCreateForm inventoryCreateFrom){
+    private InventoryDetails getFromInventoryDetailsCreateForm(InventoryDetailsCreateForm inventoryCreateFrom){
         InventoryDetails  inventoryDetails = new InventoryDetails();
 
         inventoryDetails.setCondition(inventoryCreateFrom.getStatus());
         inventoryDetails.setPurchasedQuantity( inventoryCreateFrom.getPurchaseQuantity());
         inventoryDetails.setSellingPrice(inventoryCreateFrom.getSellingPrice());
+        inventoryDetails.setInventoryCycle(INVENTORY_CYCLE.FROM_SUPPLIER);
+
         /**
          * Initially all quantity are Available Quantity
          * */

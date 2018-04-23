@@ -28,8 +28,12 @@ public class EntryServiceAop {
 
     @AfterReturning(pointcut = "execution(* com.workspaceit.dccpos.service.ShipmentService.create(..))",returning="shipmentReturnObj")
     public void purchase(Object shipmentReturnObj){
+        Shipment shipment = null;
+        if(shipmentReturnObj instanceof Shipment){
+            shipment =   ((Shipment)shipmentReturnObj);
+        }
 
-        Shipment shipment =   ((Shipment)shipmentReturnObj);
+        if(shipment==null)return;
 
 
 

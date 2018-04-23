@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.entity;
 
+import com.workspaceit.dccpos.constant.INVENTORY_CYCLE;
 import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -29,6 +30,13 @@ public class InventoryDetails {
     @Enumerated(EnumType.STRING)
     @Column(name = "condition")
     private PRODUCT_CONDITION condition;
+
+
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cycle")
+    private INVENTORY_CYCLE inventoryCycle;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -83,6 +91,14 @@ public class InventoryDetails {
         this.condition = condition;
     }
 
+    public INVENTORY_CYCLE getInventoryCycle() {
+        return inventoryCycle;
+    }
+
+    public void setInventoryCycle(INVENTORY_CYCLE inventoryCycle) {
+        this.inventoryCycle = inventoryCycle;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -90,6 +106,7 @@ public class InventoryDetails {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -104,6 +121,7 @@ public class InventoryDetails {
         if (soldQuantity != that.soldQuantity) return false;
         if (availableQuantity != that.availableQuantity) return false;
         if (condition != that.condition) return false;
+        if (inventoryCycle != that.inventoryCycle) return false;
         return createdAt != null ? createdAt.equals(that.createdAt) : that.createdAt == null;
     }
 
@@ -118,6 +136,7 @@ public class InventoryDetails {
         result = 31 * result + soldQuantity;
         result = 31 * result + availableQuantity;
         result = 31 * result + (condition != null ? condition.hashCode() : 0);
+        result = 31 * result + (inventoryCycle != null ? inventoryCycle.hashCode() : 0);
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;
     }
