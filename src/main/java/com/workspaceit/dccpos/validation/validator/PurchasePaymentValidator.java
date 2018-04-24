@@ -5,7 +5,6 @@ import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.ValidationHelper;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
 import com.workspaceit.dccpos.validation.form.purchase.AccountPaymentForm;
-import com.workspaceit.dccpos.validation.form.purchase.PurchasePaymentForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -19,8 +18,7 @@ public class PurchasePaymentValidator {
         this.ledgerService = ledgerService;
     }
 
-    public void validate(String prefix,PurchasePaymentForm purchasePaymentForm, Errors errors){
-       AccountPaymentForm[] accountPaymentForms =  purchasePaymentForm.getProductPricePaymentAccount();
+    public void validate(String prefix,AccountPaymentForm[] accountPaymentForms, Errors errors){
         prefix =  ValidationHelper.preparePrefix(prefix);
 
         if(accountPaymentForms==null || accountPaymentForms.length==0){

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 24, 2018 at 06:11 AM
+-- Generation Time: Apr 24, 2018 at 11:46 AM
 -- Server version: 5.6.39
 -- PHP Version: 5.5.9-1ubuntu4.24
 
@@ -158,18 +158,19 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   KEY `personal_info_id` (`personal_info_id`),
   KEY `company_id` (`company_id`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=118 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=130 ;
 
 --
 -- Dumping data for table `acc_ledgers`
 --
 
 INSERT INTO `acc_ledgers` (`id`, `group_id`, `personal_info_id`, `company_id`, `code`, `name`, `op_balance`, `op_balance_dc`, `current_balance`, `current_balance_dc`, `type`, `reconciliation`, `notes`, `created_at`) VALUES
-(1, 2, NULL, NULL, 'INVENTORY', 'Inventory', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:27:16'),
+(1, 1, NULL, NULL, 'INVENTORY', 'Inventory', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:27:16'),
 (2, 4, NULL, NULL, 'COGS', 'Cost Of Good Sold', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:35:20'),
-(3, 1, NULL, NULL, 'CASH', 'Cash', 0.00, 'DR', 0.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-20 10:36:24'),
+(3, 1, NULL, NULL, 'CASH', 'Cash', 0.00, 'DR', 5640.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-20 10:36:24'),
 (4, 4, NULL, NULL, 'SHIPMENT_COST', 'Shipment Cost', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:41:28'),
-(5, 2, NULL, NULL, 'DUE_SHIPMENT_COST', 'Due shipment cost', 0.00, 'CR', 0.00, 'CR', 'OTHER', 0, '', '2018-04-23 10:09:29'),
+(5, 1, NULL, NULL, NULL, 'Bank', 0.00, 'DR', 99999.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-24 06:36:45'),
+(6, 2, NULL, NULL, 'DUE_SHIPMENT_COST', 'Due shipment cost', 0.00, 'CR', 0.00, 'CR', 'OTHER', 0, '', '2018-04-23 10:09:29'),
 (101, 8, 1, NULL, NULL, 'Person 1', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 12:26:10');
 
 -- --------------------------------------------------------
@@ -181,11 +182,11 @@ INSERT INTO `acc_ledgers` (`id`, `group_id`, `personal_info_id`, `company_id`, `
 CREATE TABLE IF NOT EXISTS `acess_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `auth_credential_id` int(11) NOT NULL,
-  `role` enum('ADMIN','POS_OPERATOR') NOT NULL,
+  `role` enum('ADMIN','POS_OPERATOR') COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `auth_credential_id` (`auth_credential_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `acess_role`
@@ -202,7 +203,7 @@ INSERT INTO `acess_role` (`id`, `auth_credential_id`, `role`, `created_at`) VALU
 
 CREATE TABLE IF NOT EXISTS `address` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `formatted_address` text,
+  `formatted_address` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
@@ -246,7 +247,7 @@ INSERT INTO `auth_credential` (`id`, `personal_info_id`, `email`, `password`, `s
 
 CREATE TABLE IF NOT EXISTS `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) NOT NULL,
+  `name` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
@@ -269,9 +270,9 @@ INSERT INTO `category` (`id`, `name`, `created_at`) VALUES
 CREATE TABLE IF NOT EXISTS `company` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `address_id` int(11) DEFAULT NULL,
-  `title` varchar(200) NOT NULL,
-  `phone` varchar(200) DEFAULT NULL,
-  `email` varchar(200) DEFAULT NULL,
+  `title` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `phone` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `address_id` (`address_id`)
@@ -286,7 +287,7 @@ CREATE TABLE IF NOT EXISTS `company` (
 CREATE TABLE IF NOT EXISTS `company_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `personal_info_id` int(11) NOT NULL,
-  `role` enum('EMPLOYEE','SUPPLIER','WHOLESALER') NOT NULL,
+  `role` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `personal_info_id` (`personal_info_id`)
@@ -374,8 +375,8 @@ CREATE TABLE IF NOT EXISTS `personal_information` (
   `address_id` int(11) DEFAULT NULL,
   `full_name` varchar(200) NOT NULL,
   `dob` date DEFAULT NULL,
-  `email` varchar(200) DEFAULT NULL,
-  `phone` varchar(200) DEFAULT NULL,
+  `email` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `address_id` (`address_id`)
@@ -397,11 +398,11 @@ INSERT INTO `personal_information` (`id`, `address_id`, `full_name`, `dob`, `ema
 CREATE TABLE IF NOT EXISTS `product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category_id` int(11) DEFAULT NULL,
-  `name` varchar(200) NOT NULL,
+  `name` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `weight` int(11) NOT NULL,
   `weight_unit` enum('KG','GM') DEFAULT NULL,
   `image` varchar(500) DEFAULT NULL,
-  `barcode` varchar(500) DEFAULT NULL,
+  `barcode` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `total_available_quantity` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -477,14 +478,14 @@ CREATE TABLE IF NOT EXISTS `shipment_transaction` (
 
 CREATE TABLE IF NOT EXISTS `shop_information` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) NOT NULL,
-  `address` text NOT NULL,
-  `logo` varchar(200) NOT NULL,
-  `email` varchar(200) NOT NULL,
-  `phone` varchar(200) NOT NULL,
+  `name` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `logo` varchar(200) CHARACTER SET latin1 NOT NULL,
+  `email` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -516,7 +517,7 @@ CREATE TABLE IF NOT EXISTS `temp_file` (
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `token` (`token`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
 
 --
 -- Dumping data for table `temp_file`
@@ -539,7 +540,9 @@ INSERT INTO `temp_file` (`id`, `token`, `path`, `file_name`, `created_date`) VAL
 (14, 1000091472, '/home/mi/project-file/pos/tmp/23393150465367.JPG', '23393150465367.JPG', '2018-04-20 12:26:16'),
 (15, 1000289192, '/home/mi/project-file/pos/tmp/27234275626165.JPG', '27234275626165.JPG', '2018-04-20 13:30:18'),
 (16, 1000547343, '/home/mi/project-file/pos/tmp/27602303432731.JPG', '27602303432731.JPG', '2018-04-20 13:36:26'),
-(17, 1000454183, '/home/mi/project-file/pos/tmp/25136638767649.png', '25136638767649.png', '2018-04-23 11:01:20');
+(17, 1000454183, '/home/mi/project-file/pos/tmp/25136638767649.png', '25136638767649.png', '2018-04-23 11:01:20'),
+(18, 1000800958, '/home/mi/project-file/pos/tmp/8395239381726.png', '8395239381726.png', '2018-04-24 06:15:23'),
+(19, 1000388290, '/home/mi/project-file/pos/tmp/3976418198347.png', '3976418198347.png', '2018-04-24 11:35:08');
 
 -- --------------------------------------------------------
 

@@ -16,11 +16,13 @@ public class PurchaseForm {
 
     @Valid
     @NotNull
-    private PurchasePaymentForm payment;
+    private ShipmentCreateForm shipment;
 
     @Valid
-    @NotNull
-    private ShipmentCreateForm shipment;
+    private AccountPaymentForm[] productPricePaymentAccount;
+
+    @Valid
+    private AccountPaymentForm shippingCostPaymentAccount;
 
 
 
@@ -41,19 +43,29 @@ public class PurchaseForm {
         this.shipment = shipment;
     }
 
-    public PurchasePaymentForm getPayment() {
-        return payment;
+
+    public AccountPaymentForm[] getProductPricePaymentAccount() {
+        return productPricePaymentAccount;
     }
 
-    public void setPayment(PurchasePaymentForm payment) {
-        this.payment = payment;
+    public void setProductPricePaymentAccount(AccountPaymentForm[] productPricePaymentAccount) {
+        this.productPricePaymentAccount = productPricePaymentAccount;
+    }
+
+    public AccountPaymentForm getShippingCostPaymentAccount() {
+        return shippingCostPaymentAccount;
+    }
+
+    public void setShippingCostPaymentAccount(AccountPaymentForm shippingCostPaymentAccount) {
+        this.shippingCostPaymentAccount = shippingCostPaymentAccount;
     }
 
     @Override
     public String toString() {
         return "PurchaseForm{" +
                 "inventories=" + Arrays.toString(inventories) +
-                ", payment=" + payment +
+                ", productPricePaymentAccount=" + Arrays.toString(productPricePaymentAccount) +
+                ", shippingCostPaymentAccount=" + shippingCostPaymentAccount +
                 ", shipment=" + shipment +
                 '}';
     }

@@ -14,13 +14,11 @@ import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.AccountPaymentFormHelper;
 import com.workspaceit.dccpos.validation.form.purchase.AccountPaymentForm;
-import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
-import com.workspaceit.dccpos.validation.form.purchase.PurchasePaymentForm;
+import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,24 +53,16 @@ public class EntryService {
     @Transactional(rollbackFor = Exception.class)
     public Entry createShipmentEntry(Shipment shipment, PurchaseForm purchaseForm) throws EntityNotFound {
         List<EntryItem> entryItems = new ArrayList<>();
-        PurchasePaymentForm paymentForm = purchaseForm.getPayment();
         EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
-        List<Ledger> paidProductPriceCashOrBankLedgers  = new ArrayList<>();
-        AccountPaymentForm[]  productPricePaymentAccounts =  purchaseForm.getPayment().getProductPricePaymentAccount();
-        AccountPaymentForm  shippingCostPaymentAccount =  purchaseForm.getPayment().getShippingCostPaymentAccount();
+        AccountPaymentForm[]  productPricePaymentAccounts =  purchaseForm.getProductPricePaymentAccount();
+        AccountPaymentForm  shippingCostPaymentAccount =  purchaseForm.getShippingCostPaymentAccount();
+
         double totalShippingCost = shipment.getTotalCost();
         double totalInventoryPrice = shipment.getTotalProductPrice();
 
-
         double paidProductPrice = AccountPaymentFormHelper.getTotalPaidAmount(productPricePaymentAccounts);
         double paidShippingCostAmount =(shippingCostPaymentAccount!=null)? shippingCostPaymentAccount.getAmount():0;
-
         double totalEntryDcAmount = totalShippingCost+totalInventoryPrice;
-
-
-
-
-
 
         Supplier supplier = shipment.getSupplier();
 
@@ -95,7 +85,7 @@ public class EntryService {
          *  - Full paid
          *  - Partially paid
          *
-         *  Shiping Cost Dr
+         *  Shipping Cost Dr
          *  CashOrBanck Dr
          * if Due
          *  Due Shipping Cost Cr
@@ -110,8 +100,8 @@ public class EntryService {
 
             Ledger cashOrBankLedger = this.ledgerService.getLedger(ledgerId);
 
-            EntryItem entryShippingCostCahsOrBank = this.getEntryItem(shippingCostPaymentAccount.getAmount(),cashOrBankLedger,ACCOUNTING_ENTRY.CR);
-            entryItems.add(entryShippingCostCahsOrBank);
+            EntryItem entryShippingCostCashOrBank = this.getEntryItem(shippingCostPaymentAccount.getAmount(),cashOrBankLedger,ACCOUNTING_ENTRY.CR);
+            entryItems.add(entryShippingCostCashOrBank);
         }
 
 
@@ -135,10 +125,17 @@ public class EntryService {
          *  - Partially paid
          * -----------------------
          *  Inventory ... Dr
-         *  CashOrBanck ... Cr
+         *  CashOrBanck 1 ... Cr
+         *      .
+         *      .
+         *      .
+         *  CashOrBanck n ... Cr
+         *
          * if Due
          *  Supplier ... Cr
          * */
+
+
         EntryItem entryItemInventory = this.getShipmentEntryItem(totalInventoryPrice,LEDGER_CODE.INVENTORY,ACCOUNTING_ENTRY.DR);
         double priceBalance = 0;
 
@@ -149,7 +146,7 @@ public class EntryService {
                 int ledgerId = accountPaymentForm.getLedgerId();
 
                 Ledger cashOrBankLedger = this.ledgerService.getLedger(ledgerId);
-                EntryItem entryItemCashOrBank = this.getEntryItem(accountPaymentForm.getAmount(),cashOrBankLedger,ACCOUNTING_ENTRY.CR);
+                EntryItem entryItemCashOrBank = this.getEntryItem(entryItems,accountPaymentForm.getAmount(),cashOrBankLedger,ACCOUNTING_ENTRY.CR);
 
                 if(!entryItems.contains(entryItemCashOrBank))entryItems.add(entryItemCashOrBank);
             }
@@ -158,14 +155,12 @@ public class EntryService {
 
 
         if(paidProductPrice == 0){
-            paidProductPrice = totalInventoryPrice;
+            priceBalance = totalInventoryPrice;
         }else if(totalInventoryPrice > paidProductPrice){
             priceBalance = totalInventoryPrice-paidProductPrice;
         }
 
-
         if(priceBalance>0){
-
             EntryItem entryItemSupplier = this.getEntryItem(priceBalance,supplierLedger,ACCOUNTING_ENTRY.CR);
             entryItems.add(entryItemSupplier);
         }
@@ -177,42 +172,7 @@ public class EntryService {
         return entry;
 
     }
-    @Transactional(rollbackFor = Exception.class)
-    public Entry createShipmentEntryOnCash(Shipment shipment){
-        List<EntryItem> entryItems = new ArrayList<>();
 
-        double totalCost = shipment.getTotalCost();
-        double totalInventoryPrice = shipment.getTotalProductPrice();
-
-        double totalEntryDcAmount = totalCost+totalInventoryPrice;
-
-
-        Entry entry = new Entry();
-        entry.setDrTotal(totalEntryDcAmount);
-        entry.setCrTotal(totalEntryDcAmount);
-        entry.setEntryType(null);
-        entry.setCreatedBy(shipment.getPurchasedBy());
-        entry.setEntryItems(entryItems);
-        entry.setDate(shipment.getPurchasedDate());
-        entry.setNarration("Purchased  product");
-
-
-        EntryItem entryItemInventory = this.getShipmentEntryItem(totalInventoryPrice,LEDGER_CODE.INVENTORY,ACCOUNTING_ENTRY.DR);
-        EntryItem entryItemShipmentCost = this.getShipmentEntryItem(totalCost,LEDGER_CODE.SHIPMENT_COST,ACCOUNTING_ENTRY.DR);
-        EntryItem entryItemCash = this.getShipmentEntryItem(totalInventoryPrice+totalInventoryPrice,LEDGER_CODE.CASH,ACCOUNTING_ENTRY.CR);
-
-
-
-        entryItems.add(entryItemInventory);
-        entryItems.add(entryItemShipmentCost);
-
-        entryItems.add(entryItemCash);
-        this.entryDao.save(entry);
-
-
-        return entry;
-
-    }
     private EntryItem getShipmentEntryItem(double amount ,LEDGER_CODE ledgerCode,ACCOUNTING_ENTRY accountingEntry){
         Ledger ledger = this.ledgerService.getByCode(ledgerCode);
 
@@ -238,7 +198,7 @@ public class EntryService {
     private EntryItem getEntryItem(List<EntryItem> entryItems,double amount , Ledger ledger, ACCOUNTING_ENTRY accountingEntry){
 
        Optional<EntryItem> entryOptional =  entryItems.stream().filter(entryItem -> {
-                return entryItem.getId()==ledger.getId()
+                return entryItem.getLedger().getId()==ledger.getId()
                         && entryItem.getAccountingEntry().equals(accountingEntry);
         }).findFirst();
 

@@ -9,7 +9,6 @@ import com.workspaceit.dccpos.entity.Supplier;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.TrackingIdGenerator;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
-import com.workspaceit.dccpos.validation.form.purchase.PurchasePaymentForm;
 import com.workspaceit.dccpos.validation.form.shipment.ShipmentCreateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,15 +56,13 @@ public class ShipmentService {
     public Shipment create(Employee employee, PurchaseForm purchaseForm)throws EntityNotFound{
         ShipmentCreateForm shipmentCreateForm = purchaseForm.getShipment();
         Supplier supplier =  this.supplierService.getSupplier(shipmentCreateForm.getSupplierId());
-        PurchasePaymentForm paymentForm = purchaseForm.getPayment();
-
 
         double carryingCost = shipmentCreateForm.getCarryingCost()==null?0:shipmentCreateForm.getCarryingCost();
         double cfCost = shipmentCreateForm.getCfCost()==null?0:shipmentCreateForm.getCfCost();
         double laborCost = shipmentCreateForm.getLaborCost()==null?0:shipmentCreateForm.getLaborCost();
         double otherCost = shipmentCreateForm.getOtherCost()==null?0:shipmentCreateForm.getOtherCost();
         double totalCost = this.getTotalCost(shipmentCreateForm);
-        double totalPaid = paymentForm.getTotalPaidAmount();
+        double totalPaid = 0;
 
         /**
          * Create Inventory
