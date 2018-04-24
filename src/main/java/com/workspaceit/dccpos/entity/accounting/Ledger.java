@@ -39,14 +39,14 @@ public class Ledger {
 
 
     @Column(name =  "op_balance")
-    private Double openingBalance;
+    private double openingBalance;
 
     @Enumerated(EnumType.STRING)
     @Column(name =  "op_balance_dc")
     private ACCOUNTING_ENTRY openingBalanceEntryType;
 
     @Column(name =  "current_balance")
-    private Double currentBalance;
+    private double currentBalance;
 
     @Enumerated(EnumType.STRING)
     @Column(name =  "current_balance_dc")
@@ -123,19 +123,19 @@ public class Ledger {
         this.createdAt = createdAt;
     }
 
-    public Double getOpeningBalance() {
+    public double getOpeningBalance() {
         return openingBalance;
     }
 
-    public void setOpeningBalance(Double openingBalance) {
+    public void setOpeningBalance(double openingBalance) {
         this.openingBalance = openingBalance;
     }
 
-    public Double getCurrentBalance() {
+    public double getCurrentBalance() {
         return currentBalance;
     }
 
-    public void setCurrentBalance(Double currentBalance) {
+    public void setCurrentBalance(double currentBalance) {
         this.currentBalance = currentBalance;
     }
 
@@ -188,6 +188,8 @@ public class Ledger {
         Ledger ledger = (Ledger) o;
 
         if (id != ledger.id) return false;
+        if (Double.compare(ledger.openingBalance, openingBalance) != 0) return false;
+        if (Double.compare(ledger.currentBalance, currentBalance) != 0) return false;
         if (reconciliation != ledger.reconciliation) return false;
         if (groupAccount != null ? !groupAccount.equals(ledger.groupAccount) : ledger.groupAccount != null)
             return false;
@@ -196,11 +198,7 @@ public class Ledger {
         if (company != null ? !company.equals(ledger.company) : ledger.company != null) return false;
         if (code != ledger.code) return false;
         if (name != null ? !name.equals(ledger.name) : ledger.name != null) return false;
-        if (openingBalance != null ? !openingBalance.equals(ledger.openingBalance) : ledger.openingBalance != null)
-            return false;
         if (openingBalanceEntryType != ledger.openingBalanceEntryType) return false;
-        if (currentBalance != null ? !currentBalance.equals(ledger.currentBalance) : ledger.currentBalance != null)
-            return false;
         if (currentBalanceEntryType != ledger.currentBalanceEntryType) return false;
         if (ledgerType != ledger.ledgerType) return false;
         if (notes != null ? !notes.equals(ledger.notes) : ledger.notes != null) return false;
@@ -209,15 +207,19 @@ public class Ledger {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result;
+        long temp;
+        result = id;
         result = 31 * result + (groupAccount != null ? groupAccount.hashCode() : 0);
         result = 31 * result + (personalInformation != null ? personalInformation.hashCode() : 0);
         result = 31 * result + (company != null ? company.hashCode() : 0);
         result = 31 * result + (code != null ? code.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (openingBalance != null ? openingBalance.hashCode() : 0);
+        temp = Double.doubleToLongBits(openingBalance);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (openingBalanceEntryType != null ? openingBalanceEntryType.hashCode() : 0);
-        result = 31 * result + (currentBalance != null ? currentBalance.hashCode() : 0);
+        temp = Double.doubleToLongBits(currentBalance);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (currentBalanceEntryType != null ? currentBalanceEntryType.hashCode() : 0);
         result = 31 * result + (ledgerType != null ? ledgerType.hashCode() : 0);
         result = 31 * result + reconciliation;

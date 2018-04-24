@@ -65,7 +65,7 @@ public class ShipmentService {
         double laborCost = shipmentCreateForm.getLaborCost()==null?0:shipmentCreateForm.getLaborCost();
         double otherCost = shipmentCreateForm.getOtherCost()==null?0:shipmentCreateForm.getOtherCost();
         double totalCost = this.getTotalCost(shipmentCreateForm);
-        double totalPaid =  paymentForm.getTotalPaidAmount();
+        double totalPaid = paymentForm.getTotalPaidAmount();
 
         /**
          * Create Inventory

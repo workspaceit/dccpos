@@ -22,6 +22,9 @@ public class PurchaseForm {
     @NotNull
     private ShipmentCreateForm shipment;
 
+
+
+
     public InventoryCreateFrom[] getInventories() {
         return inventories;
     }

@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.validation.form.purchase;
 
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -26,4 +27,14 @@ public class AccountPaymentForm {
     public void setAmount(Double amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return "AccountPaymentForm{" +
+                "ledgerId=" + ledgerId +
+                ", amount=" + amount +
+                '}';
+    }
+
+
 }

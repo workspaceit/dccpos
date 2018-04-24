@@ -25,6 +25,7 @@ public class EntryItem {
     @JoinColumn(name = "ledger_id",referencedColumnName = "id")
     private Ledger ledger;
 
+
     @Column(name = "amount")
     private double amount;
 

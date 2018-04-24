@@ -9,6 +9,9 @@ import org.springframework.validation.Errors;
 public class PurchaseValidator {
     private InventoryValidator inventoryValidator;
     private ShipmentValidator shipmentValidator;
+    private PurchasePaymentValidator purchasePaymentValidator;
+
+
 
     @Autowired
     public void setInventoryValidator(InventoryValidator inventoryValidator) {
@@ -20,9 +23,15 @@ public class PurchaseValidator {
         this.shipmentValidator = shipmentValidator;
     }
 
+    @Autowired
+    public void setPurchasePaymentValidator(PurchasePaymentValidator purchasePaymentValidator) {
+        this.purchasePaymentValidator = purchasePaymentValidator;
+    }
+
     public void validate(PurchaseForm purchaseForm, Errors errors){
         this.shipmentValidator.validate("shipment",purchaseForm.getShipment(),errors);
         this.inventoryValidator.validate("inventories",purchaseForm.getInventories(),errors);
+        this.purchasePaymentValidator.validate("payment",purchaseForm.getPayment(),errors);
     }
 
 }

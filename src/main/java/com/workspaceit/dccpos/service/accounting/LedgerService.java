@@ -9,6 +9,7 @@ import com.workspaceit.dccpos.entity.Company;
 import com.workspaceit.dccpos.entity.PersonalInformation;
 import com.workspaceit.dccpos.entity.accounting.GroupAccount;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
+import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.validation.form.accounting.LedgerForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,20 @@ public class LedgerService {
     public Ledger getByCode(LEDGER_CODE ledgerCode){
         return this.ledgerDao.findByCode(ledgerCode);
     }
+    @Transactional
+    public Ledger getById(int id){
+        return this.ledgerDao.findById(id);
+    }
+
+
+    @Transactional
+    public Ledger getLedger(int id) throws EntityNotFound {
+         Ledger ledger = this.ledgerDao.findById(id);
+
+         if(ledger==null)throw new EntityNotFound("Ledger not found by id:"+id);
+        return ledger;
+    }
+
     @Transactional
     public Ledger getByCompanyIdAndCode(int id, GROUP_CODE groupCode){
         return this.ledgerDao.findByCompanyAndGroupCode(id,groupCode);
@@ -152,6 +167,33 @@ public class LedgerService {
         this.updateLedgeName(ledger,personalInformation.getFullName());
 
         return ledger;
+    }
+    public boolean isCashOrBankAccountWillOverDrawn(Ledger ledger,double amount,boolean calculateFromEntierRecords){
+        ACCOUNTING_ENTRY openingBalanceEntryType = ledger.getOpeningBalanceEntryType();
+        ACCOUNTING_ENTRY currentBalanceEntryType = ledger.getCurrentBalanceEntryType();
+        double currentBalance = ledger.getCurrentBalance();
+        if(openingBalanceEntryType.equals(currentBalanceEntryType)){
+            if(currentBalance<amount){
+                return true;
+            }
+        }else{
+            return true;
+        }
+        return false;
+
+    }
+    public boolean isCashOrBankAccountWillOverDrawn(int ledgerId,double amount,boolean calculateFromEntireRecords) throws EntityNotFound {
+       Ledger ledger =  this.getLedger(ledgerId);
+       return this.isCashOrBankAccountWillOverDrawn(ledger,amount,calculateFromEntireRecords);
+    }
+    public boolean isCashOrBankAccount(int ledgerId) throws EntityNotFound {
+        Ledger ledger =  this.getLedger(ledgerId);
+
+        return this.isCashOrBankAccount(ledger);
+
+    }
+    public boolean isCashOrBankAccount( Ledger ledger){
+        return ledger.getLedgerType().equals(LEDGER_TYPE.CASH_ACCOUNT);
     }
     private void updateLedgeName(Ledger ledger,String name){
         ledger.setName(name);

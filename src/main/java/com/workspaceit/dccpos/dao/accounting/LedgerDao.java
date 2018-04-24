@@ -24,6 +24,13 @@ public class LedgerDao extends BaseDao {
                 .setMaxResults(1)
                 .uniqueResult();
     }
+    public Ledger findById( int id){
+        Session session = this.getCurrentSession();
+        return (Ledger)session.createQuery(" FROM Ledger lg where lg.id =:id ")
+                .setParameter("id",id)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
     public Ledger findByPersonalInfoIdAndGroupCode(int personalInformationId, GROUP_CODE groupCode){
         Session session = this.getCurrentSession();
         return (Ledger)session.createQuery(" FROM Ledger lg where lg.personalInformation.id =:personalInformationId " +

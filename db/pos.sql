@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 23, 2018 at 05:51 AM
+-- Generation Time: Apr 24, 2018 at 06:11 AM
 -- Server version: 5.6.39
 -- PHP Version: 5.5.9-1ubuntu4.24
 
@@ -39,17 +39,7 @@ CREATE TABLE IF NOT EXISTS `acc_entries` (
   PRIMARY KEY (`id`),
   KEY `ac_entries_created_by_index` (`created_by`),
   KEY `FKgjbihsd3i7rquwws86fcye0jl` (`entry_type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
-
---
--- Dumping data for table `acc_entries`
---
-
-INSERT INTO `acc_entries` (`id`, `entry_type`, `number`, `date`, `dr_total`, `cr_total`, `narration`, `created_at`, `created_by`) VALUES
-(1, NULL, 0, '2018-04-19', 108.00, 108.00, 'Purchased  product', '2018-04-20 13:36:30', NULL),
-(2, NULL, 0, '2018-04-19', 108.00, 108.00, 'Purchased  product', '2018-04-23 04:40:26', NULL),
-(3, NULL, 0, '2018-04-19', 108.00, 108.00, 'Purchased  product', '2018-04-23 04:44:33', NULL),
-(4, NULL, 0, '2018-04-19', 108.00, 108.00, 'Purchased  product', '2018-04-23 05:12:27', NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -69,29 +59,7 @@ CREATE TABLE IF NOT EXISTS `acc_entry_items` (
   PRIMARY KEY (`id`),
   KEY `FKsktxpw9rj3098v6icvo480t87` (`created_by`),
   KEY `FKt6w8e3lqgl6v1gvmuxalw34jw` (`entry_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
-
---
--- Dumping data for table `acc_entry_items`
---
-
-INSERT INTO `acc_entry_items` (`id`, `entry_id`, `ledger_id`, `amount`, `dc`, `reconciliation_date`, `created_at`, `created_by`) VALUES
-(1, 1, 79, 60.70, 'DR', NULL, '2018-04-20 13:36:30', NULL),
-(2, NULL, 110, 60.70, 'CR', NULL, '2018-04-20 13:36:30', NULL),
-(3, NULL, 83, 60.70, 'DR', NULL, '2018-04-20 13:36:30', NULL),
-(4, NULL, 82, 60.70, 'CR', NULL, '2018-04-20 13:36:30', NULL),
-(5, 2, 79, 60.70, 'DR', NULL, '2018-04-23 04:40:26', NULL),
-(6, NULL, 110, 60.70, 'CR', NULL, '2018-04-23 04:40:26', NULL),
-(7, NULL, 83, 60.70, 'DR', NULL, '2018-04-23 04:40:26', NULL),
-(8, NULL, 82, 60.70, 'CR', NULL, '2018-04-23 04:40:26', NULL),
-(9, 3, 79, 60.70, 'DR', NULL, '2018-04-23 04:44:33', NULL),
-(10, NULL, 110, 60.70, 'CR', NULL, '2018-04-23 04:44:33', NULL),
-(11, NULL, 83, 60.70, 'DR', NULL, '2018-04-23 04:44:33', NULL),
-(12, NULL, 82, 60.70, 'CR', NULL, '2018-04-23 04:44:33', NULL),
-(13, 4, 79, 60.70, 'DR', NULL, '2018-04-23 05:12:27', NULL),
-(14, NULL, 110, 60.70, 'CR', NULL, '2018-04-23 05:12:27', NULL),
-(15, NULL, 83, 60.70, 'DR', NULL, '2018-04-23 05:12:27', NULL),
-(16, NULL, 82, 60.70, 'CR', NULL, '2018-04-23 05:12:27', NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -172,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   `group_id` bigint(18) NOT NULL,
   `personal_info_id` int(11) DEFAULT NULL,
   `company_id` int(11) DEFAULT NULL,
-  `code` enum('INVENTORY','COGS','CASH','SHIPMENT_COST') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `code` enum('INVENTORY','COGS','CASH','SHIPMENT_COST','DUE_SHIPMENT_COST') COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `op_balance` decimal(25,2) NOT NULL DEFAULT '0.00',
   `op_balance_dc` enum('DR','CR') COLLATE utf8_unicode_ci NOT NULL,
@@ -190,21 +158,19 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   KEY `personal_info_id` (`personal_info_id`),
   KEY `company_id` (`company_id`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=112 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=118 ;
 
 --
 -- Dumping data for table `acc_ledgers`
 --
 
 INSERT INTO `acc_ledgers` (`id`, `group_id`, `personal_info_id`, `company_id`, `code`, `name`, `op_balance`, `op_balance_dc`, `current_balance`, `current_balance_dc`, `type`, `reconciliation`, `notes`, `created_at`) VALUES
-(79, 2, NULL, NULL, 'INVENTORY', 'Inventory', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:27:16'),
-(80, 4, NULL, NULL, 'COGS', 'Cost Of Good Sold', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:35:20'),
-(82, 1, NULL, NULL, 'CASH', 'Cash', 0.00, 'DR', 0.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-20 10:36:24'),
-(83, 4, NULL, NULL, 'SHIPMENT_COST', 'Shipment Cost', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:41:28'),
-(101, 8, 1, NULL, NULL, 'Person 1', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 12:26:10'),
-(109, 8, 2, NULL, NULL, 'Person 1', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 13:36:19'),
-(110, 9, NULL, 1, NULL, 'Agora ', 0.00, 'CR', 0.00, 'CR', 'OTHER', 0, '', '2018-04-20 13:36:22'),
-(111, 5, NULL, 2, NULL, 'Shopno', 0.00, 'CR', 0.00, 'CR', 'OTHER', 0, '', '2018-04-20 13:36:23');
+(1, 2, NULL, NULL, 'INVENTORY', 'Inventory', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:27:16'),
+(2, 4, NULL, NULL, 'COGS', 'Cost Of Good Sold', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:35:20'),
+(3, 1, NULL, NULL, 'CASH', 'Cash', 0.00, 'DR', 0.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-20 10:36:24'),
+(4, 4, NULL, NULL, 'SHIPMENT_COST', 'Shipment Cost', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:41:28'),
+(5, 2, NULL, NULL, 'DUE_SHIPMENT_COST', 'Due shipment cost', 0.00, 'CR', 0.00, 'CR', 'OTHER', 0, '', '2018-04-23 10:09:29'),
+(101, 8, 1, NULL, NULL, 'Person 1', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 12:26:10');
 
 -- --------------------------------------------------------
 
@@ -219,15 +185,14 @@ CREATE TABLE IF NOT EXISTS `acess_role` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `auth_credential_id` (`auth_credential_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `acess_role`
 --
 
 INSERT INTO `acess_role` (`id`, `auth_credential_id`, `role`, `created_at`) VALUES
-(1, 1, 'ADMIN', '2018-04-20 13:10:07'),
-(2, 2, 'POS_OPERATOR', '2018-04-20 13:36:19');
+(1, 1, 'ADMIN', '2018-04-20 13:10:07');
 
 -- --------------------------------------------------------
 
@@ -240,17 +205,14 @@ CREATE TABLE IF NOT EXISTS `address` (
   `formatted_address` text,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `address`
 --
 
 INSERT INTO `address` (`id`, `formatted_address`, `created_at`) VALUES
-(1, 'NIkunja 2, Road 8', '2018-04-20 13:23:12'),
-(2, 'Road 84, House 16. Nikunja 2,Dhaka', '2018-04-20 13:36:19'),
-(3, 'Road 8, House 16. Nikunja 2,Dhaka', '2018-04-20 13:36:22'),
-(4, 'Road 8, House 16. Nikunja 2,Dhaka', '2018-04-20 13:36:23');
+(1, 'NIkunja 2, Road 8', '2018-04-20 13:23:12');
 
 -- --------------------------------------------------------
 
@@ -267,15 +229,14 @@ CREATE TABLE IF NOT EXISTS `auth_credential` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `FK204315vkkjatxsc2egk1ifmlf` (`personal_info_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `auth_credential`
 --
 
 INSERT INTO `auth_credential` (`id`, `personal_info_id`, `email`, `password`, `status`, `created_at`) VALUES
-(1, 1, 'admin@admin.com', '$2a$10$5aTN9klJNhO3DERcg/j11.VQC2skPV2zz37SG3kraKRms.v5.XYyC', 'ACTIVE', '2018-04-20 13:08:54'),
-(2, 2, 'admin3@admin.com', '$2a$10$6uNrdQNdmzBFfHNrnfGeTOjO2B06Ktvhww5Stj6C2HsksCA5Wb6KS', 'ACTIVE', '2018-04-20 13:36:19');
+(1, 1, 'admin@admin.com', '$2a$10$5aTN9klJNhO3DERcg/j11.VQC2skPV2zz37SG3kraKRms.v5.XYyC', 'ACTIVE', '2018-04-24 04:47:04');
 
 -- --------------------------------------------------------
 
@@ -314,15 +275,7 @@ CREATE TABLE IF NOT EXISTS `company` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `address_id` (`address_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `company`
---
-
-INSERT INTO `company` (`id`, `address_id`, `title`, `phone`, `email`, `created_at`) VALUES
-(1, 3, 'Agora ', '3214', 'sdf@df.com', '2018-04-20 13:36:22'),
-(2, 4, 'Shopno', '3214', 'sdf@df.com', '2018-04-20 13:36:23');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -337,15 +290,14 @@ CREATE TABLE IF NOT EXISTS `company_role` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `personal_info_id` (`personal_info_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `company_role`
 --
 
 INSERT INTO `company_role` (`id`, `personal_info_id`, `role`, `created_at`) VALUES
-(1, 1, 'EMPLOYEE', '2018-04-20 12:26:10'),
-(2, 2, 'EMPLOYEE', '2018-04-20 13:36:19');
+(1, 1, 'EMPLOYEE', '2018-04-20 12:26:10');
 
 -- --------------------------------------------------------
 
@@ -362,15 +314,14 @@ CREATE TABLE IF NOT EXISTS `employee` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_info_id` (`personal_info_id`),
   UNIQUE KEY `employee_id` (`employee_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `employee`
 --
 
 INSERT INTO `employee` (`id`, `personal_info_id`, `employee_id`, `salary`, `created_at`) VALUES
-(1, 1, '97480', 125.00, '2018-04-20 12:26:10'),
-(2, 2, '1231', 125.00, '2018-04-20 13:36:19');
+(1, 1, '97480', 125.00, '2018-04-20 12:26:10');
 
 -- --------------------------------------------------------
 
@@ -390,25 +341,7 @@ CREATE TABLE IF NOT EXISTS `inventory` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`,`shipment_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
-
---
--- Dumping data for table `inventory`
---
-
-INSERT INTO `inventory` (`id`, `product_id`, `shipment_id`, `purchase_price`, `purchase_quantity`, `sold_quantity`, `available_quantity`, `status`, `created_at`) VALUES
-(1, 1, 1, 2.00, 12, 0, 12, 'IN_STOCK', '2018-04-20 13:36:30'),
-(2, 2, 1, 1.50, 21, 0, 21, 'IN_STOCK', '2018-04-20 13:36:30'),
-(3, 3, 1, 1.30, 4, 0, 4, 'IN_STOCK', '2018-04-20 13:36:30'),
-(4, 1, 2, 2.00, 12, 0, 12, 'IN_STOCK', '2018-04-23 04:40:25'),
-(5, 2, 2, 1.50, 21, 0, 21, 'IN_STOCK', '2018-04-23 04:40:26'),
-(6, 3, 2, 1.30, 4, 0, 4, 'IN_STOCK', '2018-04-23 04:40:26'),
-(7, 1, 3, 2.00, 12, 0, 12, 'IN_STOCK', '2018-04-23 04:44:33'),
-(8, 2, 3, 1.50, 21, 0, 21, 'IN_STOCK', '2018-04-23 04:44:33'),
-(9, 3, 3, 1.30, 4, 0, 4, 'IN_STOCK', '2018-04-23 04:44:33'),
-(12, 1, 4, 2.00, 12, 0, 12, 'IN_STOCK', '2018-04-23 05:12:27'),
-(13, 2, 4, 1.50, 21, 0, 21, 'IN_STOCK', '2018-04-23 05:12:27'),
-(14, 3, 4, 1.30, 4, 0, 4, 'IN_STOCK', '2018-04-23 05:12:27');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -428,37 +361,7 @@ CREATE TABLE IF NOT EXISTS `inventory_details` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `inventory_id` (`inventory_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
-
---
--- Dumping data for table `inventory_details`
---
-
-INSERT INTO `inventory_details` (`id`, `inventory_id`, `selling_price`, `purchased_quantity`, `sold_quantity`, `available_quantity`, `condition`, `cycle`, `created_at`) VALUES
-(1, 1, 102.00, 10, 0, 10, 'GOOD', 'FROM_SUPPLIER', '2018-04-20 13:36:30'),
-(2, 1, 310.00, 2, 0, 2, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-20 13:36:30'),
-(3, 2, 102.00, 20, 0, 20, 'GOOD', 'FROM_SUPPLIER', '2018-04-20 13:36:30'),
-(4, 2, 310.00, 1, 0, 1, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-20 13:36:30'),
-(5, 3, 102.00, 1, 0, 1, 'GOOD', 'FROM_SUPPLIER', '2018-04-20 13:36:30'),
-(6, 3, 310.00, 3, 0, 3, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-20 13:36:30'),
-(7, 4, 102.00, 10, 0, 10, 'GOOD', 'FROM_SUPPLIER', '2018-04-23 04:40:26'),
-(8, 4, 310.00, 2, 0, 2, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-23 04:40:26'),
-(9, 5, 102.00, 20, 0, 20, 'GOOD', 'FROM_SUPPLIER', '2018-04-23 04:40:26'),
-(10, 5, 310.00, 1, 0, 1, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-23 04:40:26'),
-(11, 6, 102.00, 1, 0, 1, 'GOOD', 'FROM_SUPPLIER', '2018-04-23 04:40:26'),
-(12, 6, 310.00, 3, 0, 3, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-23 04:40:26'),
-(13, 7, 102.00, 10, 0, 10, 'GOOD', 'FROM_SUPPLIER', '2018-04-23 04:44:33'),
-(14, 7, 310.00, 2, 0, 2, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-23 04:44:33'),
-(15, 8, 102.00, 20, 0, 20, 'GOOD', 'FROM_SUPPLIER', '2018-04-23 04:44:33'),
-(16, 8, 310.00, 1, 0, 1, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-23 04:44:33'),
-(17, 9, 102.00, 1, 0, 1, 'GOOD', 'FROM_SUPPLIER', '2018-04-23 04:44:33'),
-(18, 9, 310.00, 3, 0, 3, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-23 04:44:33'),
-(19, 12, 102.00, 10, 0, 10, 'GOOD', 'FROM_SUPPLIER', '2018-04-23 05:12:27'),
-(20, 12, 310.00, 2, 0, 2, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-23 05:12:27'),
-(21, 13, 102.00, 20, 0, 20, 'GOOD', 'FROM_SUPPLIER', '2018-04-23 05:12:27'),
-(22, 13, 310.00, 1, 0, 1, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-23 05:12:27'),
-(23, 14, 102.00, 1, 0, 1, 'GOOD', 'FROM_SUPPLIER', '2018-04-23 05:12:27'),
-(24, 14, 310.00, 3, 0, 3, 'DAMAGED', 'FROM_SUPPLIER', '2018-04-23 05:12:27');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -476,15 +379,14 @@ CREATE TABLE IF NOT EXISTS `personal_information` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `address_id` (`address_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `personal_information`
 --
 
 INSERT INTO `personal_information` (`id`, `address_id`, `full_name`, `dob`, `email`, `phone`, `created_at`) VALUES
-(1, 1, 'SYTEM ADMIN', '1966-04-20', 'admin@admin.com', '01234567', '2018-04-20 13:19:58'),
-(2, 2, 'Person 1', '2018-04-04', NULL, NULL, '2018-04-20 13:36:19');
+(1, 1, 'SYTEM ADMIN', '1966-04-20', 'admin@admin.com', '01234567', '2018-04-20 13:19:58');
 
 -- --------------------------------------------------------
 
@@ -505,16 +407,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`,`barcode`),
   KEY `weight` (`weight`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
-
---
--- Dumping data for table `product`
---
-
-INSERT INTO `product` (`id`, `category_id`, `name`, `weight`, `weight_unit`, `image`, `barcode`, `total_available_quantity`, `created_at`) VALUES
-(1, 2, 'Choco Bar     <script> <\\/script>', 23, 'KG', '', '123121', 48, '2018-04-20 13:36:28'),
-(2, 1, 'Dano', 250, 'GM', '', '12312', 84, '2018-04-20 13:36:29'),
-(3, 1, 'Milk Bar', 250, 'GM', '', '12456', 16, '2018-04-20 13:36:30');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -552,23 +445,46 @@ CREATE TABLE IF NOT EXISTS `shipment` (
   `total_quantity` int(11) NOT NULL,
   `total_product_price` decimal(25,2) NOT NULL,
   `total_cost` decimal(25,2) NOT NULL,
+  `total_paid` decimal(25,2) NOT NULL,
   `purchased_by` int(11) DEFAULT NULL,
   `purchased_date` date NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `supplier_id` (`supplier_id`),
   KEY `entry_id` (`entry_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `shipment`
+-- Table structure for table `shipment_transaction`
 --
 
-INSERT INTO `shipment` (`id`, `tracking_id`, `supplier_id`, `entry_id`, `cf_cost`, `carrying_cost`, `labor_cost`, `other_cost`, `total_quantity`, `total_product_price`, `total_cost`, `purchased_by`, `purchased_date`, `created_at`) VALUES
-(1, 'SP1', 1, 1, 0, 25, 20, 2, 37, 60.70, 47.30, NULL, '2018-04-19', '2018-04-20 13:36:30'),
-(2, 'SP2', 1, 2, 0, 25, 20, 2, 37, 60.70, 47.30, NULL, '2018-04-19', '2018-04-23 04:40:26'),
-(3, 'SP3', 1, 3, 0, 25, 20, 2, 37, 60.70, 47.30, NULL, '2018-04-19', '2018-04-23 04:44:33'),
-(4, 'SP4', 1, 4, 0, 25, 20, 2, 37, 60.70, 47.30, NULL, '2018-04-19', '2018-04-23 05:12:27');
+CREATE TABLE IF NOT EXISTS `shipment_transaction` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `shipment_id` int(11) DEFAULT NULL,
+  `paid_amount` decimal(25,2) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shop_information`
+--
+
+CREATE TABLE IF NOT EXISTS `shop_information` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `address` text NOT NULL,
+  `logo` varchar(200) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `phone` varchar(200) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -584,14 +500,7 @@ CREATE TABLE IF NOT EXISTS `supplier` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_info_id` (`company_id`),
   UNIQUE KEY `supplier_id` (`supplier_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `supplier`
---
-
-INSERT INTO `supplier` (`id`, `company_id`, `supplier_id`, `created_at`) VALUES
-(1, 1, '1231', '2018-04-20 13:36:22');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -607,7 +516,7 @@ CREATE TABLE IF NOT EXISTS `temp_file` (
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `token` (`token`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Dumping data for table `temp_file`
@@ -629,7 +538,8 @@ INSERT INTO `temp_file` (`id`, `token`, `path`, `file_name`, `created_date`) VAL
 (13, 1000040114, '/home/mi/project-file/pos/tmp/22611032070774.JPG', '22611032070774.JPG', '2018-04-20 12:13:14'),
 (14, 1000091472, '/home/mi/project-file/pos/tmp/23393150465367.JPG', '23393150465367.JPG', '2018-04-20 12:26:16'),
 (15, 1000289192, '/home/mi/project-file/pos/tmp/27234275626165.JPG', '27234275626165.JPG', '2018-04-20 13:30:18'),
-(16, 1000547343, '/home/mi/project-file/pos/tmp/27602303432731.JPG', '27602303432731.JPG', '2018-04-20 13:36:26');
+(16, 1000547343, '/home/mi/project-file/pos/tmp/27602303432731.JPG', '27602303432731.JPG', '2018-04-20 13:36:26'),
+(17, 1000454183, '/home/mi/project-file/pos/tmp/25136638767649.png', '25136638767649.png', '2018-04-23 11:01:20');
 
 -- --------------------------------------------------------
 
@@ -644,14 +554,7 @@ CREATE TABLE IF NOT EXISTS `wholesaler` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_info_id` (`company_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `wholesaler`
---
-
-INSERT INTO `wholesaler` (`id`, `company_id`, `wholesaler_id`, `created_at`) VALUES
-(1, 2, '1231', '2018-04-20 13:36:23');
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Constraints for dumped tables

@@ -19,7 +19,11 @@ public class PurchasePaymentForm {
     private Double paidProductPriceAmount;
 
     @Valid
-    private AccountPaymentForm[] paymentAccount;
+    private AccountPaymentForm[] productPricePaymentAccount;
+
+    @Valid
+    private AccountPaymentForm shippingCostPaymentAccount;
+
 
     public Double getTotalPaidAmount() {
         return totalPaidAmount;
@@ -29,12 +33,12 @@ public class PurchasePaymentForm {
         this.totalPaidAmount = totalPaidAmount;
     }
 
-    public AccountPaymentForm[] getPaymentAccount() {
-        return paymentAccount;
+    public AccountPaymentForm[] getProductPricePaymentAccount() {
+        return productPricePaymentAccount;
     }
 
-    public void setPaymentAccount(AccountPaymentForm[] paymentAccount) {
-        this.paymentAccount = paymentAccount;
+    public void setProductPricePaymentAccount(AccountPaymentForm[] productPricePaymentAccount) {
+        this.productPricePaymentAccount = productPricePaymentAccount;
     }
 
 
@@ -54,11 +58,22 @@ public class PurchasePaymentForm {
         this.paidProductPriceAmount = paidProductPriceAmount;
     }
 
+    public AccountPaymentForm getShippingCostPaymentAccount() {
+        return shippingCostPaymentAccount;
+    }
+
+    public void setShippingCostPaymentAccount(AccountPaymentForm shippingCostPaymentAccount) {
+        this.shippingCostPaymentAccount = shippingCostPaymentAccount;
+    }
+
     @Override
     public String toString() {
         return "PurchasePaymentForm{" +
                 "totalPaidAmount=" + totalPaidAmount +
-                ", paymentAccount=" + Arrays.toString(paymentAccount) +
+                ", paidCostAmount=" + paidCostAmount +
+                ", paidProductPriceAmount=" + paidProductPriceAmount +
+                ", productPricePaymentAccount=" + Arrays.toString(productPricePaymentAccount) +
+                ", shippingCostPaymentAccount=" + shippingCostPaymentAccount +
                 '}';
     }
 }
