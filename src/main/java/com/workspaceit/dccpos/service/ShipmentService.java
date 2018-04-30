@@ -42,14 +42,21 @@ public class ShipmentService {
 
     @Transactional
     public Shipment getByShipment(int id) throws EntityNotFound {
-        Shipment shipment =  this.shipmentDao.getById(id);
+        Shipment shipment =  this.shipmentDao.findById(id);
 
         if(shipment==null)throw new EntityNotFound("Entity not found by id: "+id);
         return shipment;
     }
+
+    @Transactional
+    public List<Shipment> getAll(int limit, int offset){
+        offset = (offset-1)*limit;
+        return this.shipmentDao.findAll(limit,offset);
+    }
+
     @Transactional
     public Shipment getById(int id){
-        return this.shipmentDao.getById(id);
+        return this.shipmentDao.findById(id);
     }
 
     @Transactional(rollbackFor = Exception.class)

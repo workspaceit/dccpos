@@ -182,7 +182,7 @@ INSERT INTO `acc_ledgers` (`id`, `group_id`, `personal_info_id`, `company_id`, `
 CREATE TABLE IF NOT EXISTS `acess_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `auth_credential_id` int(11) NOT NULL,
-  `role` enum('ADMIN','POS_OPERATOR') COLLATE utf8_unicode_ci NOT NULL,
+  `role` enum('ALL','POS_OPERATOR') COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `auth_credential_id` (`auth_credential_id`)
@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `acess_role` (
 --
 
 INSERT INTO `acess_role` (`id`, `auth_credential_id`, `role`, `created_at`) VALUES
-(1, 1, 'ADMIN', '2018-04-20 13:10:07');
+(1, 1, 'ALL', '2018-04-20 13:10:07');
 
 -- --------------------------------------------------------
 
@@ -387,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `personal_information` (
 --
 
 INSERT INTO `personal_information` (`id`, `address_id`, `full_name`, `dob`, `email`, `phone`, `created_at`) VALUES
-(1, 1, 'SYTEM ADMIN', '1966-04-20', 'admin@admin.com', '01234567', '2018-04-20 13:19:58');
+(1, 1, 'SYTEM ALL', '1966-04-20', 'admin@admin.com', '01234567', '2018-04-20 13:19:58');
 
 -- --------------------------------------------------------
 

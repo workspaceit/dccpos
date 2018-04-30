@@ -22,7 +22,7 @@ public class Shipment {
     @JoinColumn(name = "supplier_id",referencedColumnName = "id")
     private Supplier supplier;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "entry_id",referencedColumnName = "id")
     private Entry entry;
 
@@ -59,7 +59,7 @@ public class Shipment {
     @Column(name = "total_paid")
     private double totalPaid;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchased_by")
     private Employee purchasedBy;
 

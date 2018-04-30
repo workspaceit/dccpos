@@ -4,7 +4,7 @@ import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.ValidationHelper;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
-import com.workspaceit.dccpos.validation.form.purchase.AccountPaymentForm;
+import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -18,7 +18,7 @@ public class PurchasePaymentValidator {
         this.ledgerService = ledgerService;
     }
 
-    public void validate(String prefix,AccountPaymentForm[] accountPaymentForms, Errors errors){
+    public void validate(String prefix, LedgerEntryForm[] accountPaymentForms, Errors errors){
         prefix =  ValidationHelper.preparePrefix(prefix);
 
         if(accountPaymentForms==null || accountPaymentForms.length==0){
@@ -28,9 +28,9 @@ public class PurchasePaymentValidator {
 
     }
 
-    public void validateAccountPayment(String prefix,AccountPaymentForm[] accountPaymentForms, Errors errors){
+    public void validateAccountPayment(String prefix, LedgerEntryForm[] accountPaymentForms, Errors errors){
         for(int i=0;i<accountPaymentForms.length;i++){
-            AccountPaymentForm accountPaymentForm =  accountPaymentForms[i];
+            LedgerEntryForm accountPaymentForm =  accountPaymentForms[i];
             String ledgerFieldName = ValidationHelper.preparePrefix(prefix+"["+i+"]")+"ledgerId";
             String amountFieldName = ValidationHelper.preparePrefix(prefix+"["+i+"]")+"amount";
 

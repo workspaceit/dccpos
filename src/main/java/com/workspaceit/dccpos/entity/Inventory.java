@@ -25,6 +25,7 @@ public class Inventory {
     @JoinColumn(name = "product_id",referencedColumnName = "id")
     private Product product;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "shipment_id",referencedColumnName = "id")
     private Shipment shipment;

@@ -13,7 +13,7 @@ ALTER TABLE `employee` AUTO_INCREMENT = 2;
 
 DELETE from `company_role` where id>1;
 ALTER TABLE `company_role` AUTO_INCREMENT = 2;
-
+DELETE from `acc_ledgers` where `personal_info_id` >1 OR `company_id` IS NOT NULL;
 DELETE from  `personal_information` where id>1;
 ALTER TABLE `personal_information` AUTO_INCREMENT = 2;
 
@@ -23,7 +23,7 @@ ALTER TABLE `address` AUTO_INCREMENT = 2;
 TRUNCATE TABLE `wholesaler`;
 TRUNCATE TABLE `supplier`;
 TRUNCATE TABLE `company`;
-DELETE from `acc_ledgers` where `personal_info_id` >1 OR `company_id` IS NOT NULL;
+
 SET FOREIGN_KEY_CHECKS =1;
 
 /*Remove Personal Information*/

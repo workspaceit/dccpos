@@ -12,16 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 
 @RestController
 @RequestMapping(EndpointRequestUriPrefix.endPointAuth +"/auth-credential")
+@CrossOrigin
 public class AuthCredentialEndPoint {
     private AuthCredentialService authCredentialService;
     private AuthCredentialValidator authCredentialValidator;

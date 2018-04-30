@@ -18,6 +18,10 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class PersistenceConfig {
 
+    public class DateConfig {
+       public final static String timeZone="GMT+6";
+    }
+
     @Autowired
     private Environment env;
     @Bean

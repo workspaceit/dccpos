@@ -205,4 +205,25 @@ public class LedgerService {
     private void update(Ledger ledger){
         this.ledgerDao.update(ledger);
     }
+
+    @Transactional
+    public List<Ledger> getByGroupCode(GROUP_CODE groupCode){
+        return this.ledgerDao.findByGroupCode(groupCode);
+    }
+    @Transactional
+    public List<Ledger> getAllWholesaler(){
+        return this.getByGroupCode(GROUP_CODE.WHOLESALER);
+    }
+    @Transactional
+    public List<Ledger> getAllSupplier(){
+        return this.getByGroupCode(GROUP_CODE.SUPPLIER);
+    }
+    @Transactional
+    public List<Ledger> getAllEmployeeSalary(){
+        return this.getByGroupCode(GROUP_CODE.SALARY);
+    }
+    @Transactional
+    public List<Ledger> getAllBankOrCash(){
+        return this.ledgerDao.findAllBakOrCash();
+    }
 }

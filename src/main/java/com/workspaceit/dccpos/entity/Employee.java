@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.entity;
 
+import com.workspaceit.dccpos.constant.EMPLOYEE_TYPE;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -18,6 +19,11 @@ public class Employee {
 
     @Column(name = "employee_id")
     private String employeeId;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private EMPLOYEE_TYPE type;
 
     @Column(name = "salary")
     private float salary;
@@ -52,6 +58,15 @@ public class Employee {
         this.employeeId = employeeId;
     }
 
+
+    public EMPLOYEE_TYPE getType() {
+        return type;
+    }
+
+    public void setType(EMPLOYEE_TYPE type) {
+        this.type = type;
+    }
+
     public float getSalary() {
         return salary;
     }
@@ -66,5 +81,32 @@ public class Employee {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Employee employee = (Employee) o;
+
+        if (id != employee.id) return false;
+        if (Float.compare(employee.salary, salary) != 0) return false;
+        if (personalInformation != null ? !personalInformation.equals(employee.personalInformation) : employee.personalInformation != null)
+            return false;
+        if (employeeId != null ? !employeeId.equals(employee.employeeId) : employee.employeeId != null) return false;
+        if (type != employee.type) return false;
+        return createdAt != null ? createdAt.equals(employee.createdAt) : employee.createdAt == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (personalInformation != null ? personalInformation.hashCode() : 0);
+        result = 31 * result + (employeeId != null ? employeeId.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (salary != +0.0f ? Float.floatToIntBits(salary) : 0);
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+        return result;
     }
 }

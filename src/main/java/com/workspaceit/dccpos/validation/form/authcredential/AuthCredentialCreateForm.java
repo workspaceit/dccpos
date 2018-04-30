@@ -20,7 +20,7 @@ public class AuthCredentialCreateForm {
     @NotBlank(message="Confirm password required")
     private String confirmPassword;
 
-    @NotNull(message="Access role required")
+   // @NotNull(message="Access role required")
     private ACCESS_ROLE accessRole;
 
     public String getEmail() {

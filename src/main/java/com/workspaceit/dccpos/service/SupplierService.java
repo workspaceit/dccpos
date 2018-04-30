@@ -52,8 +52,8 @@ public class SupplierService {
         return supplier;
     }
     @Transactional
-    public Supplier getBySupplierId(String employeeId){
-        return this.supplierDao.getBySupplierId(employeeId);
+    public Supplier getBySupplierId(String supplierId){
+        return this.supplierDao.getBySupplierId(supplierId);
     }
 
     @Transactional

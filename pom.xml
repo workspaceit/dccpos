@@ -254,13 +254,15 @@
             <artifactId>aspectjweaver</artifactId>
             <version>1.6.11</version>
         </dependency>
+
+        <!-- AOP ENDS -->
+
+        <!--  -->
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>1.7</version>
         </dependency>
-
-        <!-- AOP ENDS -->
     </dependencies>
     <build>
         <plugins>

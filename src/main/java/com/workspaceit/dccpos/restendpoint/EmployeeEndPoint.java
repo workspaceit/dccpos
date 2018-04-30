@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(EndpointRequestUriPrefix.endPointAuth+"/employee")
+@CrossOrigin
 public class EmployeeEndPoint {
     private EmployeeService employeeService;
     private EmployeeValidator employeeValidator;
@@ -75,10 +76,19 @@ public class EmployeeEndPoint {
 
         return ResponseEntity.ok(employee);
     }
-    @GetMapping("/get-all")
+    @RequestMapping(value = "/get-all",method = RequestMethod.GET)
     public ResponseEntity<?> getAll(){
         List<Employee> employees = this.employeeService.getAll();
         return ResponseEntity.ok(employees);
     }
-
+    @RequestMapping(value = "/get-by-id/{id}",method = RequestMethod.GET)
+    public ResponseEntity<?> getById(@PathVariable("id") int id){
+        Employee employees = this.employeeService.getById(id);
+        return ResponseEntity.ok(employees);
+    }
+    @RequestMapping(value = "/get-by-employee-id/{employeeId}",method = RequestMethod.GET)
+    public ResponseEntity<?> getByEmployeeId(@PathVariable("employeeId") String employeeId){
+        Employee employees = this.employeeService.getByEmployeeId(employeeId);
+        return ResponseEntity.ok(employees);
+    }
 }

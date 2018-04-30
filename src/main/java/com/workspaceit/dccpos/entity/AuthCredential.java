@@ -17,6 +17,7 @@ public class AuthCredential {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "personal_info_id",referencedColumnName = "id",nullable = false,updatable = false)
     private PersonalInformation personalInformation;

@@ -5,14 +5,13 @@ import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(EndpointRequestUriPrefix.endPointAuth+"/ledger")
+@CrossOrigin
 public class LedgerEndpoint {
     private LedgerService ledgerService;
 
@@ -25,5 +24,28 @@ public class LedgerEndpoint {
     public ResponseEntity<?> getAll(){
         List<Ledger> ledgerList = this.ledgerService.getAll();
        return ResponseEntity.ok(ledgerList);
+    }
+
+    @RequestMapping(value = "/get/{type}",method = RequestMethod.GET)
+    public ResponseEntity<?> getAll(@PathVariable("type") String type){
+        List<Ledger> ledgerList = null;
+
+        switch (type){
+            case "wholesaler":
+                ledgerList= this.ledgerService.getAllWholesaler();
+                break;
+            case "supplier":
+                ledgerList= this.ledgerService.getAllSupplier();
+                break;
+            case "employeeSalary":
+                ledgerList= this.ledgerService.getAllEmployeeSalary();
+                break;
+            case "bankOrCash":
+                ledgerList= this.ledgerService.getAllBankOrCash();
+                break;
+        }
+
+
+        return ResponseEntity.ok(ledgerList);
     }
 }

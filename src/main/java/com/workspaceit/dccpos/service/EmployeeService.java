@@ -1,6 +1,9 @@
 package com.workspaceit.dccpos.service;
 
+import com.workspaceit.dccpos.constant.ACCESS_ROLE;
 import com.workspaceit.dccpos.dao.EmployeeDao;
+import com.workspaceit.dccpos.entity.AccessRole;
+import com.workspaceit.dccpos.entity.AuthCredential;
 import com.workspaceit.dccpos.entity.Employee;
 import com.workspaceit.dccpos.entity.PersonalInformation;
 import com.workspaceit.dccpos.exception.EntityNotFound;
@@ -60,6 +63,19 @@ public class EmployeeService {
     }
 
     @Transactional
+    public Employee getByPersonalInformationId(int id){
+        return this.employeeDao.getByPersonalInformationId(id);
+    }
+    @Transactional
+    public Employee getByAuthCredential(AuthCredential authCredential){
+        PersonalInformation personalInformation = authCredential.getPersonalInformation();
+        if(personalInformation==null){
+            personalInformation = this.personalInformationService.getById(personalInformation.getId());
+        }
+        return this.employeeDao.getByPersonalInformationId(personalInformation.getId());
+    }
+
+    @Transactional
     public Employee getByEmployeeId(String employeeId){
         return this.employeeDao.getByEmployeeId(employeeId);
     }
@@ -76,13 +92,26 @@ public class EmployeeService {
         employee.setEmployeeId(employeeForm.getEmployeeId());
         employee.setSalary(employeeForm.getSalary());
         employee.setPersonalInformation(personalInfo);
+        employee.setType(employeeForm.getType());
 
         this.save(employee);
 
         /**
          * Creating login credential
          * */
-        this.authCredentialService.create(employeeForm.getAuthCredential(),personalInfo);
+
+        AccessRole accessRole = new AccessRole();
+
+        switch (employeeForm.getType()){
+            case ADMIN:
+                accessRole.setAccessRole(ACCESS_ROLE.ALL);
+                break;
+            case OFFICER:
+                accessRole.setAccessRole(ACCESS_ROLE.POS_OPERATOR);
+                break;
+
+        }
+        this.authCredentialService.create(employeeForm.getAuthCredential(),personalInfo,accessRole);
 
         /**
          * Create ledger account under SALARY GROUP
@@ -98,7 +127,7 @@ public class EmployeeService {
         Employee employee = this.getEmployee(id);
         employee.setEmployeeId(employeeForm.getEmployeeId());
         employee.setSalary(employeeForm.getSalary());
-
+        employee.setType(employeeForm.getType());
         this.save(employee);
 
         PersonalInformation personalInfo = employee.getPersonalInformation();

@@ -5,6 +5,7 @@ import com.workspaceit.dccpos.constant.accounting.ENTRY_TYPES;
 import com.workspaceit.dccpos.constant.accounting.GROUP_CODE;
 import com.workspaceit.dccpos.constant.accounting.LEDGER_CODE;
 import com.workspaceit.dccpos.dao.accounting.EntryDao;
+import com.workspaceit.dccpos.entity.Employee;
 import com.workspaceit.dccpos.entity.Shipment;
 import com.workspaceit.dccpos.entity.Supplier;
 import com.workspaceit.dccpos.entity.accounting.Entry;
@@ -13,16 +14,14 @@ import com.workspaceit.dccpos.entity.accounting.EntryType;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.AccountPaymentFormHelper;
-import com.workspaceit.dccpos.validation.form.purchase.AccountPaymentForm;
+import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
+import com.workspaceit.dccpos.validation.form.accounting.TransactionForm;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -54,8 +53,8 @@ public class EntryService {
     public Entry createShipmentEntry(Shipment shipment, PurchaseForm purchaseForm) throws EntityNotFound {
         List<EntryItem> entryItems = new ArrayList<>();
         EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
-        AccountPaymentForm[]  productPricePaymentAccounts =  purchaseForm.getProductPricePaymentAccount();
-        AccountPaymentForm  shippingCostPaymentAccount =  purchaseForm.getShippingCostPaymentAccount();
+        LedgerEntryForm[]  productPricePaymentAccounts =  purchaseForm.getProductPricePaymentAccount();
+        LedgerEntryForm shippingCostPaymentAccount =  purchaseForm.getShippingCostPaymentAccount();
 
         double totalShippingCost = shipment.getTotalCost();
         double totalInventoryPrice = shipment.getTotalProductPrice();
@@ -142,7 +141,7 @@ public class EntryService {
         entryItems.add(entryItemInventory);
 
         if(productPricePaymentAccounts!=null){
-            for(AccountPaymentForm accountPaymentForm  :productPricePaymentAccounts){
+            for(LedgerEntryForm accountPaymentForm  :productPricePaymentAccounts){
                 int ledgerId = accountPaymentForm.getLedgerId();
 
                 Ledger cashOrBankLedger = this.ledgerService.getLedger(ledgerId);
@@ -172,7 +171,73 @@ public class EntryService {
         return entry;
 
     }
+    @Transactional(rollbackFor = Exception.class)
+    public Entry createPaymentEntry(Employee employee, TransactionForm transactionForm) throws EntityNotFound {
+        return this.createPaymentOrReceiveEntry(employee,transactionForm,ENTRY_TYPES.PAYMENT);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public Entry createReceiptEntry(Employee employee, TransactionForm transactionForm) throws EntityNotFound {
+        return this.createPaymentOrReceiveEntry(employee,transactionForm,ENTRY_TYPES.RECEIPT);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    private Entry createPaymentOrReceiveEntry(Employee employee, TransactionForm transactionForm,ENTRY_TYPES _EntryType) throws EntityNotFound {
 
+        ACCOUNTING_ENTRY accountTypeCashBank = null;
+        ACCOUNTING_ENTRY accountTypeBeneficial = null;
+
+        switch (_EntryType){
+            case PAYMENT:
+                accountTypeBeneficial = ACCOUNTING_ENTRY.DR;
+                accountTypeCashBank=ACCOUNTING_ENTRY.CR;
+                break;
+            case RECEIPT:
+                accountTypeCashBank=ACCOUNTING_ENTRY.DR;
+                accountTypeBeneficial = ACCOUNTING_ENTRY.CR;
+                break;
+        }
+
+
+        List<EntryItem> entryItems = new ArrayList<>();
+        EntryType entryType = this.entryTypeService.getByLabel(_EntryType);
+        LedgerEntryForm beneficialForm =  transactionForm.getBeneficial();
+        LedgerEntryForm[] cashOrBankList = transactionForm.getCashOrBank();
+
+        double totalEntryDcAmount = beneficialForm.getAmount();
+
+
+        Entry entry = new Entry();
+        entry.setDrTotal(totalEntryDcAmount);
+        entry.setCrTotal(totalEntryDcAmount);
+        entry.setEntryType(entryType);
+        entry.setCreatedBy(employee);
+        entry.setEntryItems(entryItems);
+        entry.setDate(transactionForm.getDate());
+        entry.setNarration(transactionForm.getNarration());
+
+        Ledger beneficialLedger = this.ledgerService.getLedger(beneficialForm.getLedgerId());
+
+        EntryItem entryBeneficial = this.getEntryItem(beneficialForm.getAmount(),beneficialLedger,accountTypeBeneficial);
+        entryItems.add(entryBeneficial);
+
+
+        /**
+         * Getting all amount of cash or bank ledger
+         * */
+        for(LedgerEntryForm cashOrBank : cashOrBankList){
+
+            Ledger entryCashOrBankLedger = this.ledgerService.getLedger(cashOrBank.getLedgerId());
+            EntryItem entryCashOrBank = this.getEntryItem(cashOrBank.getAmount(),entryCashOrBankLedger,accountTypeCashBank);
+
+            entryItems.add(entryCashOrBank);
+        }
+
+
+        this.entryDao.save(entry);
+
+
+        return entry;
+
+    }
     private EntryItem getShipmentEntryItem(double amount ,LEDGER_CODE ledgerCode,ACCOUNTING_ENTRY accountingEntry){
         Ledger ledger = this.ledgerService.getByCode(ledgerCode);
 

@@ -24,6 +24,10 @@ import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
+import javax.servlet.Filter;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Configuration
 public class Oauth2Configuration {
@@ -44,10 +48,11 @@ public class Oauth2Configuration {
         public void configure(HttpSecurity http) throws Exception {
 
             String uri = (ENABLE_OAUTH)?"/auth/api/**":"/dummy-auth/api/**";
-            http.antMatcher(uri)
+            http.cors().and().antMatcher(uri)
                     .authorizeRequests()
                     .antMatchers(uri).authenticated()
-                    .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler()).and().cors();
+                    .and().cors()
+                    .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
 
             //.antMatchers("/auth/api/**").access("hasRole('"+ ACCESS_ROLE.POS_OPERATOR.name()+"')")
         }
@@ -87,7 +92,7 @@ public class Oauth2Configuration {
             clients.inMemory()
                     .withClient(this.environment.getOauthClientId())
                     .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
-                    .authorities("ROLE_"+ACCESS_ROLE.ADMIN.name())
+                    .authorities("ROLE_"+ACCESS_ROLE.ALL.name())
                     .scopes("read", "write", "trust")
                     .secret(passwordEncoder.encode(this.environment.getOauthSecret()))
                     .accessTokenValiditySeconds(60*60*24)
@@ -105,9 +110,11 @@ public class Oauth2Configuration {
         }
         @Override
         public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+            List<Filter> filtes = new ArrayList<>();
+            filtes.add(new CustomTokenEndpointAuthenticationFilter(this.authenticationManager,this.oAuth2RequestFactory ));
             oauthServer.allowFormAuthenticationForClients()
                     .passwordEncoder(passwordEncoder)
-                    .addTokenEndpointAuthenticationFilter(new CustomTokenEndpointAuthenticationFilter(this.authenticationManager,this.oAuth2RequestFactory ));
+                    .tokenEndpointAuthenticationFilters(filtes);
 
         }
 

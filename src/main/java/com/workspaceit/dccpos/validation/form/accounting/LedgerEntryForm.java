@@ -1,14 +1,15 @@
-package com.workspaceit.dccpos.validation.form.purchase;
+package com.workspaceit.dccpos.validation.form.accounting;
 
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class AccountPaymentForm {
+public class LedgerEntryForm {
     @NotNull(message = "Ledger Id required")
     @Min(value = 0,message = "Ledger Id required")
     private Integer ledgerId;
 
+    @NotNull(message = "Amount required")
     @Min(value = 1,message = "Amount can't be less equal to zero")
     private Double amount;
 

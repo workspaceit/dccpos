@@ -1,6 +1,7 @@
 package com.workspaceit.dccpos.validation.form.purchase;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
 import com.workspaceit.dccpos.validation.form.inventory.InventoryCreateFrom;
 import com.workspaceit.dccpos.validation.form.shipment.ShipmentCreateForm;
 
@@ -19,10 +20,10 @@ public class PurchaseForm {
     private ShipmentCreateForm shipment;
 
     @Valid
-    private AccountPaymentForm[] productPricePaymentAccount;
+    private LedgerEntryForm[] productPricePaymentAccount;
 
     @Valid
-    private AccountPaymentForm shippingCostPaymentAccount;
+    private LedgerEntryForm shippingCostPaymentAccount;
 
 
 
@@ -44,19 +45,19 @@ public class PurchaseForm {
     }
 
 
-    public AccountPaymentForm[] getProductPricePaymentAccount() {
+    public LedgerEntryForm[] getProductPricePaymentAccount() {
         return productPricePaymentAccount;
     }
 
-    public void setProductPricePaymentAccount(AccountPaymentForm[] productPricePaymentAccount) {
+    public void setProductPricePaymentAccount(LedgerEntryForm[] productPricePaymentAccount) {
         this.productPricePaymentAccount = productPricePaymentAccount;
     }
 
-    public AccountPaymentForm getShippingCostPaymentAccount() {
+    public LedgerEntryForm getShippingCostPaymentAccount() {
         return shippingCostPaymentAccount;
     }
 
-    public void setShippingCostPaymentAccount(AccountPaymentForm shippingCostPaymentAccount) {
+    public void setShippingCostPaymentAccount(LedgerEntryForm shippingCostPaymentAccount) {
         this.shippingCostPaymentAccount = shippingCostPaymentAccount;
     }
 

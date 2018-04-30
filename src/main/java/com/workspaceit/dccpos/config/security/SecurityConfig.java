@@ -36,7 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.cors().and()
+                .authorizeRequests()
                     .antMatchers("/admin/**").access("hasRole('ROLE_pos')")
                     //.antMatchers("/update-password*").hasAuthority("CHANGE_PASSWORD_PRIVILEGE")
                 .and()

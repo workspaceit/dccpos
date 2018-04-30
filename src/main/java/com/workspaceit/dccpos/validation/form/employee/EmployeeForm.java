@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.validation.form.employee;
 
+import com.workspaceit.dccpos.constant.EMPLOYEE_TYPE;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
@@ -14,6 +15,9 @@ public class EmployeeForm {
     @NotNull(message = "Salary required")
     @Min(value = 0,message = "Salary can't be less then zero")
     protected Float salary;
+
+    @NotNull(message = "Type required")
+    protected EMPLOYEE_TYPE type;
 
 
     public String getEmployeeId() {
@@ -33,4 +37,11 @@ public class EmployeeForm {
     }
 
 
+    public EMPLOYEE_TYPE getType() {
+        return type;
+    }
+
+    public void setType(EMPLOYEE_TYPE type) {
+        this.type = type;
+    }
 }

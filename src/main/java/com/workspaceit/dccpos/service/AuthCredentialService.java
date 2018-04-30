@@ -76,11 +76,8 @@ public class AuthCredentialService {
         this.authCredentialDao.update(authCredential);
     }
     @Transactional(rollbackFor = Exception.class)
-    public void create(AuthCredentialCreateForm authCredentialForm, PersonalInformation personalInfo){
+    public void create(AuthCredentialCreateForm authCredentialForm, PersonalInformation personalInfo,AccessRole accessRole){
         String encodedPassword = this.passwordEncoder.encode(authCredentialForm.getPassword());
-
-        AccessRole accessRole = new AccessRole();
-        accessRole.setAccessRole(authCredentialForm.getAccessRole());
 
         Set<AccessRole> accessRoles = new HashSet<>();
         accessRoles.add(accessRole);

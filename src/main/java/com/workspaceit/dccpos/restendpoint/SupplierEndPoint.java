@@ -12,16 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping(EndpointRequestUriPrefix.endPointAuth+"/supplier")
+@CrossOrigin
 public class SupplierEndPoint {
     private SupplierService supplierService;
     private SupplierValidator supplierValidator;
@@ -80,6 +78,16 @@ public class SupplierEndPoint {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ServiceResponse.getMsgInMap(entityNotFound.getMessage()));
         }
 
+        return ResponseEntity.ok(supplier);
+    }
+    @GetMapping("/get-by-id/{id}")
+    public ResponseEntity<?> getById(@PathVariable("id") int id){
+        Supplier supplier = this.supplierService.getById(id);
+        return ResponseEntity.ok(supplier);
+    }
+    @GetMapping("/get-by-supplier-id/{supplierId}")
+    public ResponseEntity<?> getByEmployeeId(@PathVariable("supplierId") String employeeId){
+        Supplier supplier = this.supplierService.getBySupplierId(employeeId);
         return ResponseEntity.ok(supplier);
     }
 }

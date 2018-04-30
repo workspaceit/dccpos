@@ -1,10 +1,8 @@
 package com.workspaceit.dccpos.restendpoint;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.workspaceit.dccpos.constant.EndpointRequestUriPrefix;
 import com.workspaceit.dccpos.entity.Product;
 import com.workspaceit.dccpos.exception.EntityNotFound;
-import com.workspaceit.dccpos.jsonView.ProductOnCartView;
 import com.workspaceit.dccpos.service.ProductService;
 import com.workspaceit.dccpos.util.ServiceResponse;
 import com.workspaceit.dccpos.util.ValidationUtil;
@@ -23,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(EndpointRequestUriPrefix.endPointPublic+"/product")
+@CrossOrigin
 public class ProductEndPoint {
     private ProductService productService;
     private ProductValidator productValidator;

@@ -1,6 +1,7 @@
 package com.workspaceit.dccpos.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.workspaceit.dccpos.config.PersistenceConfig;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class PersonalInformation {
     @Column(name = "full_name")
     private String fullName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",timezone = PersistenceConfig.DateConfig.timeZone)
     @Column(name = "dob")
     private Date dob;
 
@@ -27,6 +28,9 @@ public class PersonalInformation {
 
     @Column(name = "phone")
     private String phone;
+
+    @OneToOne(mappedBy = "personalInformation")
+    private AuthCredential authCredential;
 
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "personal_info_id",referencedColumnName = "id",nullable = false)
@@ -79,6 +83,14 @@ public class PersonalInformation {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public AuthCredential getAuthCredential() {
+        return authCredential;
+    }
+
+    public void setAuthCredential(AuthCredential authCredential) {
+        this.authCredential = authCredential;
     }
 
     public Set<CompanyRole> getCompanyRoles() {

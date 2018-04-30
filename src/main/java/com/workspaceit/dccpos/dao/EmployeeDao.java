@@ -35,4 +35,11 @@ public class EmployeeDao extends BaseDao{
                 .setMaxResults(1)
                 .uniqueResult();
     }
+    public Employee getByPersonalInformationId(int id){
+        Session session = this.getCurrentSession();
+        return (Employee)session.createQuery(" FROM Employee emp where emp.personalInformation.id =:id")
+                .setParameter("id",id)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
 }
