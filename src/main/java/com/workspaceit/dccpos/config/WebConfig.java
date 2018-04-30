@@ -119,7 +119,7 @@ public class WebConfig implements WebMvcConfigurer {
         ObjectMapper mapper = new ObjectMapper();
         //Registering Hibernate4Module to support lazy objects
         mapper.registerModule(new Hibernate5Module());
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+       // mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         messageConverter.setObjectMapper(mapper);
 
         return messageConverter;
