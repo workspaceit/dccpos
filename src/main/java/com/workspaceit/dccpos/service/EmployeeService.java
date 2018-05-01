@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -106,17 +108,9 @@ public class EmployeeService {
          * Creating login credential
          * */
 
-        AccessRole accessRole = new AccessRole();
+        AccessRole accessRole = this.getAccessRoleByEmployeeType(employeeForm.getType());
 
-        switch (employeeForm.getType()){
-            case ADMIN:
-                accessRole.setAccessRole(ACCESS_ROLE.ALL);
-                break;
-            case OFFICER:
-                accessRole.setAccessRole(ACCESS_ROLE.POS_OPERATOR);
-                break;
 
-        }
         this.authCredentialService.create(employeeForm.getAuthCredential(),personalInfo,accessRole);
 
         /**
@@ -128,15 +122,46 @@ public class EmployeeService {
     }
     @Transactional(rollbackFor = Exception.class)
     public Employee edit(int id,EmployeeUpdateForm employeeForm) throws EntityNotFound {
-
-
         Employee employee = this.getEmployee(id);
+        PersonalInformation personalInfo = employee.getPersonalInformation();
+
+        /**
+         * Creating login credential
+         * */
+        AuthCredential authCredential = personalInfo.getAuthCredential();
+
+
+        /**
+         * If Employee type change
+         * Access role also change
+         * Role is collection but only one role exist
+         * */
+
+        if(!employee.getType().equals(employeeForm.getType())){
+            employee.setType(employeeForm.getType());
+
+            AccessRole accessRole = this.getAccessRoleByEmployeeType(employeeForm.getType());
+            Collection<AccessRole> accessRoles =  authCredential.getAccessRole();
+            if(accessRoles==null){
+                accessRoles = new ArrayList<>();
+            }
+
+            for(AccessRole tmpAccessRole:accessRoles){
+                tmpAccessRole.setAccessRole(accessRole.getAccessRole());
+                break;
+            }
+
+            this.authCredentialService.update(authCredential);
+        }
+
+
+
         employee.setEmployeeId(employeeForm.getEmployeeId());
         employee.setSalary(employeeForm.getSalary());
-        employee.setType(employeeForm.getType());
+
         this.save(employee);
 
-        PersonalInformation personalInfo = employee.getPersonalInformation();
+
         this.personalInformationService.edit(personalInfo.getId(),employeeForm.getPersonalInfo());
 
         /**
@@ -144,7 +169,22 @@ public class EmployeeService {
          * */
         this.ledgerService.editEmployeeSalaryLedger(personalInfo);
 
+
+
+
         return employee;
+    }
+    private AccessRole getAccessRoleByEmployeeType(EMPLOYEE_TYPE employeeType){
+        AccessRole accessRole = new AccessRole();
+        switch (employeeType){
+            case ADMIN:
+                accessRole.setAccessRole(ACCESS_ROLE.ALL);
+                break;
+            case OFFICER:
+                accessRole.setAccessRole(ACCESS_ROLE.POS_OPERATOR);
+                break;
+        }
+        return accessRole;
     }
     private void save(Employee employee){
         this.employeeDao.save(employee);

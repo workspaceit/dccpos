@@ -3,7 +3,6 @@ package com.workspaceit.dccpos.aop.service;
 
 import com.workspaceit.dccpos.entity.accounting.Entry;
 import com.workspaceit.dccpos.entity.accounting.EntryItem;
-import com.workspaceit.dccpos.service.ShipmentService;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
