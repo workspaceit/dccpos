@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class EntryItemDao extends BaseDao{
-    public double findDrBalance(int ledgerId,ACCOUNTING_ENTRY accountingEntry ){
+    public double findBalance(int ledgerId, ACCOUNTING_ENTRY accountingEntry ){
         Session session = this.getCurrentSession();
         Object sumAmount = session.createQuery("select sum(ei.amount) from EntryItem ei " +
                 " where ei.ledger.id=:ledgerId " +

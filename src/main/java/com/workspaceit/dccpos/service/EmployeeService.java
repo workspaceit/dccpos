@@ -1,6 +1,7 @@
 package com.workspaceit.dccpos.service;
 
 import com.workspaceit.dccpos.constant.ACCESS_ROLE;
+import com.workspaceit.dccpos.constant.EMPLOYEE_TYPE;
 import com.workspaceit.dccpos.dao.EmployeeDao;
 import com.workspaceit.dccpos.entity.AccessRole;
 import com.workspaceit.dccpos.entity.AuthCredential;
@@ -47,11 +48,11 @@ public class EmployeeService {
 
     @Transactional
     public List<Employee> getAll(){
-        return this.employeeDao.getAll();
+        return this.employeeDao.findAll();
     }
     @Transactional
     public Employee getEmployee(int id)throws EntityNotFound{
-        Employee employee =  this.employeeDao.getById(id);
+        Employee employee =  this.employeeDao.findById(id);
 
         if(employee==null)throw new EntityNotFound("Employee not found by id :"+id);
 
@@ -59,12 +60,12 @@ public class EmployeeService {
     }
     @Transactional
     public Employee getById(int id){
-        return this.employeeDao.getById(id);
+        return this.employeeDao.findById(id);
     }
 
     @Transactional
     public Employee getByPersonalInformationId(int id){
-        return this.employeeDao.getByPersonalInformationId(id);
+        return this.employeeDao.findByPersonalInformationId(id);
     }
     @Transactional
     public Employee getByAuthCredential(AuthCredential authCredential){
@@ -72,16 +73,21 @@ public class EmployeeService {
         if(personalInformation==null){
             personalInformation = this.personalInformationService.getById(personalInformation.getId());
         }
-        return this.employeeDao.getByPersonalInformationId(personalInformation.getId());
+        return this.employeeDao.findByPersonalInformationId(personalInformation.getId());
     }
 
     @Transactional
     public Employee getByEmployeeId(String employeeId){
-        return this.employeeDao.getByEmployeeId(employeeId);
+        return this.employeeDao.findByEmployeeId(employeeId);
+    }
+
+    @Transactional
+    public  List<Employee> getByType(EMPLOYEE_TYPE employeeType){
+        return this.employeeDao.findByType(employeeType);
     }
     @Transactional
     public Employee getByEmployeeIdAndNotById(String employeeId,int id){
-        return this.employeeDao.getByEmployeeIdAndNotById(employeeId,id);
+        return this.employeeDao.findByEmployeeIdAndNotById(employeeId,id);
     }
     @Transactional(rollbackFor = Exception.class)
     public Employee create(EmployeeCreateForm employeeForm){

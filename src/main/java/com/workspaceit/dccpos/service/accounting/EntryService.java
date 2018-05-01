@@ -14,6 +14,7 @@ import com.workspaceit.dccpos.entity.accounting.EntryType;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.AccountPaymentFormHelper;
+import com.workspaceit.dccpos.validation.form.accounting.InvestmentForm;
 import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
 import com.workspaceit.dccpos.validation.form.accounting.TransactionForm;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;;
@@ -165,7 +166,7 @@ public class EntryService {
         }
 
 
-        this.entryDao.save(entry);
+        this.save(entry);
 
 
         return entry;
@@ -180,6 +181,42 @@ public class EntryService {
         return this.createPaymentOrReceiveEntry(employee,transactionForm,ENTRY_TYPES.RECEIPT);
     }
     @Transactional(rollbackFor = Exception.class)
+    public Entry createInvestmentEntry(Employee employee, InvestmentForm investmentForm) throws EntityNotFound {
+        List<EntryItem> entryItems = new ArrayList<>();
+        double totalInvestment = 0;
+
+        LedgerEntryForm[]  cashOrBankList = investmentForm.getCashOrBank();
+        Ledger ownersLedgerLedger = this.ledgerService.getByCode(LEDGER_CODE.INVESTMENT);
+        EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
+
+        /**
+         * Getting all amount of cash or bank ledger
+         * */
+        for(LedgerEntryForm cashOrBank : cashOrBankList){
+
+            Ledger entryCashOrBankLedger = this.ledgerService.getLedger(cashOrBank.getLedgerId());
+            EntryItem entryCashOrBank = this.getEntryItem(cashOrBank.getAmount(),entryCashOrBankLedger,ACCOUNTING_ENTRY.DR);
+            entryItems.add(entryCashOrBank);
+
+            totalInvestment +=cashOrBank.getAmount();
+        }
+
+
+        Entry entry = new Entry();
+        entry.setDrTotal(totalInvestment);
+        entry.setCrTotal(totalInvestment);
+        entry.setEntryType(entryType);
+        entry.setCreatedBy(employee);
+        entry.setEntryItems(entryItems);
+        entry.setDate(investmentForm.getDate());
+        entry.setNarration(investmentForm.getNarration());
+
+        EntryItem entryOwnerInvestment = this.getEntryItem(totalInvestment,ownersLedgerLedger,ACCOUNTING_ENTRY.CR);
+        entryItems.add(entryOwnerInvestment);
+
+
+        return this.save(entry);
+    }
     private Entry createPaymentOrReceiveEntry(Employee employee, TransactionForm transactionForm,ENTRY_TYPES _EntryType) throws EntityNotFound {
 
         ACCOUNTING_ENTRY accountTypeCashBank = null;
@@ -232,7 +269,7 @@ public class EntryService {
         }
 
 
-        this.entryDao.save(entry);
+        this.save(entry);
 
 
         return entry;
@@ -280,7 +317,9 @@ public class EntryService {
 
         return entryItem;
     }
-    private void save(Entry entry){
+    public Entry save(Entry entry){
         this.entryDao.save(entry);
+
+        return entry;
     }
 }

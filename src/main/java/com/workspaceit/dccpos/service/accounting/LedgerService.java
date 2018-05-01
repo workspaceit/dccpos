@@ -7,14 +7,18 @@ import com.workspaceit.dccpos.constant.accounting.LEDGER_TYPE;
 import com.workspaceit.dccpos.dao.accounting.LedgerDao;
 import com.workspaceit.dccpos.entity.Company;
 import com.workspaceit.dccpos.entity.PersonalInformation;
+import com.workspaceit.dccpos.entity.accounting.EntryItem;
 import com.workspaceit.dccpos.entity.accounting.GroupAccount;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
+import com.workspaceit.dccpos.helper.NumberHelper;
 import com.workspaceit.dccpos.validation.form.accounting.LedgerForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -22,6 +26,7 @@ import java.util.List;
 public class LedgerService {
     private LedgerDao ledgerDao;
     private GroupAccountService groupAccountService;
+    private EntryItemService entryItemService;
 
     @Autowired
     public void setLedgerDao(LedgerDao ledgerDao) {
@@ -31,6 +36,23 @@ public class LedgerService {
     @Autowired
     public void setGroupAccountService(GroupAccountService groupAccountService) {
         this.groupAccountService = groupAccountService;
+    }
+
+    @Autowired
+    public void setEntryItemService(EntryItemService entryItemService) {
+        this.entryItemService = entryItemService;
+    }
+
+    private void save(Ledger ledger){
+        this.ledgerDao.save(ledger);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void update(Ledger ledger){
+        this.ledgerDao.update(ledger);
+    }
+
+    private void update(Collection<Ledger> ledger){
+        this.ledgerDao.updateAll(ledger);
     }
 
     @Transactional
@@ -48,6 +70,11 @@ public class LedgerService {
     @Transactional
     public Ledger getById(int id){
         return this.ledgerDao.findById(id);
+    }
+
+    @Transactional
+    public List<Ledger> getByIds(Collection<Integer> id){
+        return this.ledgerDao.findByIds(id);
     }
 
 
@@ -168,15 +195,18 @@ public class LedgerService {
 
         return ledger;
     }
-    public boolean isCashOrBankAccountWillOverDrawn(Ledger ledger,double amount,boolean calculateFromEntierRecords){
-        ACCOUNTING_ENTRY openingBalanceEntryType = ledger.getOpeningBalanceEntryType();
-        ACCOUNTING_ENTRY currentBalanceEntryType = ledger.getCurrentBalanceEntryType();
+    public boolean isCashOrBankAccountWillOverDrawn(Ledger ledger,double amount,boolean calculateFromEntireRecords){
         double currentBalance = ledger.getCurrentBalance();
-        if(openingBalanceEntryType.equals(currentBalanceEntryType)){
-            if(currentBalance<amount){
-                return true;
+
+        if(calculateFromEntireRecords){
+            try {
+                currentBalance = this.getCurrentBalance(ledger.getId());
+            } catch (EntityNotFound entityNotFound) {
+               System.out.println(entityNotFound.getMessage());
             }
-        }else{
+        }
+
+        if(currentBalance<amount){
             return true;
         }
         return false;
@@ -195,16 +225,14 @@ public class LedgerService {
     public boolean isCashOrBankAccount( Ledger ledger){
         return ledger.getLedgerType().equals(LEDGER_TYPE.CASH_ACCOUNT);
     }
+    public boolean isAssetAccount( Ledger ledger){
+        return ledger.getGroupAccount().getCode().equals(GROUP_CODE.ASSET);
+    }
     private void updateLedgeName(Ledger ledger,String name){
         ledger.setName(name);
         this.update(ledger);
     }
-    private void save(Ledger ledger){
-        this.ledgerDao.save(ledger);
-    }
-    private void update(Ledger ledger){
-        this.ledgerDao.update(ledger);
-    }
+
 
     @Transactional
     public List<Ledger> getByGroupCode(GROUP_CODE groupCode){
@@ -225,5 +253,55 @@ public class LedgerService {
     @Transactional
     public List<Ledger> getAllBankOrCash(){
         return this.ledgerDao.findAllBakOrCash();
+    }
+
+    @Transactional
+    public double getCurrentBalance(int ledgerId) throws EntityNotFound {
+        Ledger ledger = this.getLedger(ledgerId);
+        double drAmount = this.entryItemService.getBalance(ledger.getId(), ACCOUNTING_ENTRY.DR);
+        double crAmount = this.entryItemService.getBalance(ledger.getId(), ACCOUNTING_ENTRY.CR);
+        double balance = 0;
+
+        switch (ledger.getOpeningBalanceEntryType()){
+            case DR:
+                balance = drAmount-crAmount;
+                break;
+            case CR:
+                balance = crAmount-drAmount;
+                break;
+        }
+
+        return  NumberHelper.round(balance,2);
+    }
+    @Transactional
+    public void resolveCurrentBalance(Collection<EntryItem> entryItems,boolean calculateFromEntireEntry){
+
+        if(calculateFromEntireEntry){
+            this.resolveCurrentBalanceByCalculateFromEntireEntry(entryItems);
+        }else{
+            // Need equation
+        }
+    }
+    private void resolveCurrentBalanceByCalculateFromEntireEntry(Collection<EntryItem> entryItems){
+        List<Ledger> ledgerList = new ArrayList<>();
+
+        for(EntryItem entryItem :entryItems){
+            Ledger ledger =   entryItem.getLedger();
+
+            if(ledger==null)continue;
+
+            ledgerList.add(ledger);
+        }
+
+        for(Ledger ledger:ledgerList){
+            double balance  = 0;
+            try {
+                balance = this.getCurrentBalance(ledger.getId());
+            } catch (EntityNotFound entityNotFound) {
+                System.out.println("From Ledger Service : "+entityNotFound.getMessage());
+            }
+            ledger.setCurrentBalance(balance);
+        }
+        this.update(ledgerList);
     }
 }

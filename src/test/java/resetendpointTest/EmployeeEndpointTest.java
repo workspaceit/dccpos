@@ -1,10 +1,8 @@
-package resetendpoint;
+package resetendpointTest;
+
 import com.workspaceit.dccpos.config.WebConfig;
 
 import com.workspaceit.dccpos.helper.FormToNameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,15 +16,15 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Arrays;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebConfig.class})
-public class PasswordManagementEndPointTest extends BaseTest {
+public class EmployeeEndpointTest extends BaseTest{
+
     private MockMvc mockMvc;
 
 
@@ -47,25 +45,31 @@ public class PasswordManagementEndPointTest extends BaseTest {
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
-
     @Test
-    public void requestForNewPasswordResetToken() throws Exception {
+    public void createEmployee() throws Exception {
 
         MvcResult result = mockMvc.perform(
-                post(this.publicUri+"/reset-password/request-new")
+                post(this.authUri+"/employee/create")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                                new BasicNameValuePair("email", "")
-                        ))))
-                ).andExpect(status().isUnprocessableEntity()).andReturn();
+                        .content("")
+                        )
+                .andExpect(status().isUnprocessableEntity()).andReturn();
     }
-
     @Test
-    public void submitNewPassword() throws Exception {
+    public void editEmployee() throws Exception {
 
         MvcResult result = mockMvc.perform(
-                post(this.publicUri+"/reset-password/submit")
+                post(this.authUri+"/employee/update/1")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("")).andExpect(status().isUnprocessableEntity()).andReturn();
+                        .content("")
+        )
+                .andExpect(status().isUnprocessableEntity()).andReturn();
+    }
+    @Test
+    public void allEmployee() throws Exception {
+
+        MvcResult result = mockMvc.perform(
+                get(this.authUri+"/employee/get-all"))
+                .andExpect(status().isOk()).andReturn();
     }
 }

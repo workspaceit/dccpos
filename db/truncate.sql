@@ -14,6 +14,8 @@ ALTER TABLE `employee` AUTO_INCREMENT = 2;
 DELETE from `company_role` where id>1;
 ALTER TABLE `company_role` AUTO_INCREMENT = 2;
 DELETE from `acc_ledgers` where `personal_info_id` >1 OR `company_id` IS NOT NULL;
+UPDATE `acc_ledgers` SET `current_balance`=0 WHERE 1;
+
 DELETE from  `personal_information` where id>1;
 ALTER TABLE `personal_information` AUTO_INCREMENT = 2;
 
@@ -38,4 +40,6 @@ TRUNCATE TABLE `inventory`;
 TRUNCATE TABLE `inventory_details`;
 TRUNCATE TABLE `acc_entries`;
 TRUNCATE TABLE `acc_entry_items`;
+
+
 SET FOREIGN_KEY_CHECKS =1;

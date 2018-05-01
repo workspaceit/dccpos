@@ -1,4 +1,4 @@
-package resetendpoint;
+package resetendpointTest;
 
 import com.workspaceit.dccpos.constant.EndpointRequestUriPrefix;
 

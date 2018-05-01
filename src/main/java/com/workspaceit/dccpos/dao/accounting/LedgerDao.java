@@ -8,6 +8,7 @@ import com.workspaceit.dccpos.entity.accounting.Ledger;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -24,6 +25,12 @@ public class LedgerDao extends BaseDao {
                 .setParameter("ledgerCode",ledgerCode)
                 .setMaxResults(1)
                 .uniqueResult();
+    }
+    public List<Ledger> findByIds( Collection<Integer> ids){
+        Session session = this.getCurrentSession();
+        return session.createQuery(" FROM Ledger lg where lg.id in :id ")
+                .setParameter("id",ids)
+                .list();
     }
     public Ledger findById( int id){
         Session session = this.getCurrentSession();

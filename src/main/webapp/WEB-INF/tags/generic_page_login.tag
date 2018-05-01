@@ -18,7 +18,7 @@
     <!-- Bootstrap Core CSS -->
     <link href="<s:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="<s:url value="/resources/css/sb-resetendpoint.css"/>" rel="stylesheet">
+    <link href="<s:url value="/resources/css/sb-resetendpointTest.css"/>" rel="stylesheet">
     <!-- Morris Charts CSS -->
     <link href="<s:url value="/resources/css/plugins/morris.css"/>" rel="stylesheet">
     <!-- Custom Fonts -->

@@ -8,6 +8,7 @@ import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.service.EmployeeService;
 import com.workspaceit.dccpos.service.accounting.EntryService;
 import com.workspaceit.dccpos.util.ServiceResponse;
+import com.workspaceit.dccpos.validation.form.accounting.InvestmentForm;
 import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
 import com.workspaceit.dccpos.validation.form.accounting.TransactionForm;
 import com.workspaceit.dccpos.validation.form.authcredential.PasswordResetForm;
@@ -133,4 +134,30 @@ public class EntryEndPoint {
         }
         return ResponseEntity.ok(entry);
     }
+    @RequestMapping("/make/investment/cash")
+    public ResponseEntity<?> makeReceipt(Authentication authentication, @Valid @RequestBody InvestmentForm investmentForm, BindingResult bindingResult){
+        AuthCredential authCredential = (AuthCredential) authentication.getPrincipal();
+        Employee currentUser =  this.employeeService.getByAuthCredential(authCredential);
+        Entry entry = null;
+
+        /**
+         * Basic and business validation
+         * */
+        ServiceResponse serviceResponse = ServiceResponse.getInstance();
+        this.entryValidator.validateInvestment(investmentForm,bindingResult);
+
+        if(bindingResult.hasErrors()){
+            serviceResponse.bindValidationError(bindingResult);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
+        }
+
+
+        try {
+            entry =   this.entryService.createInvestmentEntry(currentUser,investmentForm);
+        } catch (EntityNotFound entityNotFound) {
+            entityNotFound.printStackTrace();
+        }
+        return ResponseEntity.ok(entry);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.service.accounting;
 
+import com.workspaceit.dccpos.constant.accounting.ACCOUNTING_ENTRY;
 import com.workspaceit.dccpos.dao.EntryItemDao;
 import com.workspaceit.dccpos.entity.accounting.EntryItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,10 @@ public class EntryItemService {
     }
     private void save( List<EntryItem> entries){
         this.entryItemDao.saveAll(entries);
+    }
+
+    @Transactional
+    public double getBalance(int ledgerId, ACCOUNTING_ENTRY accountingEntry){
+        return entryItemDao.findBalance(ledgerId, accountingEntry);
     }
 }

@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.restendpoint;
 
+import com.workspaceit.dccpos.constant.EMPLOYEE_TYPE;
 import com.workspaceit.dccpos.constant.EndpointRequestUriPrefix;
 import com.workspaceit.dccpos.entity.Employee;
 import com.workspaceit.dccpos.exception.EntityNotFound;
@@ -89,6 +90,11 @@ public class EmployeeEndPoint {
     @RequestMapping(value = "/get-by-employee-id/{employeeId}",method = RequestMethod.GET)
     public ResponseEntity<?> getByEmployeeId(@PathVariable("employeeId") String employeeId){
         Employee employees = this.employeeService.getByEmployeeId(employeeId);
+        return ResponseEntity.ok(employees);
+    }
+    @RequestMapping(value = "/get-by-type/{type}",method = RequestMethod.GET)
+    public ResponseEntity<?> getByType(@PathVariable("type") EMPLOYEE_TYPE employeeType){
+        List<Employee> employees = this.employeeService.getByType(employeeType);
         return ResponseEntity.ok(employees);
     }
 }
