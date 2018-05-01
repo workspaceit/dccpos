@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 24, 2018 at 11:46 AM
+-- Generation Time: May 01, 2018 at 01:02 PM
 -- Server version: 5.6.39
 -- PHP Version: 5.5.9-1ubuntu4.24
 
@@ -87,10 +87,10 @@ CREATE TABLE IF NOT EXISTS `acc_entry_types` (
 --
 
 INSERT INTO `acc_entry_types` (`id`, `label`, `name`, `description`, `base_type`, `numbering`, `prefix`, `suffix`, `zero_padding`, `bank_cash_ledger_restriction`, `created_at`) VALUES
-(1, 'RECEIPT', 'Reciept', 'Received in Bank account or Cash account', 1, 1, '', '', 0, 2, NULL),
-(2, 'PAYMENT', 'Payment', 'Payment made from Bank account or Cash account', 1, 1, '', '', 0, 3, NULL),
-(3, 'CONTRA', 'Contra', 'Transfer between Bank account and Cash account', 1, 1, '', '', 0, 4, NULL),
-(4, 'JOURNAL', 'Journal', 'Transfer between Non Bank account and Cash account', 1, 1, '', '', 0, 5, NULL);
+  (1, 'RECEIPT', 'Reciept', 'Received in Bank account or Cash account', 1, 1, '', '', 0, 2, NULL),
+  (2, 'PAYMENT', 'Payment', 'Payment made from Bank account or Cash account', 1, 1, '', '', 0, 3, NULL),
+  (3, 'CONTRA', 'Contra', 'Transfer between Bank account and Cash account', 1, 1, '', '', 0, 4, NULL),
+  (4, 'JOURNAL', 'Journal', 'Transfer between Non Bank account and Cash account', 1, 1, '', '', 0, 5, NULL);
 
 -- --------------------------------------------------------
 
@@ -117,17 +117,17 @@ CREATE TABLE IF NOT EXISTS `acc_groups` (
 --
 
 INSERT INTO `acc_groups` (`id`, `parent_id`, `name`, `code`, `affects_gross`) VALUES
-(1, NULL, 'Assets', 'ASSET', 0),
-(2, NULL, 'Liabilities and Owners Equity', 'LIABILITY', 0),
-(3, NULL, 'Incomes', 'INCOME', 0),
-(4, NULL, 'Expenses', 'EXPENSE', 0),
-(5, 2, 'Wholesaler', 'WHOLESALER', 0),
-(6, 3, 'Sale', 'SALE', 0),
-(7, 6, 'Whole sale', 'WHOLE_SALE', 0),
-(8, 4, 'Salary', 'SALARY', 0),
-(9, 2, 'Supplier', 'SUPPLIER', 0),
-(11, 1, 'Receivable ', 'RECEIVABLE', 0),
-(12, 2, 'Payable', 'PAYABLE', 0);
+  (1, NULL, 'Assets', 'ASSET', 0),
+  (2, NULL, 'Liabilities and Owners Equity', 'LIABILITY', 0),
+  (3, NULL, 'Incomes', 'INCOME', 0),
+  (4, NULL, 'Expenses', 'EXPENSE', 0),
+  (5, 2, 'Wholesaler', 'WHOLESALER', 0),
+  (6, 3, 'Sale', 'SALE', 0),
+  (7, 6, 'Whole sale', 'WHOLE_SALE', 0),
+  (8, 4, 'Salary', 'SALARY', 0),
+  (9, 2, 'Supplier', 'SUPPLIER', 0),
+  (11, 1, 'Receivable ', 'RECEIVABLE', 0),
+  (12, 2, 'Payable', 'PAYABLE', 0);
 
 -- --------------------------------------------------------
 
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   `group_id` bigint(18) NOT NULL,
   `personal_info_id` int(11) DEFAULT NULL,
   `company_id` int(11) DEFAULT NULL,
-  `code` enum('INVENTORY','COGS','CASH','SHIPMENT_COST','DUE_SHIPMENT_COST') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `code` enum('INVENTORY','COGS','CASH','SHIPMENT_COST','DUE_SHIPMENT_COST','INVESTMENT') COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `op_balance` decimal(25,2) NOT NULL DEFAULT '0.00',
   `op_balance_dc` enum('DR','CR') COLLATE utf8_unicode_ci NOT NULL,
@@ -158,20 +158,21 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   KEY `personal_info_id` (`personal_info_id`),
   KEY `company_id` (`company_id`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=130 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=179 ;
 
 --
 -- Dumping data for table `acc_ledgers`
 --
 
 INSERT INTO `acc_ledgers` (`id`, `group_id`, `personal_info_id`, `company_id`, `code`, `name`, `op_balance`, `op_balance_dc`, `current_balance`, `current_balance_dc`, `type`, `reconciliation`, `notes`, `created_at`) VALUES
-(1, 1, NULL, NULL, 'INVENTORY', 'Inventory', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:27:16'),
-(2, 4, NULL, NULL, 'COGS', 'Cost Of Good Sold', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:35:20'),
-(3, 1, NULL, NULL, 'CASH', 'Cash', 0.00, 'DR', 5640.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-20 10:36:24'),
-(4, 4, NULL, NULL, 'SHIPMENT_COST', 'Shipment Cost', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:41:28'),
-(5, 1, NULL, NULL, NULL, 'Bank', 0.00, 'DR', 99999.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-24 06:36:45'),
-(6, 2, NULL, NULL, 'DUE_SHIPMENT_COST', 'Due shipment cost', 0.00, 'CR', 0.00, 'CR', 'OTHER', 0, '', '2018-04-23 10:09:29'),
-(101, 8, 1, NULL, NULL, 'Person 1', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 12:26:10');
+  (1, 1, NULL, NULL, 'INVENTORY', 'Inventory', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:27:16'),
+  (2, 4, NULL, NULL, 'COGS', 'Cost Of Good Sold', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:35:20'),
+  (3, 1, NULL, NULL, 'CASH', 'Cash', 0.00, 'DR', 0.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-20 10:36:24'),
+  (4, 4, NULL, NULL, 'SHIPMENT_COST', 'Shipment Cost', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:41:28'),
+  (5, 1, NULL, NULL, NULL, 'Bank', 0.00, 'DR', 0.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-24 06:36:45'),
+  (6, 2, NULL, NULL, 'DUE_SHIPMENT_COST', 'Due shipment cost', 0.00, 'CR', 0.00, 'CR', 'OTHER', 0, '', '2018-04-23 10:09:29'),
+  (7, 2, NULL, NULL, 'INVESTMENT', 'Owner''s Investment', 0.00, 'CR', 0.00, 'CR', 'OTHER', 0, '', '2018-05-01 07:46:29'),
+  (101, 8, 1, NULL, NULL, 'Person 1', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 12:26:10');
 
 -- --------------------------------------------------------
 
@@ -193,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `acess_role` (
 --
 
 INSERT INTO `acess_role` (`id`, `auth_credential_id`, `role`, `created_at`) VALUES
-(1, 1, 'ALL', '2018-04-20 13:10:07');
+  (1, 1, 'POS_OPERATOR', '2018-04-30 11:09:53');
 
 -- --------------------------------------------------------
 
@@ -213,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `address` (
 --
 
 INSERT INTO `address` (`id`, `formatted_address`, `created_at`) VALUES
-(1, 'NIkunja 2, Road 8', '2018-04-20 13:23:12');
+  (1, 'Road 84, House 16. Nikunja 2,Dhaka', '2018-04-20 13:23:12');
 
 -- --------------------------------------------------------
 
@@ -237,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `auth_credential` (
 --
 
 INSERT INTO `auth_credential` (`id`, `personal_info_id`, `email`, `password`, `status`, `created_at`) VALUES
-(1, 1, 'admin@admin.com', '$2a$10$5aTN9klJNhO3DERcg/j11.VQC2skPV2zz37SG3kraKRms.v5.XYyC', 'ACTIVE', '2018-04-24 04:47:04');
+  (1, 1, 'admin@admin.com', '$2a$10$5aTN9klJNhO3DERcg/j11.VQC2skPV2zz37SG3kraKRms.v5.XYyC', 'ACTIVE', '2018-04-24 04:47:04');
 
 -- --------------------------------------------------------
 
@@ -257,9 +258,9 @@ CREATE TABLE IF NOT EXISTS `category` (
 --
 
 INSERT INTO `category` (`id`, `name`, `created_at`) VALUES
-(1, 'Chocolate', '2018-04-16 08:15:59'),
-(2, 'Grocery', '2018-04-16 08:15:59'),
-(3, 'Drinks', '2018-04-16 08:16:11');
+  (1, 'Chocolate', '2018-04-16 08:15:59'),
+  (2, 'Grocery', '2018-04-16 08:15:59'),
+  (3, 'Drinks', '2018-04-16 08:16:11');
 
 -- --------------------------------------------------------
 
@@ -271,8 +272,8 @@ CREATE TABLE IF NOT EXISTS `company` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `address_id` int(11) DEFAULT NULL,
   `title` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `phone` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `phone` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `address_id` (`address_id`)
@@ -298,7 +299,7 @@ CREATE TABLE IF NOT EXISTS `company_role` (
 --
 
 INSERT INTO `company_role` (`id`, `personal_info_id`, `role`, `created_at`) VALUES
-(1, 1, 'EMPLOYEE', '2018-04-20 12:26:10');
+  (1, 1, 'EMPLOYEE', '2018-04-20 12:26:10');
 
 -- --------------------------------------------------------
 
@@ -310,6 +311,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `personal_info_id` int(11) NOT NULL,
   `employee_id` varchar(200) DEFAULT NULL,
+  `type` enum('ADMIN','OFFICER') NOT NULL,
   `salary` float(11,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -321,8 +323,8 @@ CREATE TABLE IF NOT EXISTS `employee` (
 -- Dumping data for table `employee`
 --
 
-INSERT INTO `employee` (`id`, `personal_info_id`, `employee_id`, `salary`, `created_at`) VALUES
-(1, 1, '97480', 125.00, '2018-04-20 12:26:10');
+INSERT INTO `employee` (`id`, `personal_info_id`, `employee_id`, `type`, `salary`, `created_at`) VALUES
+  (1, 1, '1231', 'OFFICER', 125.00, '2018-04-20 12:26:10');
 
 -- --------------------------------------------------------
 
@@ -387,7 +389,7 @@ CREATE TABLE IF NOT EXISTS `personal_information` (
 --
 
 INSERT INTO `personal_information` (`id`, `address_id`, `full_name`, `dob`, `email`, `phone`, `created_at`) VALUES
-(1, 1, 'SYTEM ALL', '1966-04-20', 'admin@admin.com', '01234567', '2018-04-20 13:19:58');
+  (1, 1, 'Person 1', '2018-04-04', NULL, NULL, '2018-04-20 13:19:58');
 
 -- --------------------------------------------------------
 
@@ -524,25 +526,25 @@ CREATE TABLE IF NOT EXISTS `temp_file` (
 --
 
 INSERT INTO `temp_file` (`id`, `token`, `path`, `file_name`, `created_date`) VALUES
-(1, 1000777818, '/home/mi/project-file/pmc/tmp/22041597251246.jpeg', '22041597251246.jpeg', '2018-04-16 10:33:51'),
-(2, 1000178532, '/home/mi/project-file/pmc/tmp/22193915543084.jpeg', '22193915543084.jpeg', '2018-04-16 10:36:23'),
-(3, 1000190006, '/home/mi/project-file/pos/tmp/22256818623673.jpeg', '22256818623673.jpeg', '2018-04-16 10:37:26'),
-(4, 1000435901, '/home/mi/project-file/pos/tmp/22282936970489.jpg', '22282936970489.jpg', '2018-04-16 10:37:52'),
-(5, 1000121185, '/home/mi/project-file/pos/tmp/22585543613975.jpg', '22585543613975.jpg', '2018-04-16 10:42:54'),
-(6, 1000849460, '/home/mi/project-file/pos/tmp/14256678808523.JPG', '14256678808523.JPG', '2018-04-20 09:54:00'),
-(7, 1000802082, '/home/mi/project-file/pos/tmp/14287007458519.JPG', '14287007458519.JPG', '2018-04-20 09:54:30'),
-(8, 1000592484, '/home/mi/project-file/pos/tmp/14538367016252.JPG', '14538367016252.JPG', '2018-04-20 09:58:42'),
-(9, 1000709215, '/home/mi/project-file/pos/tmp/17868672631188.JPG', '17868672631188.JPG', '2018-04-20 10:54:12'),
-(10, 1000664691, '/home/mi/project-file/pos/tmp/21954480378058.JPG', '21954480378058.JPG', '2018-04-20 12:02:18'),
-(11, 1000809138, '/home/mi/project-file/pos/tmp/22226852309307.JPG', '22226852309307.JPG', '2018-04-20 12:06:50'),
-(12, 1000884278, '/home/mi/project-file/pos/tmp/22549630972247.JPG', '22549630972247.JPG', '2018-04-20 12:12:13'),
-(13, 1000040114, '/home/mi/project-file/pos/tmp/22611032070774.JPG', '22611032070774.JPG', '2018-04-20 12:13:14'),
-(14, 1000091472, '/home/mi/project-file/pos/tmp/23393150465367.JPG', '23393150465367.JPG', '2018-04-20 12:26:16'),
-(15, 1000289192, '/home/mi/project-file/pos/tmp/27234275626165.JPG', '27234275626165.JPG', '2018-04-20 13:30:18'),
-(16, 1000547343, '/home/mi/project-file/pos/tmp/27602303432731.JPG', '27602303432731.JPG', '2018-04-20 13:36:26'),
-(17, 1000454183, '/home/mi/project-file/pos/tmp/25136638767649.png', '25136638767649.png', '2018-04-23 11:01:20'),
-(18, 1000800958, '/home/mi/project-file/pos/tmp/8395239381726.png', '8395239381726.png', '2018-04-24 06:15:23'),
-(19, 1000388290, '/home/mi/project-file/pos/tmp/3976418198347.png', '3976418198347.png', '2018-04-24 11:35:08');
+  (1, 1000777818, '/home/mi/project-file/pmc/tmp/22041597251246.jpeg', '22041597251246.jpeg', '2018-04-16 10:33:51'),
+  (2, 1000178532, '/home/mi/project-file/pmc/tmp/22193915543084.jpeg', '22193915543084.jpeg', '2018-04-16 10:36:23'),
+  (3, 1000190006, '/home/mi/project-file/pos/tmp/22256818623673.jpeg', '22256818623673.jpeg', '2018-04-16 10:37:26'),
+  (4, 1000435901, '/home/mi/project-file/pos/tmp/22282936970489.jpg', '22282936970489.jpg', '2018-04-16 10:37:52'),
+  (5, 1000121185, '/home/mi/project-file/pos/tmp/22585543613975.jpg', '22585543613975.jpg', '2018-04-16 10:42:54'),
+  (6, 1000849460, '/home/mi/project-file/pos/tmp/14256678808523.JPG', '14256678808523.JPG', '2018-04-20 09:54:00'),
+  (7, 1000802082, '/home/mi/project-file/pos/tmp/14287007458519.JPG', '14287007458519.JPG', '2018-04-20 09:54:30'),
+  (8, 1000592484, '/home/mi/project-file/pos/tmp/14538367016252.JPG', '14538367016252.JPG', '2018-04-20 09:58:42'),
+  (9, 1000709215, '/home/mi/project-file/pos/tmp/17868672631188.JPG', '17868672631188.JPG', '2018-04-20 10:54:12'),
+  (10, 1000664691, '/home/mi/project-file/pos/tmp/21954480378058.JPG', '21954480378058.JPG', '2018-04-20 12:02:18'),
+  (11, 1000809138, '/home/mi/project-file/pos/tmp/22226852309307.JPG', '22226852309307.JPG', '2018-04-20 12:06:50'),
+  (12, 1000884278, '/home/mi/project-file/pos/tmp/22549630972247.JPG', '22549630972247.JPG', '2018-04-20 12:12:13'),
+  (13, 1000040114, '/home/mi/project-file/pos/tmp/22611032070774.JPG', '22611032070774.JPG', '2018-04-20 12:13:14'),
+  (14, 1000091472, '/home/mi/project-file/pos/tmp/23393150465367.JPG', '23393150465367.JPG', '2018-04-20 12:26:16'),
+  (15, 1000289192, '/home/mi/project-file/pos/tmp/27234275626165.JPG', '27234275626165.JPG', '2018-04-20 13:30:18'),
+  (16, 1000547343, '/home/mi/project-file/pos/tmp/27602303432731.JPG', '27602303432731.JPG', '2018-04-20 13:36:26'),
+  (17, 1000454183, '/home/mi/project-file/pos/tmp/25136638767649.png', '25136638767649.png', '2018-04-23 11:01:20'),
+  (18, 1000800958, '/home/mi/project-file/pos/tmp/8395239381726.png', '8395239381726.png', '2018-04-24 06:15:23'),
+  (19, 1000388290, '/home/mi/project-file/pos/tmp/3976418198347.png', '3976418198347.png', '2018-04-24 11:35:08');
 
 -- --------------------------------------------------------
 
