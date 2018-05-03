@@ -46,10 +46,8 @@ public class ShipmentDao extends BaseDao {
         Date fromDate = shipmentSearchForm.getFromDate();
         Date toDate = shipmentSearchForm.getToDate();
 
-
-
-
         if(fromDate!=null && toDate!=null){
+            predicates.add(builder.greaterThanOrEqualTo(root.get("purchasedDate"),fromDate));
             predicates.add(builder.lessThanOrEqualTo(root.get("purchasedDate"),toDate));
         }else if(fromDate!=null){
             predicates.add(builder.equal(root.get("purchasedDate"),fromDate));
