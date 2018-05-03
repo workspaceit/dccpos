@@ -1,5 +1,8 @@
 package com.workspaceit.dccpos.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.workspaceit.dccpos.config.PersistenceConfig;
 import com.workspaceit.dccpos.entity.accounting.Entry;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -63,9 +66,11 @@ public class Shipment {
     @JoinColumn(name = "purchased_by")
     private Employee purchasedBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",timezone = PersistenceConfig.DateConfig.timeZone)
     @Column(name = "purchased_date")
     private Date purchasedDate;
 
+    @JsonIgnore
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")

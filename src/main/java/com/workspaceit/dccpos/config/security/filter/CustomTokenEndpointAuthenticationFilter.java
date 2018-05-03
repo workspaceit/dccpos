@@ -21,6 +21,7 @@ public class CustomTokenEndpointAuthenticationFilter extends TokenEndpointAuthen
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
                 /* before authentication check for condition if true then process to authenticate */
+                System.out.println("CustomTokenEndpointAuthenticationFilter : FILTERS ");
         HttpServletResponse httpServletResponse = (HttpServletResponse)res;
         httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
         super.doFilter(req, res, chain);

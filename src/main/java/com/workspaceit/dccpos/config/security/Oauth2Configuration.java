@@ -2,6 +2,7 @@ package com.workspaceit.dccpos.config.security;
 
 import com.workspaceit.dccpos.config.Environment;
 import com.workspaceit.dccpos.config.security.filter.CustomTokenEndpointAuthenticationFilter;
+import com.workspaceit.dccpos.config.security.filter.HttpFilter;
 import com.workspaceit.dccpos.constant.ACCESS_ROLE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,6 +24,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.OAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.Filter;
 import java.util.ArrayList;
@@ -51,7 +53,6 @@ public class Oauth2Configuration {
             http.cors().and().antMatcher(uri)
                     .authorizeRequests()
                     .antMatchers(uri).authenticated()
-                    .and().cors()
                     .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
 
             //.antMatchers("/auth/api/**").access("hasRole('"+ ACCESS_ROLE.POS_OPERATOR.name()+"')")

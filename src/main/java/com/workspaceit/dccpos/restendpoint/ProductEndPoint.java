@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(EndpointRequestUriPrefix.endPointPublic+"/product")
+@RequestMapping(EndpointRequestUriPrefix.endPointAuth+"/product")
 @CrossOrigin
 public class ProductEndPoint {
     private ProductService productService;

@@ -83,7 +83,7 @@ public class BaseDao {
             session.evict(obj);
         }
     }
-    public long findTotalRowCount(Class<?> cls){
+    public long findAllRowCount(Class<?> cls){
         String entityName = cls.getSimpleName();
         long count =(Long)this.getCurrentSession().createQuery("select count(id) from "+entityName).uniqueResult();
         return count;

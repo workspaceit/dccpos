@@ -254,7 +254,23 @@ public class LedgerService {
     public List<Ledger> getAllBankOrCash(){
         return this.ledgerDao.findAllBakOrCash();
     }
+    @Transactional
+    public List<Ledger> getAssetAccount(){
+        return this.ledgerDao.findByGroupCode(GROUP_CODE.ASSET);
+    }
+    @Transactional
+    public List<Ledger> getLiabilityAccount(){
+        return this.ledgerDao.findByGroupCode(GROUP_CODE.LIABILITY);
+    }
+    @Transactional
+    public List<Ledger> getExpenseAccount(){
+        return this.ledgerDao.findByGroupCode(GROUP_CODE.EXPENSE);
+    }
+    @Transactional
+    public List<Ledger> getIncomeAccount(){
+        return this.ledgerDao.findByGroupCode(GROUP_CODE.INCOME);
 
+    }
     @Transactional
     public double getCurrentBalance(int ledgerId) throws EntityNotFound {
         Ledger ledger = this.getLedger(ledgerId);

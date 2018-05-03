@@ -10,8 +10,10 @@ import com.workspaceit.dccpos.service.ShipmentService;
 import com.workspaceit.dccpos.util.ServiceResponse;
 import com.workspaceit.dccpos.util.ValidationUtil;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
+import com.workspaceit.dccpos.validation.form.shipment.ShipmentSearchForm;
 import com.workspaceit.dccpos.validation.validator.PurchaseValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -52,11 +55,7 @@ public class ShipmentEndPoint {
         this.employeeService = employeeService;
     }
 
-    @GetMapping(value = "/get-by-id/{id}")
-    public ResponseEntity<?> getById(@PathVariable("id") Integer id){
-        Shipment shipment  =  this.shipmentService.getById(id);
-        return ResponseEntity.ok(shipment);
-    }
+
 
 
 
@@ -84,15 +83,32 @@ public class ShipmentEndPoint {
 
         return ResponseEntity.ok(shipment);
     }
-
+    @GetMapping(value = "/get-by-id/{id}")
+    public ResponseEntity<?> getById(@PathVariable("id") Integer id){
+        Shipment shipment  =  this.shipmentService.getById(id);
+        return ResponseEntity.ok(shipment);
+    }
+    @GetMapping(value = "/get-by-tracking-id/{trackingId}")
+    public ResponseEntity<?> getById(@PathVariable("trackingId") String trackingId){
+        Shipment shipment  =  this.shipmentService.getByTrackingId(trackingId);
+        return ResponseEntity.ok(shipment);
+    }
     @GetMapping("/get-all/{limit}/{offset}")
-    public ResponseEntity<?> getAll(@PathVariable int limit, @PathVariable int offset){
+    public ResponseEntity<?> getAll(@PathVariable int limit, @PathVariable int offset,
+                                    @Valid ShipmentSearchForm shipmentSearchForm,BindingResult bindingResult){
         ServiceResponse serviceResponse = this.validationUtil.limitOffsetValidation(limit,offset,10);
         if(serviceResponse.hasErrors()){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
         }
-        List<Shipment> shipments = this.shipmentService.getAll(limit,offset);
 
-        return ResponseEntity.ok(shipments);
+        long totalCount;
+        List<Shipment> shipments;
+
+        totalCount = this.shipmentService.getCountOfAll(shipmentSearchForm);
+        shipments = this.shipmentService.getAll(limit,offset,shipmentSearchForm);
+
+
+        return ResponseEntity.ok(serviceResponse.getResult(totalCount,shipments));
     }
+
 }

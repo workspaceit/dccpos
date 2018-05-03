@@ -29,7 +29,7 @@ public class LedgerEndpoint {
     @RequestMapping(value = "/get/{type}",method = RequestMethod.GET)
     public ResponseEntity<?> getAll(@PathVariable("type") String type){
         List<Ledger> ledgerList = null;
-
+        
         switch (type){
             case "wholesaler":
                 ledgerList= this.ledgerService.getAllWholesaler();
@@ -42,6 +42,18 @@ public class LedgerEndpoint {
                 break;
             case "bankOrCash":
                 ledgerList= this.ledgerService.getAllBankOrCash();
+                break;
+            case "assets":
+                ledgerList= this.ledgerService.getAssetAccount();
+                break;
+            case "liability":
+                ledgerList= this.ledgerService.getLiabilityAccount();
+                break;
+            case "expense":
+                ledgerList= this.ledgerService.getExpenseAccount();
+                break;
+            case "income":
+                ledgerList= this.ledgerService.getIncomeAccount();
                 break;
         }
 

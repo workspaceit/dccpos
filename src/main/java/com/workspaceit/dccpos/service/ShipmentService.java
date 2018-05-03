@@ -2,18 +2,17 @@ package com.workspaceit.dccpos.service;
 
 import com.workspaceit.dccpos.constant.INVENTORY_ATTRS;
 import com.workspaceit.dccpos.dao.ShipmentDao;
-import com.workspaceit.dccpos.entity.Employee;
-import com.workspaceit.dccpos.entity.Inventory;
-import com.workspaceit.dccpos.entity.Shipment;
-import com.workspaceit.dccpos.entity.Supplier;
+import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.TrackingIdGenerator;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
 import com.workspaceit.dccpos.validation.form.shipment.ShipmentCreateForm;
+import com.workspaceit.dccpos.validation.form.shipment.ShipmentSearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -48,15 +47,53 @@ public class ShipmentService {
         return shipment;
     }
 
+
     @Transactional
     public List<Shipment> getAll(int limit, int offset){
         offset = (offset-1)*limit;
         return this.shipmentDao.findAll(limit,offset);
     }
+    @Transactional
+    public long getCountOfAll(){
+        return this.shipmentDao.findAllRowCount(Shipment.class);
+    }
 
+    @Transactional
+    public List<Shipment> getAll(int limit, int offset, ShipmentSearchForm shipmentSearchForm){
+        offset = (offset-1)*limit;
+        return this.shipmentDao.findAll(limit,offset,shipmentSearchForm);
+    }
+    @Transactional
+    public long getCountOfAll( ShipmentSearchForm shipmentSearchForm){
+        return this.shipmentDao.findCountOfAll(shipmentSearchForm);
+    }
+
+    @Transactional
+    public List<Shipment> getAllByDate( int limit, int offset,Date date){
+        offset = (offset-1)*limit;
+        return this.shipmentDao.findAllByDate(limit,offset,date);
+    }
+
+    @Transactional
+    public List<Shipment> getAllByDate( int limit, int offset,Date fromDate,Date toDate){
+        offset = (offset-1)*limit;
+        return this.shipmentDao.findAllByDate(limit,offset,fromDate,toDate);
+    }
+    @Transactional
+    public long getCountOfAllByDate(Date date){
+        return this.shipmentDao.findCountOfAllByDate(date);
+    }
+    @Transactional
+    public long getCountOfAllByDate(Date fromDate,Date toDate){
+        return this.shipmentDao.findCountOfAllByDate(fromDate,toDate);
+    }
     @Transactional
     public Shipment getById(int id){
         return this.shipmentDao.findById(id);
+    }
+    @Transactional
+    public Shipment getByTrackingId(String trackingId){
+        return this.shipmentDao.findByTrackingId(trackingId);
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -77,6 +77,7 @@ public class EmployeeEndPoint {
 
         return ResponseEntity.ok(employee);
     }
+    @CrossOrigin
     @RequestMapping(value = "/get-all",method = RequestMethod.GET)
     public ResponseEntity<?> getAll(){
         List<Employee> employees = this.employeeService.getAll();

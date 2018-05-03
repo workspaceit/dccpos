@@ -58,7 +58,7 @@ public class ProductService {
 
     @Transactional
     public long getTotalRowCount(){
-        return this.productDao.findTotalRowCount(Product.class);
+        return this.productDao.findAllRowCount(Product.class);
     }
 
     @Transactional
