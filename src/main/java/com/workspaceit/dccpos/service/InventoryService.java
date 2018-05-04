@@ -24,6 +24,7 @@ public class InventoryService {
     private InventoryDetailsService inventoryDetailsService;
 
 
+
     @Autowired
     public void setInventoryDao(InventoryDao inventoryDao) {
         this.inventoryDao = inventoryDao;

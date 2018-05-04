@@ -1,8 +1,14 @@
 package resetendpointTest;
 
 import com.workspaceit.dccpos.config.WebConfig;
+import com.workspaceit.dccpos.constant.SALE_TYPE;
 import com.workspaceit.dccpos.dao.EntryItemDao;
+import com.workspaceit.dccpos.entity.Employee;
+import com.workspaceit.dccpos.entity.Sale;
 import com.workspaceit.dccpos.helper.FormToNameValuePair;
+import com.workspaceit.dccpos.service.EmployeeService;
+import com.workspaceit.dccpos.service.PersonalInformationService;
+import com.workspaceit.dccpos.service.SaleService;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +22,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Date;
+
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebConfig.class})
@@ -28,14 +36,8 @@ public class SampleTest extends BaseTest{
 
     private FormToNameValuePair formToNameValuePair;
 
-    private EntryItemDao entryItemDao;
 
-    private LedgerService ledgerService;
 
-@Autowired
-    public void setLedgerService(LedgerService ledgerService) {
-        this.ledgerService = ledgerService;
-    }
 
     @Autowired
     public void setWac(WebApplicationContext wac) {
@@ -46,21 +48,14 @@ public class SampleTest extends BaseTest{
         this.formToNameValuePair = formToNameValuePair;
     }
 
-    @Autowired
-    public void setEntryItemDao(EntryItemDao entryItemDao) {
-        this.entryItemDao = entryItemDao;
-    }
-
     @Before
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
     @Test
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void test() throws Exception {
-        double balance = this.ledgerService.getCurrentBalance(6);
 
-        System.out.println(balance);
     }
 }

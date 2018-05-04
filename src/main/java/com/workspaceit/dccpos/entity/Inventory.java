@@ -1,7 +1,10 @@
 package com.workspaceit.dccpos.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.workspaceit.dccpos.constant.INVENTORY_STATUS;
+import com.workspaceit.dccpos.jsonView.InventoryView;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,40 +13,49 @@ import java.util.List;
 
 @Entity
 @Table(name = "inventory")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(InventoryView.Basic.class)
     private int id;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "inventory_id",referencedColumnName = "id",nullable = false)
+    @JsonView(InventoryView.Summary.class)
     private List<InventoryDetails> inventoryDetails;
 
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonView(InventoryView.Details.class)
     @JoinColumn(name = "product_id",referencedColumnName = "id")
     private Product product;
 
-    @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonView(InventoryView.Summary.class)
     @JoinColumn(name = "shipment_id",referencedColumnName = "id")
     private Shipment shipment;
 
     @Column(name = "purchase_price")
+    @JsonView(InventoryView.Basic.class)
     private Double purchasePrice;
 
     @Column(name = "purchase_quantity")
+    @JsonView(InventoryView.Basic.class)
     private int purchaseQuantity;
 
     @Column(name = "sold_quantity")
+    @JsonView(InventoryView.Basic.class)
     private int soldQuantity;
 
     @Column(name = "available_quantity")
+    @JsonView(InventoryView.Basic.class)
     private int availableQuantity;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
+    @JsonView(InventoryView.Basic.class)
     private INVENTORY_STATUS status;
 
 

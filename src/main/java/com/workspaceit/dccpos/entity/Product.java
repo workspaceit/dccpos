@@ -1,49 +1,79 @@
 package com.workspaceit.dccpos.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.workspaceit.dccpos.constant.WEIGHT_UNIT;
+import com.workspaceit.dccpos.jsonView.ProductView;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "product")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(ProductView.Basic.class)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id",referencedColumnName = "id")
-    private Category category;
-
+    @JsonView(ProductView.Basic.class)
     @Column(name = "name")
     private String name;
 
+
+    @ManyToOne
+    @JoinColumn(name = "category_id",referencedColumnName = "id")
+    @JsonView(ProductView.Summary.class)
+    private Category category;
+
+
+    @JsonView(ProductView.Summary.class)
     @Column(name = "weight")
     private int weight;
 
+    @JsonView(ProductView.Summary.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "weight_unit")
     private WEIGHT_UNIT weightUnit;
 
+
+    @JsonView(ProductView.Summary.class)
     @Column(name = "image")
     private String image;
 
+    @JsonView(ProductView.Summary.class)
     @Column(name = "barcode")
     private String barcode;
 
 
+    @JsonView(ProductView.Summary.class)
     @Column(name = "total_available_quantity")
     private int totalAvailableQuantity;
 
+    @JsonView(ProductView.Summary.class)
+    @Column(name = "good_quantity")
+    private int goodQuantity;
+
+    @JsonView(ProductView.Summary.class)
+    @Column(name = "damaged_quantity")
+    private int damagedQuantity;
+
+    @JsonView(ProductView.Summary.class)
+    @Column(name = "min_price")
+    private double  minPrice;
+
+    @JsonView(ProductView.Summary.class)
+    @Column(name = "max_price")
+    private double maxPrice;
+
+
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id",referencedColumnName = "id")
-    List<Inventory> inventories;
+    private List<Inventory> inventories;
 
     @JsonIgnore
     @CreationTimestamp
@@ -115,6 +145,39 @@ public class Product {
         this.totalAvailableQuantity = totalAvailableQuantity;
     }
 
+
+    public int getGoodQuantity() {
+        return goodQuantity;
+    }
+
+    public void setGoodQuantity(int goodQuantity) {
+        this.goodQuantity = goodQuantity;
+    }
+
+    public int getDamagedQuantity() {
+        return damagedQuantity;
+    }
+
+    public void setDamagedQuantity(int damagedQuantity) {
+        this.damagedQuantity = damagedQuantity;
+    }
+
+    public double getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(double minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public double getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(double maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
     public List<Inventory> getInventories() {
         return inventories;
     }
@@ -142,6 +205,10 @@ public class Product {
         if (id != product.id) return false;
         if (weight != product.weight) return false;
         if (totalAvailableQuantity != product.totalAvailableQuantity) return false;
+        if (goodQuantity != product.goodQuantity) return false;
+        if (damagedQuantity != product.damagedQuantity) return false;
+        if (Double.compare(product.minPrice, minPrice) != 0) return false;
+        if (Double.compare(product.maxPrice, maxPrice) != 0) return false;
         if (category != null ? !category.equals(product.category) : product.category != null) return false;
         if (name != null ? !name.equals(product.name) : product.name != null) return false;
         if (weightUnit != product.weightUnit) return false;
@@ -153,7 +220,9 @@ public class Product {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result;
+        long temp;
+        result = id;
         result = 31 * result + (category != null ? category.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + weight;
@@ -161,6 +230,12 @@ public class Product {
         result = 31 * result + (image != null ? image.hashCode() : 0);
         result = 31 * result + (barcode != null ? barcode.hashCode() : 0);
         result = 31 * result + totalAvailableQuantity;
+        result = 31 * result + goodQuantity;
+        result = 31 * result + damagedQuantity;
+        temp = Double.doubleToLongBits(minPrice);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(maxPrice);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (inventories != null ? inventories.hashCode() : 0);
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;

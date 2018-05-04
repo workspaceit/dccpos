@@ -1,11 +1,14 @@
 package com.workspaceit.dccpos.service;
 
+import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
 import com.workspaceit.dccpos.dao.ProductDao;
 import com.workspaceit.dccpos.entity.Category;
+import com.workspaceit.dccpos.entity.Inventory;
 import com.workspaceit.dccpos.entity.Product;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.FormFilterHelper;
 import com.workspaceit.dccpos.validation.form.product.ProductCreateForm;
+import com.workspaceit.dccpos.validation.form.product.ProductSearchForm;
 import com.workspaceit.dccpos.validation.form.product.ProductUpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ public class ProductService {
     private ProductDao productDao;
     private CategoryService categoryService;
     private TempFileService tempFileService;
+    private InventoryDetailsService inventoryDetailsService;
 
     @Autowired
     public void setProductDao(ProductDao productDao) {
@@ -36,6 +40,11 @@ public class ProductService {
         this.tempFileService = tempFileService;
     }
 
+    @Autowired
+    public void setInventoryDetailsService(InventoryDetailsService inventoryDetailsService) {
+        this.inventoryDetailsService = inventoryDetailsService;
+    }
+
     @Transactional
     public List<Product> getAll(){
         return this.productDao.findAll();
@@ -45,6 +54,15 @@ public class ProductService {
     public List<Product> getAll(int limit, int offset){
         offset = (offset-1)*limit;
         return this.productDao.findAll(limit,offset);
+    }
+    @Transactional
+    public List<Product> getAll(int limit, int offset, ProductSearchForm searchForm){
+        offset = (offset-1)*limit;
+        return this.productDao.findAll(limit,offset,searchForm);
+    }
+    @Transactional
+    public long getCountOfAll(ProductSearchForm searchForm){
+        return this.productDao.findCountOfAll(searchForm);
     }
     @Transactional
     public List<Product> getByCategoryId(int categoryId,int limit, int offset){
@@ -57,7 +75,7 @@ public class ProductService {
     }
 
     @Transactional
-    public long getTotalRowCount(){
+    public long getCountOfAll(){
         return this.productDao.findAllRowCount(Product.class);
     }
 
@@ -114,6 +132,11 @@ public class ProductService {
         product.setImage(imagePath);
         product.setBarcode(productCreateForm.getBarcode());
         product.setTotalAvailableQuantity(0);
+        product.setDamagedQuantity(0);
+        product.setGoodQuantity(0);
+        product.setMaxPrice(0d);
+        product.setMinPrice(0d);
+
 
         this.save(product);
 
@@ -157,11 +180,40 @@ public class ProductService {
 
         return product;
     }
+    @Transactional(rollbackFor = Exception.class)
+    public void resolveProductProperties(List<Inventory> inventories ){
+        for(Inventory inventory :inventories){
+            if(inventory==null)continue;
 
+            Product product = inventory.getProduct();
+
+            if(product==null)continue;
+
+            double maxSellingPrice =  this.inventoryDetailsService.getMaxSellingPrice(inventory);
+            double minSellingPrice =  this.inventoryDetailsService.getMinSellingPrice(inventory);
+            int goodAvailableQuantity =  this.inventoryDetailsService.getAvailableQuantity(inventory, PRODUCT_CONDITION.GOOD);
+            int damagedAvailableQuantity =  this.inventoryDetailsService.getAvailableQuantity(inventory, PRODUCT_CONDITION.DAMAGED);
+            int totalQuantity = 0;
+
+            totalQuantity += product.getTotalAvailableQuantity();
+            totalQuantity += inventory.getPurchaseQuantity();
+
+            product.setTotalAvailableQuantity(totalQuantity);
+            product.setMaxPrice(maxSellingPrice);
+            product.setMinPrice(minSellingPrice);
+            product.setGoodQuantity(goodAvailableQuantity);
+            product.setDamagedQuantity(damagedAvailableQuantity);
+
+
+            this.update(product);
+        }
+    }
     private void save(Product product){
         this.productDao.save(product);
     }
     public void update(Product product){
         this.productDao.update(product);
     }
+
+
 }

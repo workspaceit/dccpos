@@ -37,17 +37,7 @@ public class ProductServiceAop {
 
         if(inventories==null || inventories.size()==0)return;
 
-        for(Inventory inventory :inventories){
-            int totalQuantity = 0;
-            totalQuantity += inventory.getPurchaseQuantity();
-            Product product = inventory.getProduct();
-
-            if(product==null)continue;
-
-            totalQuantity+=product.getTotalAvailableQuantity();
-            product.setTotalAvailableQuantity(totalQuantity);
-            this.productService.update(product);
-        }
+        this.productService.resolveProductProperties(inventories);
 
 
 

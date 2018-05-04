@@ -7,6 +7,7 @@ import com.workspaceit.dccpos.service.ProductService;
 import com.workspaceit.dccpos.util.ServiceResponse;
 import com.workspaceit.dccpos.util.ValidationUtil;
 import com.workspaceit.dccpos.validation.form.product.ProductCreateForm;
+import com.workspaceit.dccpos.validation.form.product.ProductSearchForm;
 import com.workspaceit.dccpos.validation.form.product.ProductUpdateForm;
 import com.workspaceit.dccpos.validation.validator.ProductValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +45,14 @@ public class ProductEndPoint {
 
 
     @RequestMapping("/get-all/{limit}/{offset}")
-    public ResponseEntity<?> getAll(@PathVariable int limit, @PathVariable int offset){
+    public ResponseEntity<?> getAll(@PathVariable int limit, @PathVariable int offset, @Valid ProductSearchForm productSearchForm){
         ServiceResponse serviceResponse = this.validationUtil.limitOffsetValidation(limit,offset,10);
         if(serviceResponse.hasErrors()){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
         }
 
-        long totalRowCount = this.productService.getTotalRowCount();
-        List<Product> productList = this.productService.getAll(limit,offset);
+        long totalRowCount = this.productService.getCountOfAll(productSearchForm);
+        List<Product> productList = this.productService.getAll(limit,offset,productSearchForm);
 
         return ResponseEntity.ok(serviceResponse.getResult(totalRowCount,productList));
     }
@@ -70,7 +71,7 @@ public class ProductEndPoint {
     }
 
     @RequestMapping(value = "/get/{id}",method = RequestMethod.GET)
-    public ResponseEntity<?> getByBarcode(@PathVariable("id") Integer id){
+    public ResponseEntity<?> getById(@PathVariable("id") Integer id){
         Product product = this.productService.getById(id);
         return ResponseEntity.ok(product);
     }
