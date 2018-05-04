@@ -25,18 +25,22 @@ public class WholesalerValidator {
     }
 
     public void validate(WholesalerCreateForm wholesalerCreateForm, Errors error){
-
-        this.validateUniqueWholesalerId(wholesalerCreateForm.getWholesalerId(),error);
+        if(wholesalerCreateForm.getWholesalerId()!=null && !wholesalerCreateForm.getWholesalerId().trim().equals("")) {
+            this.validateUniqueWholesalerId(wholesalerCreateForm.getWholesalerId(), error);
+        }
 
         if(wholesalerCreateForm.getCompany()!=null){
             this.companyValidator.validate("company",wholesalerCreateForm.getCompany(),error);
         }
 
     }
-    public void validateUpdate(int id, WholesalerUpdateForm WholesalerUpdateForm, Errors error){
-        this.validateWholesalerIdUsedByOthers(WholesalerUpdateForm.getWholesalerId(),id,error);
-        if(WholesalerUpdateForm.getCompany()!=null){
-            this.companyValidator.validateUpdate("company",WholesalerUpdateForm.getCompany(),error);
+    public void validateUpdate(int id, WholesalerUpdateForm wholesalerUpdateForm, Errors error){
+        if(wholesalerUpdateForm.getWholesalerId()!=null && !wholesalerUpdateForm.getWholesalerId().trim().equals("")) {
+
+            this.validateWholesalerIdUsedByOthers(wholesalerUpdateForm.getWholesalerId(),id,error);
+        }
+        if(wholesalerUpdateForm.getCompany()!=null){
+            this.companyValidator.validateUpdate("company",wholesalerUpdateForm.getCompany(),error);
         }
     }
     public void validateUniqueWholesalerId(String employeeId, Errors error){

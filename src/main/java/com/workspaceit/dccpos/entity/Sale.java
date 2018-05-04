@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "sale")
@@ -28,6 +29,10 @@ public class Sale {
     @ManyToOne
     @JoinColumn(name = "personal_info_id")
     private PersonalInformation consumer;
+
+    @OneToMany
+    @JoinColumn(name = "sale_id",referencedColumnName = "id")
+    private Set<SaleDetails> saleDetails;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
@@ -108,6 +113,14 @@ public class Sale {
 
     public void setConsumer(PersonalInformation consumer) {
         this.consumer = consumer;
+    }
+
+    public Set<SaleDetails> getSaleDetails() {
+        return saleDetails;
+    }
+
+    public void setSaleDetails(Set<SaleDetails> saleDetails) {
+        this.saleDetails = saleDetails;
     }
 
     public SALE_TYPE getType() {
@@ -222,6 +235,7 @@ public class Sale {
         this.createdAt = createdAt;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -231,7 +245,9 @@ public class Sale {
 
         if (id != sale.id) return false;
         if (Double.compare(sale.discount, discount) != 0) return false;
-        if (Double.compare(sale.discount, discount) != 0) return false;
+        if (Double.compare(sale.vat, vat) != 0) return false;
+        if (totalQuantity != sale.totalQuantity) return false;
+        if (totalReturnedQuantity != sale.totalReturnedQuantity) return false;
         if (Double.compare(sale.totalPrice, totalPrice) != 0) return false;
         if (Double.compare(sale.totalDue, totalDue) != 0) return false;
         if (Double.compare(sale.totalReceive, totalReceive) != 0) return false;
@@ -241,6 +257,7 @@ public class Sale {
         if (soldBy != null ? !soldBy.equals(sale.soldBy) : sale.soldBy != null) return false;
         if (wholesaler != null ? !wholesaler.equals(sale.wholesaler) : sale.wholesaler != null) return false;
         if (consumer != null ? !consumer.equals(sale.consumer) : sale.consumer != null) return false;
+        if (saleDetails != null ? !saleDetails.equals(sale.saleDetails) : sale.saleDetails != null) return false;
         if (type != sale.type) return false;
         if (note != null ? !note.equals(sale.note) : sale.note != null) return false;
         if (date != null ? !date.equals(sale.date) : sale.date != null) return false;
@@ -255,11 +272,14 @@ public class Sale {
         result = 31 * result + (soldBy != null ? soldBy.hashCode() : 0);
         result = 31 * result + (wholesaler != null ? wholesaler.hashCode() : 0);
         result = 31 * result + (consumer != null ? consumer.hashCode() : 0);
+        result = 31 * result + (saleDetails != null ? saleDetails.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         temp = Double.doubleToLongBits(discount);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(discount);
+        temp = Double.doubleToLongBits(vat);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + totalQuantity;
+        result = 31 * result + totalReturnedQuantity;
         temp = Double.doubleToLongBits(totalPrice);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(totalDue);

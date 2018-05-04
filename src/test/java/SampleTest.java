@@ -1,15 +1,7 @@
-package resetendpointTest;
+
 
 import com.workspaceit.dccpos.config.WebConfig;
-import com.workspaceit.dccpos.constant.SALE_TYPE;
-import com.workspaceit.dccpos.dao.EntryItemDao;
-import com.workspaceit.dccpos.entity.Employee;
-import com.workspaceit.dccpos.entity.Sale;
 import com.workspaceit.dccpos.helper.FormToNameValuePair;
-import com.workspaceit.dccpos.service.EmployeeService;
-import com.workspaceit.dccpos.service.PersonalInformationService;
-import com.workspaceit.dccpos.service.SaleService;
-import com.workspaceit.dccpos.service.accounting.LedgerService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,13 +13,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.Date;
+import resetendpointTest.BaseTest;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebConfig.class})
-public class SampleTest extends BaseTest{
+public class SampleTest extends BaseTest {
 
     private MockMvc mockMvc;
 
