@@ -12,7 +12,7 @@ import java.util.*;
 @Repository
 public class ShipmentDao extends BaseDao {
 
-    public Shipment findById(int id){
+    public Shipment findById(long id){
         Session session = this.getCurrentSession();
         return (Shipment)session.createQuery("select distinct sp FROM Shipment sp " +
                 " left join fetch sp.entry " +

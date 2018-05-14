@@ -19,18 +19,23 @@ public class PurchasePaymentValidator {
     }
 
     public void validate(String prefix, LedgerEntryForm[] accountPaymentForms, Errors errors){
-        prefix =  ValidationHelper.preparePrefix(prefix);
-
         if(accountPaymentForms==null || accountPaymentForms.length==0){
             return;
         }
-        this.validateAccountPayment(prefix+"paymentAccount",accountPaymentForms,errors);
+        this.validateAccountPayment(prefix,accountPaymentForms,errors);
 
     }
 
     public void validateAccountPayment(String prefix, LedgerEntryForm[] accountPaymentForms, Errors errors){
         for(int i=0;i<accountPaymentForms.length;i++){
             LedgerEntryForm accountPaymentForm =  accountPaymentForms[i];
+            validateAccountPayment(prefix, accountPaymentForm,i, errors);
+        }
+    }
+    public void validateAccountPayment(String prefix, LedgerEntryForm accountPaymentForm,int i, Errors errors){
+            if(accountPaymentForm==null ){
+                return;
+            }
             String ledgerFieldName = ValidationHelper.preparePrefix(prefix+"["+i+"]")+"ledgerId";
             String amountFieldName = ValidationHelper.preparePrefix(prefix+"["+i+"]")+"amount";
 
@@ -43,7 +48,7 @@ public class PurchasePaymentValidator {
                     ledger = this.ledgerService.getLedger(ledgerId);
                 } catch (EntityNotFound entityNotFound) {
                     errors.rejectValue(ledgerFieldName,entityNotFound.getMessage());
-                    continue;
+                    return;
                 }
             }
 
@@ -53,14 +58,14 @@ public class PurchasePaymentValidator {
 
                 if(!isCashOrBankAccount){
                     errors.rejectValue(amountFieldName,"Ledger Account is not bank or cash account");
-                    continue;
+                    return;
                 }
                 if(overDrawnFlag){
                     errors.rejectValue(amountFieldName,"Account don't have sufficient balance");
                 }
             }
 
-        }
+
     }
 
 }

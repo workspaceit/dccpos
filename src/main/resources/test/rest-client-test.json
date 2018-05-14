@@ -6,7 +6,7 @@
       "type": "Project",
       "description": "",
       "id": "c4226841-a12e-441a-b046-9b49f4080e2d",
-      "lastModified": "2018-05-04T17:10:58.900+06:00",
+      "lastModified": "2018-05-14T18:07:32.796+06:00",
       "name": "POS"
     },
     {
@@ -21,7 +21,7 @@
       "type": "Scenario",
       "description": "",
       "id": "28508267-c995-4a6a-9e04-19a0c55423ca",
-      "lastModified": "2018-05-04T17:10:58.901+06:00",
+      "lastModified": "2018-05-14T18:07:32.797+06:00",
       "name": "Endpoints",
       "requestOrder": [
         "AUTHENTICATION",
@@ -38,9 +38,8 @@
         "Supplier-Update",
         "Supplier-Get-All",
         "Wholesaler-Create",
-        "Request 58",
+        "Wholesaler-Create 1",
         "Wholesaler-Update",
-        "Request 59",
         "Wholesaler-Get-All",
         "Oauth Login",
         "Supplier-Create:ALL NULL",
@@ -69,23 +68,23 @@
         "Ledger Employee",
         "Make Receipt",
         "Make Payment",
+        "Make Investment ",
         "Shipment Create",
         "Shipment Get All",
         "Shipment Get By Id",
         "Shipment Get By Tracking ID",
-        "Make Investment ",
         "Make Investment Duplicate",
         "Make Payment Duplicate",
         "Make Receipt Duplicate",
         "Category Get All",
         "Category By Id",
         "Ledger Asset",
-        "Wholesaler-Create 1",
         "Ledger Liability",
         "Ledger Income",
         "Ledger Expense",
         "Wholesaler-Update 1",
-        "Wholesaler-Update 2"
+        "Shipment Create C:3 [Total Due]",
+        "Shipment Create C:2 [ Total Paid ]"
       ],
       "parentId": "bd8b3e61-d30e-4350-8631-704fabab67dc"
     },
@@ -1352,7 +1351,7 @@
         "autoSetLength": true,
         "textBody": "username=p@pmc.com&password=123456&client_id=pmc-app-client&client_secret=f6c3d96bc05036e738f0899ba149f447924b3a09&grant_type=password"
       },
-      "headersType": "Form",
+      "headersType": "Raw",
       "uri": {
         "query": {
           "delimiter": "&",
@@ -1365,7 +1364,7 @@
         "path": "/auth/api/wholesaler/create"
       },
       "id": "59e7f921-08b8-4361-988b-167283a86d34",
-      "lastModified": "2018-05-04T17:07:10.203+06:00",
+      "lastModified": "2018-05-04T17:37:02.228+06:00",
       "name": "Wholesaler-Create",
       "headers": [
         {
@@ -1396,6 +1395,60 @@
       "metaInfo": {
         "IS_FROM_HISTORY": null
       },
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.title",
+              "value": "sss"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBody": "username=p@pmc.com&password=123456&client_id=pmc-app-client&client_secret=f6c3d96bc05036e738f0899ba149f447924b3a09&grant_type=password"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "{scheme}"
+        },
+        "host": "{url}",
+        "path": "/auth/api/wholesaler/create"
+      },
+      "id": "4312a50a-844c-4664-b321-a9777cc414f7",
+      "lastModified": "2018-05-04T17:37:07.088+06:00",
+      "name": "Wholesaler-Create 1",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "metaInfo": {},
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
     {
@@ -3143,8 +3196,70 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
+        "textBody": "{\n \"cashOrBank\":[{\"ledgerId\":3,\"amount\":5000},{\"ledgerId\":5,\"amount\":5000}],\n  \"narration\":\"Cash Invest ment\",\n  \"date\": 1525090664062\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/entry/make/investment/cash"
+      },
+      "id": "2608986d-5135-4582-a7af-ed8b116a21f1",
+      "lastModified": "2018-05-03T11:58:34.968+06:00",
+      "name": "Make Investment ",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "200"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseHeader",
+          "path": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
         "textBodyEditorHeight": 526,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2}\n     \t]\n    },\n    {\"productId\":2,\"purchasePrice\":1.5,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1}\n     \t]\n    },\n    {\"productId\":3,\"purchasePrice\":1.3,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n     \t]\n    }\n  ],\n  \"payment\":{\n    \t\t\"totalPaidAmount\":20,\n             \"paidCostAmount\":5,\n             \"paidProductPriceAmount\":10,\n             \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":40.7}\n                              ],\n             \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":3}\n    \n            }\n}"
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2}\n     \t]\n    },\n    {\"productId\":2,\"purchasePrice\":1.5,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1}\n     \t]\n    },\n    {\"productId\":3,\"purchasePrice\":1.3,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n     \t]\n    }\n  ],\n  \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":40.7}\n                              ],\n             \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":3}\n}"
       },
       "headersType": "Raw",
       "uri": {
@@ -3153,13 +3268,14 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/shipment/create"
       },
       "id": "81c07e69-6012-4ab6-8385-7d9e3c44a682",
-      "lastModified": "2018-05-04T14:34:24.239+06:00",
+      "lastModified": "2018-05-14T16:34:26.649+06:00",
       "name": "Shipment Create",
       "headers": [
         {
@@ -3360,68 +3476,6 @@
           "subject": "ResponseJsonBody",
           "path": "$.trackingId",
           "value": "SP1"
-        }
-      ],
-      "metaInfo": {},
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
-      "type": "Request",
-      "method": {
-        "requestBody": true,
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
-        "name": "POST"
-      },
-      "body": {
-        "formBody": {
-          "overrideContentType": true,
-          "encoding": "application/x-www-form-urlencoded",
-          "items": []
-        },
-        "bodyType": "Text",
-        "autoSetLength": true,
-        "textBody": "{\n \"cashOrBank\":[{\"ledgerId\":3,\"amount\":5000},{\"ledgerId\":5,\"amount\":5000}],\n  \"narration\":\"Cash Invest ment\",\n  \"date\": 1525090664062\n}"
-      },
-      "headersType": "Form",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "http",
-          "version": "V11"
-        },
-        "host": "{url}",
-        "path": "/auth/api/entry/make/investment/cash"
-      },
-      "id": "2608986d-5135-4582-a7af-ed8b116a21f1",
-      "lastModified": "2018-05-03T11:58:34.968+06:00",
-      "name": "Make Investment ",
-      "headers": [
-        {
-          "enabled": true,
-          "name": "Authorization",
-          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
-        },
-        {
-          "enabled": true,
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "assertions": [
-        {
-          "comparison": "Equals",
-          "subject": "ResponseStatus",
-          "path": "code",
-          "value": "200"
-        },
-        {
-          "comparison": "Equals",
-          "subject": "ResponseHeader",
-          "path": "Access-Control-Allow-Origin",
-          "value": "*"
         }
       ],
       "metaInfo": {},
@@ -3786,55 +3840,6 @@
     {
       "type": "Request",
       "method": {
-        "requestBody": true,
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
-        "name": "POST"
-      },
-      "body": {
-        "formBody": {
-          "overrideContentType": true,
-          "encoding": "application/x-www-form-urlencoded",
-          "items": [
-            {
-              "enabled": true,
-              "type": "Text",
-              "name": "company.title",
-              "value": "sss"
-            }
-          ]
-        },
-        "bodyType": "Form",
-        "autoSetLength": true,
-        "textBody": "username=p@pmc.com&password=123456&client_id=pmc-app-client&client_secret=f6c3d96bc05036e738f0899ba149f447924b3a09&grant_type=password"
-      },
-      "headersType": "Form",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "{scheme}"
-        },
-        "host": "{url}",
-        "path": "/auth/api/wholesaler/create"
-      },
-      "id": "4312a50a-844c-4664-b321-a9777cc414f7",
-      "lastModified": "2018-05-04T17:07:28.850+06:00",
-      "name": "Wholesaler-Create 1",
-      "headers": [
-        {
-          "enabled": true,
-          "name": "Content-Type",
-          "value": "application/x-www-form-urlencoded"
-        }
-      ],
-      "metaInfo": {},
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
-      "type": "Request",
-      "method": {
         "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
         "name": "GET"
       },
@@ -4084,6 +4089,102 @@
       "metaInfo": {
         "IS_FROM_HISTORY": null
       },
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2}\n     \t]\n    },\n    {\"productId\":2,\"purchasePrice\":1.5,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1}\n     \t]\n    },\n    {\"productId\":3,\"purchasePrice\":1.3,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n     \t]\n    }\n  ]\n    \n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/shipment/create"
+      },
+      "id": "267aea3b-d1ea-4144-8388-2365b441e1f8",
+      "lastModified": "2018-05-14T16:54:19.820+06:00",
+      "name": "Shipment Create C:3 [Total Due]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2}\n     \t]\n    },\n    {\"productId\":2,\"purchasePrice\":1.5,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1}\n     \t]\n    },\n    {\"productId\":3,\"purchasePrice\":1.3,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n     \t]\n    }\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":40.0}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":47}\n    \n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/shipment/create"
+      },
+      "id": "ea663b09-e51a-41f2-b9c3-98a316b7ecd0",
+      "lastModified": "2018-05-14T16:54:28.489+06:00",
+      "name": "Shipment Create C:2 [ Total Paid ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
     {

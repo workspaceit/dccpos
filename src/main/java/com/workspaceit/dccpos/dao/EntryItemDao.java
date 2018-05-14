@@ -1,8 +1,12 @@
 package com.workspaceit.dccpos.dao;
 
 import com.workspaceit.dccpos.constant.accounting.ACCOUNTING_ENTRY;
+import com.workspaceit.dccpos.entity.accounting.Entry;
+import com.workspaceit.dccpos.entity.accounting.EntryItem;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class EntryItemDao extends BaseDao{
@@ -16,5 +20,12 @@ public class EntryItemDao extends BaseDao{
                 .uniqueResult();
         double count =(Double) ((sumAmount==null)?0d:sumAmount);
         return count;
+    }
+
+    public List<EntryItem> findByEntryId(int entryId){
+        Session session = this.getCurrentSession();
+        return session.createQuery("FROM EntryItem ei where ei.entry.id =:entryId ")
+                .setParameter("entryId",entryId)
+                .list();
     }
 }

@@ -3,12 +3,14 @@ package com.workspaceit.dccpos.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.workspaceit.dccpos.config.PersistenceConfig;
+import com.workspaceit.dccpos.constant.SHIPMENT_COST;
 import com.workspaceit.dccpos.entity.accounting.Entry;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -16,7 +18,7 @@ import java.util.Set;
 public class Shipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(name = "tracking_id")
     private String trackingId;
@@ -33,17 +35,10 @@ public class Shipment {
     @JoinColumn(name = "shipment_id",referencedColumnName = "id")
     private List<Inventory> inventories;
 
-    @Column(name = "cf_cost")
-    private double cfCost;
-
-    @Column(name = "carrying_cost")
-    private double carryingCost;
-
-    @Column(name = "labor_cost")
-    private double laborCost;
-
-    @Column(name = "other_cost")
-    private double otherCost;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "shipment_id",referencedColumnName = "id")
+    @MapKey(name = "name")
+    private Map<SHIPMENT_COST,ShipmentCost> costs;
 
 
     @Column(name = "total_quantity")
@@ -77,11 +72,11 @@ public class Shipment {
     private Date createdAt;
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -117,38 +112,13 @@ public class Shipment {
         this.inventories = inventories;
     }
 
-    public double getCfCost() {
-        return cfCost;
+    public Map<SHIPMENT_COST, ShipmentCost> getCosts() {
+        return costs;
     }
 
-    public void setCfCost(double cfCost) {
-        this.cfCost = cfCost;
+    public void setCosts(Map<SHIPMENT_COST, ShipmentCost> costs) {
+        this.costs = costs;
     }
-
-    public double getCarryingCost() {
-        return carryingCost;
-    }
-
-    public void setCarryingCost(double carryingCost) {
-        this.carryingCost = carryingCost;
-    }
-
-    public double getLaborCost() {
-        return laborCost;
-    }
-
-    public void setLaborCost(double laborCost) {
-        this.laborCost = laborCost;
-    }
-
-    public double getOtherCost() {
-        return otherCost;
-    }
-
-    public void setOtherCost(double otherCost) {
-        this.otherCost = otherCost;
-    }
-
 
     public int getTotalQuantity() {
         return totalQuantity;
@@ -223,10 +193,6 @@ public class Shipment {
         Shipment shipment = (Shipment) o;
 
         if (id != shipment.id) return false;
-        if (Double.compare(shipment.cfCost, cfCost) != 0) return false;
-        if (Double.compare(shipment.carryingCost, carryingCost) != 0) return false;
-        if (Double.compare(shipment.laborCost, laborCost) != 0) return false;
-        if (Double.compare(shipment.otherCost, otherCost) != 0) return false;
         if (totalQuantity != shipment.totalQuantity) return false;
         if (Double.compare(shipment.totalProductPrice, totalProductPrice) != 0) return false;
         if (Double.compare(shipment.totalCost, totalCost) != 0) return false;
@@ -235,6 +201,8 @@ public class Shipment {
         if (supplier != null ? !supplier.equals(shipment.supplier) : shipment.supplier != null) return false;
         if (entry != null ? !entry.equals(shipment.entry) : shipment.entry != null) return false;
         if (inventories != null ? !inventories.equals(shipment.inventories) : shipment.inventories != null)
+            return false;
+        if (costs != null ? !costs.equals(shipment.costs) : shipment.costs != null)
             return false;
         if (transactions != null ? !transactions.equals(shipment.transactions) : shipment.transactions != null)
             return false;
@@ -249,19 +217,12 @@ public class Shipment {
     public int hashCode() {
         int result;
         long temp;
-        result = id;
+        result = (int) (id ^ (id >>> 32));
         result = 31 * result + (trackingId != null ? trackingId.hashCode() : 0);
         result = 31 * result + (supplier != null ? supplier.hashCode() : 0);
         result = 31 * result + (entry != null ? entry.hashCode() : 0);
         result = 31 * result + (inventories != null ? inventories.hashCode() : 0);
-        temp = Double.doubleToLongBits(cfCost);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(carryingCost);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(laborCost);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(otherCost);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (costs != null ? costs.hashCode() : 0);
         result = 31 * result + totalQuantity;
         temp = Double.doubleToLongBits(totalProductPrice);
         result = 31 * result + (int) (temp ^ (temp >>> 32));

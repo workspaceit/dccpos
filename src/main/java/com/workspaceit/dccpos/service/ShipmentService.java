@@ -1,6 +1,7 @@
 package com.workspaceit.dccpos.service;
 
 import com.workspaceit.dccpos.constant.INVENTORY_ATTRS;
+import com.workspaceit.dccpos.constant.SHIPMENT_COST;
 import com.workspaceit.dccpos.dao.ShipmentDao;
 import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.exception.EntityNotFound;
@@ -12,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -23,6 +22,7 @@ public class ShipmentService {
 
     private SupplierService supplierService;
     private InventoryService inventoryService;
+    private ShipmentCostService shipmentCostService;
 
     @Autowired
     public void setShipmentDao(ShipmentDao shipmentDao) {
@@ -39,6 +39,11 @@ public class ShipmentService {
         this.supplierService = supplierService;
     }
 
+    @Autowired
+    public void setShipmentCostService(ShipmentCostService shipmentCostService) {
+        this.shipmentCostService = shipmentCostService;
+    }
+
     @Transactional
     public Shipment getByShipment(int id) throws EntityNotFound {
         Shipment shipment =  this.shipmentDao.findById(id);
@@ -47,7 +52,14 @@ public class ShipmentService {
         return shipment;
     }
 
-
+    @Transactional
+    public long getMaxId(){
+        return this.shipmentDao.findMaxId(Shipment.class);
+    }
+    @Transactional
+    public long getMinId(){
+        return this.shipmentDao.findMinId(Shipment.class);
+    }
     @Transactional
     public List<Shipment> getAll(int limit, int offset){
         offset = (offset-1)*limit;
@@ -88,7 +100,7 @@ public class ShipmentService {
         return this.shipmentDao.findCountOfAllByDate(fromDate,toDate);
     }
     @Transactional
-    public Shipment getById(int id){
+    public Shipment getById(long id){
         return this.shipmentDao.findById(id);
     }
     @Transactional
@@ -108,20 +120,25 @@ public class ShipmentService {
         double totalCost = this.getTotalCost(shipmentCreateForm);
         double totalPaid = 0;
 
+        Map<SHIPMENT_COST,ShipmentCost> shipmentCosts = new HashMap<>();
+
+
+        shipmentCosts.put(SHIPMENT_COST.CARRYING,new ShipmentCost(SHIPMENT_COST.CARRYING,carryingCost));
+        shipmentCosts.put(SHIPMENT_COST.CF,new ShipmentCost(SHIPMENT_COST.CF,cfCost));
+        shipmentCosts.put(SHIPMENT_COST.LABOR,new ShipmentCost(SHIPMENT_COST.LABOR,laborCost));
+        shipmentCosts.put(SHIPMENT_COST.OTHERS,new ShipmentCost(SHIPMENT_COST.OTHERS,otherCost));
+
         /**
          * Create Inventory
          * */
         List<Inventory> inventories = this.inventoryService.create(purchaseForm.getInventories());
+        this.shipmentCostService.create(null,shipmentCosts);
         Map<INVENTORY_ATTRS,Double> priceCostMap = this.inventoryService.getTotalProductPriceAndQuantity(inventories);
+
 
         Shipment shipment = new Shipment();
 
         shipment.setSupplier(supplier);
-
-        shipment.setCarryingCost(carryingCost);
-        shipment.setCfCost(cfCost);
-        shipment.setLaborCost(laborCost);
-        shipment.setOtherCost(otherCost);
 
         shipment.setInventories(inventories);
 
@@ -135,6 +152,11 @@ public class ShipmentService {
 
         this.save(shipment);
 
+
+
+
+        shipment.setCosts(shipmentCosts);
+
         String trackingId = TrackingIdGenerator.getShipmentTrackingId(shipment.getId());
 
         shipment.setTrackingId(trackingId);
@@ -142,17 +164,20 @@ public class ShipmentService {
         this.update(shipment);
 
 
-
+        shipment = this.getById(shipment.getId());
 
         return shipment;
     }
 
-    public double getTotalCost(Shipment shipment){
+    public double getTotalCost( Map<SHIPMENT_COST,ShipmentCost> costs){
         double totalCost = 0;
-        totalCost += shipment.getCarryingCost();
-        totalCost += shipment.getCfCost();
-        totalCost += shipment.getLaborCost();
-        totalCost += shipment.getTotalProductPrice();
+
+        Set<SHIPMENT_COST> keySet =  costs.keySet();
+        for(SHIPMENT_COST key :keySet){
+            System.out.println(costs.get(key).getId()+" "+  totalCost+" " +costs.get(key).getAmount());
+            totalCost += costs.get(key).getAmount();
+        }
+
 
         return totalCost;
     }

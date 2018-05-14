@@ -1,6 +1,8 @@
 package com.workspaceit.dccpos.aop.service;
 
 
+import com.workspaceit.dccpos.constant.accounting.ACCOUNTING_ENTRY;
+import com.workspaceit.dccpos.constant.accounting.GROUP_CODE;
 import com.workspaceit.dccpos.entity.Shipment;
 import com.workspaceit.dccpos.entity.accounting.Entry;
 import com.workspaceit.dccpos.entity.accounting.EntryItem;
@@ -60,8 +62,10 @@ public class EntryServiceAop {
         /**
          * Shipment related Accounting entry
          * */
-        Entry  entry = entryService.createShipmentEntry(shipment,purchaseForm);
+        Entry  entry = this.entryService.createShipmentEntry(shipment,purchaseForm);
+        double paidAmount = this.entryService.getTotalEntryItemsAmount(entry, GROUP_CODE.ASSET, ACCOUNTING_ENTRY.CR);
 
+        shipment.setTotalPaid(paidAmount);
         shipment.setEntry(entry);
         this.shipmentService.update(shipment);
 

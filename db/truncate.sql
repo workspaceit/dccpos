@@ -35,6 +35,7 @@ SET FOREIGN_KEY_CHECKS =1;
 
 /* Purchase */
 SET FOREIGN_KEY_CHECKS =0;
+TRUNCATE TABLE `shipment_cost`;
 TRUNCATE TABLE `shipment`;
 TRUNCATE TABLE `inventory`;
 TRUNCATE TABLE `inventory_details`;

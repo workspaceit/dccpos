@@ -88,4 +88,14 @@ public class BaseDao {
         long count =(Long)this.getCurrentSession().createQuery("select count(id) from "+entityName).uniqueResult();
         return count;
     }
+    public long findMaxId(Class<?> cls){
+        String entityName = cls.getSimpleName();
+        long count =(Long)this.getCurrentSession().createQuery("select max(id) from "+entityName).uniqueResult();
+        return count;
+    }
+    public long findMinId(Class<?> cls){
+        String entityName = cls.getSimpleName();
+        long count =(Long)this.getCurrentSession().createQuery("select min(id) from "+entityName).uniqueResult();
+        return count;
+    }
 }

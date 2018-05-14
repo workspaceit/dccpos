@@ -18,7 +18,7 @@ public class EntryItem {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn( name = "entry_id",referencedColumnName = "id")
+    @JoinColumn( name = "entry_id",referencedColumnName = "id",nullable = false)
     private Entry entry;
 
     @ManyToOne

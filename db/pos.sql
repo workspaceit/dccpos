@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 01, 2018 at 01:02 PM
+-- Generation Time: May 14, 2018 at 12:15 PM
 -- Server version: 5.6.39
 -- PHP Version: 5.5.9-1ubuntu4.24
 
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   KEY `personal_info_id` (`personal_info_id`),
   KEY `company_id` (`company_id`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=179 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=202 ;
 
 --
 -- Dumping data for table `acc_ledgers`
@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `acess_role` (
 --
 
 INSERT INTO `acess_role` (`id`, `auth_credential_id`, `role`, `created_at`) VALUES
-  (1, 1, 'POS_OPERATOR', '2018-04-30 11:09:53');
+  (1, 1, 'ALL', '2018-05-03 06:19:45');
 
 -- --------------------------------------------------------
 
@@ -324,7 +324,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
 --
 
 INSERT INTO `employee` (`id`, `personal_info_id`, `employee_id`, `type`, `salary`, `created_at`) VALUES
-  (1, 1, '1231', 'OFFICER', 125.00, '2018-04-20 12:26:10');
+  (1, 1, '1231', 'ADMIN', 125.00, '2018-04-20 12:26:10');
 
 -- --------------------------------------------------------
 
@@ -333,8 +333,8 @@ INSERT INTO `employee` (`id`, `personal_info_id`, `employee_id`, `type`, `salary
 --
 
 CREATE TABLE IF NOT EXISTS `inventory` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) NOT NULL,
+  `id` bigint(22) unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) unsigned NOT NULL,
   `shipment_id` int(11) DEFAULT NULL,
   `purchase_price` decimal(7,2) NOT NULL,
   `purchase_quantity` int(11) NOT NULL,
@@ -353,7 +353,7 @@ CREATE TABLE IF NOT EXISTS `inventory` (
 --
 
 CREATE TABLE IF NOT EXISTS `inventory_details` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(22) unsigned NOT NULL AUTO_INCREMENT,
   `inventory_id` int(11) DEFAULT NULL COMMENT 'Keep it for Hibernate sake',
   `selling_price` decimal(25,2) NOT NULL,
   `purchased_quantity` int(11) NOT NULL,
@@ -398,7 +398,7 @@ INSERT INTO `personal_information` (`id`, `address_id`, `full_name`, `dob`, `ema
 --
 
 CREATE TABLE IF NOT EXISTS `product` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `category_id` int(11) DEFAULT NULL,
   `name` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `weight` int(11) NOT NULL,
@@ -406,6 +406,10 @@ CREATE TABLE IF NOT EXISTS `product` (
   `image` varchar(500) DEFAULT NULL,
   `barcode` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `total_available_quantity` int(11) NOT NULL,
+  `good_quantity` int(11) NOT NULL,
+  `damaged_quantity` int(11) NOT NULL,
+  `min_price` decimal(10,2) NOT NULL,
+  `max_price` decimal(10,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`,`barcode`),
@@ -433,18 +437,74 @@ CREATE TABLE IF NOT EXISTS `reset_password_tokens` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sale`
+--
+
+CREATE TABLE IF NOT EXISTS `sale` (
+  `id` bigint(22) unsigned NOT NULL AUTO_INCREMENT,
+  `employee_id` int(11) NOT NULL,
+  `wholesaler_id` int(11) DEFAULT NULL,
+  `personal_info_id` int(11) DEFAULT NULL,
+  `type` enum('WHOLESALE','CONSUMER_SALE') COLLATE utf8_unicode_ci NOT NULL,
+  `discount` decimal(10,2) NOT NULL,
+  `vat` decimal(10,2) NOT NULL,
+  `total_quantity` int(11) NOT NULL,
+  `total_returned_quantity` int(11) NOT NULL,
+  `total_price` int(11) NOT NULL,
+  `total_due` int(11) NOT NULL,
+  `total_receive` int(11) NOT NULL,
+  `total_refund_amount` decimal(15,2) NOT NULL,
+  `total_refund_amount_paid` decimal(15,2) NOT NULL,
+  `total_refund_amount_due` decimal(15,2) NOT NULL,
+  `note` text COLLATE utf8_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `employee_id` (`employee_id`,`wholesaler_id`,`personal_info_id`),
+  KEY `FK6nqj154o9mxav10de4u7ev503` (`personal_info_id`),
+  KEY `FKdj452u4gk4l32ps4ykvyhmwuu` (`wholesaler_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `sale`
+--
+
+INSERT INTO `sale` (`id`, `employee_id`, `wholesaler_id`, `personal_info_id`, `type`, `discount`, `vat`, `total_quantity`, `total_returned_quantity`, `total_price`, `total_due`, `total_receive`, `total_refund_amount`, `total_refund_amount_paid`, `total_refund_amount_due`, `note`, `date`, `created_at`) VALUES
+  (7, 1, NULL, NULL, 'WHOLESALE', 12.00, 4.00, 4, 0, 13, 41, 1, 4.00, 12.00, 1.00, 'Illegal Weapon sold ', '2018-05-04', '2018-05-04 10:52:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sale_details`
+--
+
+CREATE TABLE IF NOT EXISTS `sale_details` (
+  `id` bigint(22) unsigned NOT NULL AUTO_INCREMENT,
+  `sale_id` bigint(22) unsigned NOT NULL,
+  `inventory_id` bigint(11) unsigned NOT NULL,
+  `inventory_details_id` bigint(11) unsigned NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `per_quantity_price` int(11) NOT NULL,
+  `total_price` int(11) NOT NULL,
+  `product_condition` enum('GOOD','DAMAGED') COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `inventory_id` (`inventory_id`,`inventory_details_id`),
+  KEY `FKe11gnna4yk9o8ihe8wnnevnv` (`inventory_details_id`),
+  KEY `FKpr45fadb9iki1w3rtbtj3q1tu` (`sale_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `shipment`
 --
 
 CREATE TABLE IF NOT EXISTS `shipment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(22) unsigned NOT NULL AUTO_INCREMENT,
   `tracking_id` varchar(100) DEFAULT NULL,
   `supplier_id` int(11) NOT NULL,
   `entry_id` int(11) DEFAULT NULL,
-  `cf_cost` int(11) NOT NULL,
-  `carrying_cost` int(11) NOT NULL,
-  `labor_cost` int(11) NOT NULL,
-  `other_cost` int(11) NOT NULL,
   `total_quantity` int(11) NOT NULL,
   `total_product_price` decimal(25,2) NOT NULL,
   `total_cost` decimal(25,2) NOT NULL,
@@ -456,6 +516,36 @@ CREATE TABLE IF NOT EXISTS `shipment` (
   KEY `supplier_id` (`supplier_id`),
   KEY `entry_id` (`entry_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shipment_cost`
+--
+
+CREATE TABLE IF NOT EXISTS `shipment_cost` (
+  `id` bigint(30) unsigned NOT NULL AUTO_INCREMENT,
+  `shipment_id` bigint(22) unsigned NOT NULL,
+  `name` enum('CF','LABOR','CARRYING','OTHERS') COLLATE utf8_unicode_ci NOT NULL,
+  `amount` decimal(8,2) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `shipment_id` (`shipment_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `shipment_cost`
+--
+
+INSERT INTO `shipment_cost` (`id`, `shipment_id`, `name`, `amount`, `created_at`) VALUES
+  (1, 1, 'CARRYING', 25.00, '2018-05-14 12:09:32'),
+  (2, 1, 'CF', 0.30, '2018-05-14 12:09:32'),
+  (3, 1, 'LABOR', 20.00, '2018-05-14 12:09:32'),
+  (4, 1, 'OTHERS', 2.00, '2018-05-14 12:09:32'),
+  (5, 1, 'CARRYING', 25.00, '2018-05-14 12:11:28'),
+  (6, 1, 'CF', 0.30, '2018-05-14 12:11:28'),
+  (7, 1, 'LABOR', 20.00, '2018-05-14 12:11:28'),
+  (8, 1, 'OTHERS', 2.00, '2018-05-14 12:11:28');
 
 -- --------------------------------------------------------
 
@@ -555,7 +645,7 @@ INSERT INTO `temp_file` (`id`, `token`, `path`, `file_name`, `created_date`) VAL
 CREATE TABLE IF NOT EXISTS `wholesaler` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `company_id` int(11) NOT NULL,
-  `wholesaler_id` varchar(200) NOT NULL,
+  `wholesaler_id` varchar(200) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_info_id` (`company_id`)
@@ -576,7 +666,8 @@ ALTER TABLE `acc_entries`
 -- Constraints for table `acc_entry_items`
 --
 ALTER TABLE `acc_entry_items`
-  ADD CONSTRAINT `FKsktxpw9rj3098v6icvo480t87` FOREIGN KEY (`created_by`) REFERENCES `employee` (`id`);
+  ADD CONSTRAINT `FKsktxpw9rj3098v6icvo480t87` FOREIGN KEY (`created_by`) REFERENCES `employee` (`id`),
+  ADD CONSTRAINT `FKt6w8e3lqgl6v1gvmuxalw34jw` FOREIGN KEY (`entry_id`) REFERENCES `acc_entries` (`id`);
 
 --
 -- Constraints for table `acc_groups`
@@ -624,16 +715,49 @@ ALTER TABLE `employee`
   ADD CONSTRAINT `FKmdcbaythf5rppp1014vitdkfy` FOREIGN KEY (`personal_info_id`) REFERENCES `personal_information` (`id`);
 
 --
+-- Constraints for table `inventory`
+--
+ALTER TABLE `inventory`
+  ADD CONSTRAINT `FKh3ehafvio66j1lpqcafgwxv8t` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
+
+--
 -- Constraints for table `personal_information`
 --
 ALTER TABLE `personal_information`
   ADD CONSTRAINT `FKe3ip0abhdip6wyyg4clupqqjn` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`);
 
 --
+-- Constraints for table `product`
+--
+ALTER TABLE `product`
+  ADD CONSTRAINT `FK7l29ekt1x29jup80y2iigimyy` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
+
+--
 -- Constraints for table `reset_password_tokens`
 --
 ALTER TABLE `reset_password_tokens`
   ADD CONSTRAINT `FKiccgrrjc4a92ycy0xa4sh7kt6` FOREIGN KEY (`auth_credential_id`) REFERENCES `auth_credential` (`id`);
+
+--
+-- Constraints for table `sale`
+--
+ALTER TABLE `sale`
+  ADD CONSTRAINT `FK6nqj154o9mxav10de4u7ev503` FOREIGN KEY (`personal_info_id`) REFERENCES `personal_information` (`id`),
+  ADD CONSTRAINT `FKdj452u4gk4l32ps4ykvyhmwuu` FOREIGN KEY (`wholesaler_id`) REFERENCES `wholesaler` (`id`);
+
+--
+-- Constraints for table `sale_details`
+--
+ALTER TABLE `sale_details`
+  ADD CONSTRAINT `FK3jvsrkpijom28pctq6req8rg` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`id`),
+  ADD CONSTRAINT `FKe11gnna4yk9o8ihe8wnnevnv` FOREIGN KEY (`inventory_details_id`) REFERENCES `inventory_details` (`id`),
+  ADD CONSTRAINT `FKpr45fadb9iki1w3rtbtj3q1tu` FOREIGN KEY (`sale_id`) REFERENCES `sale` (`id`);
+
+--
+-- Constraints for table `shipment`
+--
+ALTER TABLE `shipment`
+  ADD CONSTRAINT `FK3pbvgdjjxofi2bbc2hgdmhqp5` FOREIGN KEY (`supplier_id`) REFERENCES `supplier` (`id`);
 
 --
 -- Constraints for table `supplier`
@@ -646,7 +770,8 @@ ALTER TABLE `supplier`
 -- Constraints for table `wholesaler`
 --
 ALTER TABLE `wholesaler`
-  ADD CONSTRAINT `FKd20x0cu4drcgrxl8fhpaygu0n` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`);
+  ADD CONSTRAINT `FKd20x0cu4drcgrxl8fhpaygu0n` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
+  ADD CONSTRAINT `FKedhhainwbrpoybvjym0f05n81` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

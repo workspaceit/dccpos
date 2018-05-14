@@ -15,4 +15,6 @@ public class EntryDao extends BaseDao {
         return session.createQuery("FROM Entry")
                 .list();
     }
+
+
 }

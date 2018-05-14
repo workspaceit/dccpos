@@ -29,8 +29,9 @@ public class LedgerServiceAop {
      * Only Payment and receipt
      * */
     @AfterReturning(pointcut = "execution(* com.workspaceit.dccpos.service.accounting.EntryService.createPaymentEntry(..))" +
-                           " || execution(* com.workspaceit.dccpos.service.accounting.EntryService.createReceiptEntry(..))",returning="entryObj")
-    public void create(JoinPoint joinPoint,Object entryObj) {
+                           " || execution(* com.workspaceit.dccpos.service.accounting.EntryService.createReceiptEntry(..))" +
+                           "  || execution(* com.workspaceit.dccpos.service.accounting.EntryService.createInvestmentEntry(..))",returning="entryObj")
+    public void currentBalanceCalculation(JoinPoint joinPoint,Object entryObj) {
         System.out.println("APO");
 
         Entry entry = null;

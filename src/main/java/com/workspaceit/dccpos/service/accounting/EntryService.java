@@ -30,7 +30,7 @@ public class EntryService {
     private EntryDao entryDao;
     private LedgerService ledgerService;
     private EntryTypeService entryTypeService;
-
+    private EntryItemService entryItemService;
 
     @Autowired
     public void setEntryDao(EntryDao entryDao) {
@@ -44,11 +44,18 @@ public class EntryService {
     public void setEntryTypeService(EntryTypeService entryTypeService) {
         this.entryTypeService = entryTypeService;
     }
+    @Autowired
+    public void setEntryItemService(EntryItemService entryItemService) {
+        this.entryItemService = entryItemService;
+    }
 
     @Transactional
     public List<Entry> getByDate(Date startDate, Date endDate){
         return this.entryDao.findByDate(null,null);
     }
+
+
+
 
     @Transactional(rollbackFor = Exception.class)
     public Entry createShipmentEntry(Shipment shipment, PurchaseForm purchaseForm) throws EntityNotFound {
@@ -73,10 +80,9 @@ public class EntryService {
         entry.setCrTotal(totalEntryDcAmount);
         entry.setEntryType(entryType);
         entry.setCreatedBy(shipment.getPurchasedBy());
-        entry.setEntryItems(entryItems);
         entry.setDate(shipment.getPurchasedDate());
         entry.setNarration("Purchased  product");
-
+        this.save(entry);
 
 
         /**
@@ -166,8 +172,8 @@ public class EntryService {
         }
 
 
-        this.save(entry);
-
+        this.entryItemService.saveAll(entry,entryItems);
+        entry.setEntryItems(entryItems);
 
         return entry;
 
@@ -207,15 +213,17 @@ public class EntryService {
         entry.setCrTotal(totalInvestment);
         entry.setEntryType(entryType);
         entry.setCreatedBy(employee);
-        entry.setEntryItems(entryItems);
         entry.setDate(investmentForm.getDate());
         entry.setNarration(investmentForm.getNarration());
+        this.save(entry);
 
         EntryItem entryOwnerInvestment = this.getEntryItem(totalInvestment,ownersLedgerLedger,ACCOUNTING_ENTRY.CR);
         entryItems.add(entryOwnerInvestment);
 
+        this.entryItemService.saveAll(entry,entryItems);
+        entry.setEntryItems(entryItems);
 
-        return this.save(entry);
+        return entry;
     }
     private Entry createPaymentOrReceiveEntry(Employee employee, TransactionForm transactionForm,ENTRY_TYPES _EntryType) throws EntityNotFound {
 
@@ -247,9 +255,9 @@ public class EntryService {
         entry.setCrTotal(totalEntryDcAmount);
         entry.setEntryType(entryType);
         entry.setCreatedBy(employee);
-        entry.setEntryItems(entryItems);
         entry.setDate(transactionForm.getDate());
         entry.setNarration(transactionForm.getNarration());
+        this.save(entry);
 
         Ledger beneficialLedger = this.ledgerService.getLedger(beneficialForm.getLedgerId());
 
@@ -269,9 +277,10 @@ public class EntryService {
         }
 
 
-        this.save(entry);
 
 
+        this.entryItemService.saveAll(entry,entryItems);
+        entry.setEntryItems(entryItems);
         return entry;
 
     }
@@ -321,5 +330,17 @@ public class EntryService {
         this.entryDao.save(entry);
 
         return entry;
+    }
+    public double getTotalEntryItemsAmount(Entry entry,GROUP_CODE groupCode,ACCOUNTING_ENTRY accountingEntry){
+      List<EntryItem> entryItems =   entry.getEntryItems();
+      if(entryItems==null || entryItems.size()==0){
+          entryItems = this.entryItemService.getByEntryId(entry.getId());
+      }
+
+        return entryItems.stream().filter(
+                ei->( ei.getLedger().getGroupAccount().getCode().equals(groupCode)
+                        && ei.getAccountingEntry().equals(accountingEntry)
+                    ) ).mapToDouble(ei->ei.getAmount()).sum();
+
     }
 }
