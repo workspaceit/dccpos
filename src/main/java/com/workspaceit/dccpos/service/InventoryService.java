@@ -1,11 +1,11 @@
 package com.workspaceit.dccpos.service;
 
 import com.workspaceit.dccpos.constant.INVENTORY_ATTRS;
-import com.workspaceit.dccpos.constant.INVENTORY_STATUS;
+import com.workspaceit.dccpos.constant.INVENTORY_CYCLE;
+import com.workspaceit.dccpos.constant.STOCK_STATUS;
 import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
 import com.workspaceit.dccpos.dao.InventoryDao;
 import com.workspaceit.dccpos.entity.Inventory;
-import com.workspaceit.dccpos.entity.InventoryDetails;
 import com.workspaceit.dccpos.entity.Product;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.validation.form.inventory.InventoryCreateFrom;
@@ -39,17 +39,20 @@ public class InventoryService {
     public void setInventoryDetailsService(InventoryDetailsService inventoryDetailsService) {
         this.inventoryDetailsService = inventoryDetailsService;
     }
+    @Transactional
+    public List<Inventory> getInStockByProductId(int productId) {
+        return this.inventoryDao.findByProductIdAndStockStatus(productId,STOCK_STATUS.IN_STOCK);
+    }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<Inventory> create(InventoryCreateFrom[] inventoryFroms) throws EntityNotFound {
         List<Inventory> inventories = new ArrayList<>();
         for(InventoryCreateFrom inventoryFrom:inventoryFroms){
-            List<InventoryDetails>  detailsList =  this.inventoryDetailsService.create(inventoryFrom.getDetails());
 
-            int totalQuantity = this.inventoryDetailsService.getTotalPurchasedQuantity(detailsList);
+            int totalQuantity = inventoryFrom.getPurchaseQuantity();
 
             Inventory inventory = this.getFromCreateFrom(inventoryFrom);
             inventories.add(inventory);
-            inventory.setInventoryDetails(detailsList);
             inventory.setPurchaseQuantity(totalQuantity);
             inventory.setAvailableQuantity(totalQuantity);
 
@@ -90,19 +93,20 @@ public class InventoryService {
         inventory.setProduct(product);
         inventory.setPurchasePrice(inventoryFrom.getPurchasePrice());
         inventory.setSoldQuantity(0);
-
+        inventory.setCondition(inventoryFrom.getStatus());
+        inventory.setSellingPrice(inventoryFrom.getSellingPrice());
         /**
          * Sum of Inventory details
          * */
         inventory.setPurchaseQuantity(0);
         inventory.setAvailableQuantity(0);
 
-        inventory.setStatus(INVENTORY_STATUS.IN_STOCK);
-
+        inventory.setStatus(STOCK_STATUS.IN_STOCK);
+        inventory.setInventoryCycle(INVENTORY_CYCLE.FROM_SUPPLIER);
         return inventory;
     }
 
-    private Inventory fetchByProductId(int productId, PRODUCT_CONDITION productCondition, List<Inventory> inventories){
+    private Inventory getByProductId(int productId, PRODUCT_CONDITION productCondition, List<Inventory> inventories){
         Optional<Inventory> optionalInventory = inventories.stream().filter(inventory -> {
            Product product =  inventory.getProduct();
            if(product==null)return false;
@@ -110,6 +114,40 @@ public class InventoryService {
            return ( product.getId() == productId);
         }).findFirst();
         return (optionalInventory.isPresent())?optionalInventory.get():null;
+    }
+    public double getMinSellingPrice(List<Inventory> inventories){
+
+
+        if(inventories==null)return 0d;
+
+        OptionalDouble min = inventories.stream()
+                .mapToDouble(
+                        inventoryDetails -> inventoryDetails.getSellingPrice()
+                ).min();
+
+        return min.isPresent()?min.getAsDouble():0d;
+    }
+    public double getMaxSellingPrice(List<Inventory> inventories){
+
+        if(inventories==null)return 0d;
+
+
+        OptionalDouble max = inventories.stream()
+                .mapToDouble(
+                        inventoryDetails -> inventoryDetails.getSellingPrice()
+                ).max();
+
+        return max.isPresent()?max.getAsDouble():0d;
+
+    }
+    public int getAvailableQuantity(List<Inventory> inventories, PRODUCT_CONDITION productCondition){
+
+        if(inventories==null)return 0;
+
+        return inventories.stream().filter(
+                inventory ->inventory.getCondition().equals(productCondition)
+        ).mapToInt(inventory -> inventory.getAvailableQuantity()
+        ).sum();
     }
 
     private void save(Inventory inventoryDetails){
@@ -124,4 +162,5 @@ public class InventoryService {
     private void update(List<Inventory> inventoryDetailsList){
         this.inventoryDao.updateAll(inventoryDetailsList);
     }
+
 }

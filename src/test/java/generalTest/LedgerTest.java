@@ -1,4 +1,4 @@
-package serviceTest;
+package generalTest;
 
 import com.workspaceit.dccpos.config.WebConfig;
 import com.workspaceit.dccpos.dao.EntryItemDao;
@@ -24,7 +24,7 @@ import java.util.List;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebConfig.class})
-public class LedgerServiceTest extends BaseTest{
+public class LedgerTest extends BaseTest{
 
     private MockMvc mockMvc;
     private WebApplicationContext wac;

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,6 +23,7 @@ public class ProductService {
     private ProductDao productDao;
     private CategoryService categoryService;
     private TempFileService tempFileService;
+    private InventoryService inventoryService;
     private InventoryDetailsService inventoryDetailsService;
 
     @Autowired
@@ -38,6 +40,11 @@ public class ProductService {
     @Autowired
     public void setTempFileService(TempFileService tempFileService) {
         this.tempFileService = tempFileService;
+    }
+
+    @Autowired
+    public void setInventoryService(InventoryService inventoryService) {
+        this.inventoryService = inventoryService;
     }
 
     @Autowired
@@ -182,31 +189,35 @@ public class ProductService {
     }
     @Transactional(rollbackFor = Exception.class)
     public void resolveProductProperties(List<Inventory> inventories ){
-        for(Inventory inventory :inventories){
-            if(inventory==null)continue;
+        List<Product> products = this.getAll();
+        for(Product product :products){
+            List<Inventory> productInventories = inventories.stream()
+                    .filter(inventory -> inventory.getProduct().getId() == product.getId())
+                    .collect(Collectors.toList());
+            if(productInventories == null || productInventories.size() == 0 ){
+                continue;
+            }
 
-            Product product = inventory.getProduct();
+            int goodAvailableQuantity =  product.getGoodQuantity();
+            int damagedAvailableQuantity =  product.getDamagedQuantity();
 
-            if(product==null)continue;
+            double maxSellingPrice =  this.inventoryService.getMaxSellingPrice(productInventories);
+            double minSellingPrice =  this.inventoryService.getMinSellingPrice(productInventories);
+            goodAvailableQuantity +=  this.inventoryService.getAvailableQuantity(productInventories, PRODUCT_CONDITION.GOOD);
+            damagedAvailableQuantity +=  this.inventoryService.getAvailableQuantity(productInventories, PRODUCT_CONDITION.DAMAGED);
+            int totalQuantity = goodAvailableQuantity+damagedAvailableQuantity;
 
-            double maxSellingPrice =  this.inventoryDetailsService.getMaxSellingPrice(inventory);
-            double minSellingPrice =  this.inventoryDetailsService.getMinSellingPrice(inventory);
-            int goodAvailableQuantity =  this.inventoryDetailsService.getAvailableQuantity(inventory, PRODUCT_CONDITION.GOOD);
-            int damagedAvailableQuantity =  this.inventoryDetailsService.getAvailableQuantity(inventory, PRODUCT_CONDITION.DAMAGED);
-            int totalQuantity = 0;
 
-            totalQuantity += product.getTotalAvailableQuantity();
-            totalQuantity += inventory.getPurchaseQuantity();
-
-            product.setTotalAvailableQuantity(totalQuantity);
             product.setMaxPrice(maxSellingPrice);
             product.setMinPrice(minSellingPrice);
             product.setGoodQuantity(goodAvailableQuantity);
             product.setDamagedQuantity(damagedAvailableQuantity);
+            product.setTotalAvailableQuantity(totalQuantity);
 
 
             this.update(product);
         }
+
     }
     private void save(Product product){
         this.productDao.save(product);

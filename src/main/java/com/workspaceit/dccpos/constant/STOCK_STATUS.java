@@ -1,5 +1,5 @@
 package com.workspaceit.dccpos.constant;
 
-public enum  INVENTORY_STATUS {
+public enum STOCK_STATUS {
     IN_STOCK,SOLD_OUT
 }

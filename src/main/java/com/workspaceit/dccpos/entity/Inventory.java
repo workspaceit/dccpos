@@ -3,13 +3,14 @@ package com.workspaceit.dccpos.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.workspaceit.dccpos.constant.INVENTORY_STATUS;
+import com.workspaceit.dccpos.constant.INVENTORY_CYCLE;
+import com.workspaceit.dccpos.constant.STOCK_STATUS;
+import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
 import com.workspaceit.dccpos.jsonView.InventoryView;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "inventory")
@@ -20,10 +21,17 @@ public class Inventory {
     @JsonView(InventoryView.Basic.class)
     private int id;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    /*@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "inventory_id",referencedColumnName = "id",nullable = false)
     @JsonView(InventoryView.Summary.class)
-    private List<InventoryDetails> inventoryDetails;
+    private List<InventoryDetails> inventoryDetails;*/
+
+    @Column(name = "selling_price")
+    private double sellingPrice;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "condition")
+    private PRODUCT_CONDITION condition;
 
 
     //@JsonIgnore
@@ -56,9 +64,13 @@ public class Inventory {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     @JsonView(InventoryView.Basic.class)
-    private INVENTORY_STATUS status;
+    private STOCK_STATUS status;
 
 
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cycle")
+    private INVENTORY_CYCLE inventoryCycle;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -74,13 +86,13 @@ public class Inventory {
         this.id = id;
     }
 
-    public List<InventoryDetails> getInventoryDetails() {
+    /*public List<InventoryDetails> getInventoryDetails() {
         return inventoryDetails;
     }
 
     public void setInventoryDetails(List<InventoryDetails> inventoryDetails) {
         this.inventoryDetails = inventoryDetails;
-    }
+    }*/
 
     public Product getProduct() {
         return product;
@@ -132,14 +144,37 @@ public class Inventory {
 
 
 
-    public INVENTORY_STATUS getStatus() {
+    public STOCK_STATUS getStatus() {
         return status;
     }
 
-    public void setStatus(INVENTORY_STATUS status) {
+    public void setStatus(STOCK_STATUS status) {
         this.status = status;
     }
 
+    public double getSellingPrice() {
+        return sellingPrice;
+    }
+
+    public void setSellingPrice(double sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+
+    public PRODUCT_CONDITION getCondition() {
+        return condition;
+    }
+
+    public void setCondition(PRODUCT_CONDITION condition) {
+        this.condition = condition;
+    }
+
+    public INVENTORY_CYCLE getInventoryCycle() {
+        return inventoryCycle;
+    }
+
+    public void setInventoryCycle(INVENTORY_CYCLE inventoryCycle) {
+        this.inventoryCycle = inventoryCycle;
+    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -157,23 +192,28 @@ public class Inventory {
         Inventory inventory = (Inventory) o;
 
         if (id != inventory.id) return false;
+        if (Double.compare(inventory.sellingPrice, sellingPrice) != 0) return false;
         if (purchaseQuantity != inventory.purchaseQuantity) return false;
         if (soldQuantity != inventory.soldQuantity) return false;
         if (availableQuantity != inventory.availableQuantity) return false;
-        if (inventoryDetails != null ? !inventoryDetails.equals(inventory.inventoryDetails) : inventory.inventoryDetails != null)
-            return false;
+        if (condition != inventory.condition) return false;
         if (product != null ? !product.equals(inventory.product) : inventory.product != null) return false;
         if (shipment != null ? !shipment.equals(inventory.shipment) : inventory.shipment != null) return false;
         if (purchasePrice != null ? !purchasePrice.equals(inventory.purchasePrice) : inventory.purchasePrice != null)
             return false;
         if (status != inventory.status) return false;
+        if (inventoryCycle != inventory.inventoryCycle) return false;
         return createdAt != null ? createdAt.equals(inventory.createdAt) : inventory.createdAt == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (inventoryDetails != null ? inventoryDetails.hashCode() : 0);
+        int result;
+        long temp;
+        result = id;
+        temp = Double.doubleToLongBits(sellingPrice);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (condition != null ? condition.hashCode() : 0);
         result = 31 * result + (product != null ? product.hashCode() : 0);
         result = 31 * result + (shipment != null ? shipment.hashCode() : 0);
         result = 31 * result + (purchasePrice != null ? purchasePrice.hashCode() : 0);
@@ -181,6 +221,7 @@ public class Inventory {
         result = 31 * result + soldQuantity;
         result = 31 * result + availableQuantity;
         result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (inventoryCycle != null ? inventoryCycle.hashCode() : 0);
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;
     }

@@ -1,11 +1,11 @@
-package serviceTest;
+package generalTest;
 
 import com.workspaceit.dccpos.config.WebConfig;
-import org.junit.Assert;
 import com.workspaceit.dccpos.entity.Shipment;
 import com.workspaceit.dccpos.helper.FormToNameValuePair;
 import com.workspaceit.dccpos.service.ShipmentService;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,7 @@ import java.util.List;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebConfig.class})
-public class ShipmentServiceTest extends BaseTest {
+public class ShipmentTest extends BaseTest {
     private MockMvc mockMvc;
     private WebApplicationContext wac;
     private FormToNameValuePair formToNameValuePair;
@@ -82,7 +82,6 @@ public class ShipmentServiceTest extends BaseTest {
         for(  Shipment shipment :this.shipments){
             double totalCost = shipment.getTotalCost();
             double sumOfAllCost =  this.shipmentService.getTotalCost(shipment.getCosts());
-            System.out.println(shipment.getTrackingId()+" Total cost miss matched "+totalCost+" "+sumOfAllCost);
             Assert.assertEquals(shipment.getTrackingId()+" Total cost miss matched",totalCost,sumOfAllCost,0);
         }
 

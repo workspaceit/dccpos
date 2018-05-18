@@ -29,15 +29,15 @@ public class PurchasePaymentValidator {
     public void validateAccountPayment(String prefix, LedgerEntryForm[] accountPaymentForms, Errors errors){
         for(int i=0;i<accountPaymentForms.length;i++){
             LedgerEntryForm accountPaymentForm =  accountPaymentForms[i];
-            validateAccountPayment(prefix, accountPaymentForm,i, errors);
+            validateAccountPayment(prefix+"["+i+"]", accountPaymentForm, errors);
         }
     }
-    public void validateAccountPayment(String prefix, LedgerEntryForm accountPaymentForm,int i, Errors errors){
+    public void validateAccountPayment(String prefix, LedgerEntryForm accountPaymentForm, Errors errors){
             if(accountPaymentForm==null ){
                 return;
             }
-            String ledgerFieldName = ValidationHelper.preparePrefix(prefix+"["+i+"]")+"ledgerId";
-            String amountFieldName = ValidationHelper.preparePrefix(prefix+"["+i+"]")+"amount";
+            String ledgerFieldName = ValidationHelper.preparePrefix(prefix)+"ledgerId";
+            String amountFieldName = ValidationHelper.preparePrefix(prefix)+"amount";
 
             Integer ledgerId = accountPaymentForm.getLedgerId();
             double amount = accountPaymentForm.getAmount();
@@ -67,5 +67,6 @@ public class PurchasePaymentValidator {
 
 
     }
+
 
 }

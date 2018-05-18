@@ -32,7 +32,7 @@ public class InventoryValidator {
                 this.validateProduct(tmpPrefix,inventoryFrom.getProductId(),errors);
             }
         }
-        this.validateDuplicateProductId(prefix,inventoryFroms,errors);
+       // this.validateDuplicateProductId(prefix,inventoryFroms,errors);
     }
 
     private void validateProduct(String prefix,Integer productId,Errors errors){

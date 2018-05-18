@@ -32,7 +32,7 @@ public class PurchaseValidator {
         this.shipmentValidator.validate("shipment",purchaseForm.getShipment(),errors);
         this.inventoryValidator.validate("inventories",purchaseForm.getInventories(),errors);
         this.purchasePaymentValidator.validate("productPricePaymentAccount",purchaseForm.getProductPricePaymentAccount(),errors);
-        this.purchasePaymentValidator.validateAccountPayment("shippingCostPaymentAccount",purchaseForm.getShippingCostPaymentAccount(),0,errors);
+        this.purchasePaymentValidator.validateAccountPayment("shippingCostPaymentAccount",purchaseForm.getShippingCostPaymentAccount(),errors);
     }
 
 }
