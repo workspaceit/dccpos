@@ -1,11 +1,13 @@
 package com.workspaceit.dccpos.validation.form.shipment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.workspaceit.dccpos.constant.SHIPMENT_COST;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShipmentForm {
@@ -17,10 +19,7 @@ public class ShipmentForm {
     @Min(value = 1,message = "Supplier Required")
     private Integer supplierId;
 
-    private Double cfCost;
-    private Double carryingCost;
-    private Double laborCost;
-    private Double otherCost;
+    private Map<SHIPMENT_COST,Double> cost;
 
     /**
      * Receive Timestamp in milliseconds
@@ -45,36 +44,12 @@ public class ShipmentForm {
         this.supplierId = supplierId;
     }
 
-    public Double getCfCost() {
-        return cfCost;
+    public Map<SHIPMENT_COST, Double> getCost() {
+        return cost;
     }
 
-    public void setCfCost(Double cfCost) {
-        this.cfCost = cfCost;
-    }
-
-    public Double getCarryingCost() {
-        return carryingCost;
-    }
-
-    public void setCarryingCost(Double carryingCost) {
-        this.carryingCost = carryingCost;
-    }
-
-    public Double getLaborCost() {
-        return laborCost;
-    }
-
-    public void setLaborCost(Double laborCost) {
-        this.laborCost = laborCost;
-    }
-
-    public Double getOtherCost() {
-        return otherCost;
-    }
-
-    public void setOtherCost(Double otherCost) {
-        this.otherCost = otherCost;
+    public void setCost(Map<SHIPMENT_COST, Double> cost) {
+        this.cost = cost;
     }
 
     public Date getPurchaseDate() {
@@ -90,10 +65,7 @@ public class ShipmentForm {
         return "ShipmentForm{" +
                 "trackingId='" + trackingId + '\'' +
                 ", supplierId=" + supplierId +
-                ", cfCost=" + cfCost +
-                ", carryingCost=" + carryingCost +
-                ", laborCost=" + laborCost +
-                ", otherCost=" + otherCost +
+                ", cost=" + cost +
                 ", purchaseDate=" + purchaseDate +
                 '}';
     }

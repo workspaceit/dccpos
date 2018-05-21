@@ -44,3 +44,9 @@ TRUNCATE TABLE `acc_entry_items`;
 
 
 SET FOREIGN_KEY_CHECKS =1;
+
+/*Temp FIle Remove*/
+SET FOREIGN_KEY_CHECKS =0;
+DELETE from  `temp_file` where id>1;
+ALTER TABLE `temp_file` AUTO_INCREMENT = 2;
+SET FOREIGN_KEY_CHECKS =1;

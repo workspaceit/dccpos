@@ -73,12 +73,18 @@ public class ProductTest extends BaseTest {
             double goodQuantity = this.inventoryService.getAvailableQuantity(inventories, PRODUCT_CONDITION.GOOD);
             double damagedQuantity = this.inventoryService.getAvailableQuantity(inventories, PRODUCT_CONDITION.DAMAGED);
 
-            System.out.println(product.getName()+" Total cost min selling price "+minSellingPrice+" "+product.getMinPrice()+" "+0);
-
             Assert.assertEquals(product.getName()+" Total cost min selling price ",minSellingPrice,product.getMinPrice(),0);
             Assert.assertEquals(product.getName()+" Total cost max selling price ",maxSellingPrice,product.getMaxPrice(),0);
             Assert.assertEquals(product.getName()+" Total good quantity ",goodQuantity,product.getGoodQuantity(),0);
             Assert.assertEquals(product.getName()+" Total damage quantity ",damagedQuantity,product.getDamagedQuantity(),0);
+
+            for(Inventory inventory : inventories ){
+                int expectedQuantity = inventory.getAvailableQuantity()+inventory.getSoldQuantity();;
+                int purchasedQuantity = inventory.getPurchaseQuantity();
+
+                Assert.assertEquals(product.getName()+" Quantity mismatched ",expectedQuantity,purchasedQuantity,0);
+
+            }
 
         }
 

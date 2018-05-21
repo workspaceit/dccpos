@@ -82,7 +82,17 @@ public class ShipmentTest extends BaseTest {
         for(  Shipment shipment :this.shipments){
             double totalCost = shipment.getTotalCost();
             double sumOfAllCost =  this.shipmentService.getTotalCost(shipment.getCosts());
-            Assert.assertEquals(shipment.getTrackingId()+" Total cost miss matched",totalCost,sumOfAllCost,0);
+            Assert.assertEquals(shipment.getTrackingId()+": Total cost miss matched",totalCost,sumOfAllCost,0);
+        }
+
+    }
+    @Test
+    @Transactional
+    public void paymentTest(){
+        for(  Shipment shipment :this.shipments){
+            double expectedPayment =  shipment.getTotalCost()+shipment.getTotalProductPrice();
+            double paidAmount =  shipment.getTotalPaid();
+            Assert.assertTrue(shipment.getTrackingId()+": Payment is greater then sum of price and cost",expectedPayment>=paidAmount);
         }
 
     }

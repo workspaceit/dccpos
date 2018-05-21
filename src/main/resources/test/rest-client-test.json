@@ -6,7 +6,7 @@
       "type": "Project",
       "description": "",
       "id": "c4226841-a12e-441a-b046-9b49f4080e2d",
-      "lastModified": "2018-05-14T18:07:32.796+06:00",
+      "lastModified": "2018-05-21T13:50:48.210+06:00",
       "name": "POS"
     },
     {
@@ -21,7 +21,7 @@
       "type": "Scenario",
       "description": "",
       "id": "28508267-c995-4a6a-9e04-19a0c55423ca",
-      "lastModified": "2018-05-14T18:07:32.797+06:00",
+      "lastModified": "2018-05-21T12:31:33.571+06:00",
       "name": "Endpoints",
       "requestOrder": [
         "AUTHENTICATION",
@@ -84,7 +84,9 @@
         "Ledger Expense",
         "Wholesaler-Update 1",
         "Shipment Create C:3 [Total Due]",
-        "Shipment Create C:2 [ Total Paid ]"
+        "Shipment Create C:2 [ Full Paid ]",
+        "Shipment Create C:2 [ Insufficient Balance]",
+        "Shipment Create C:3 [ Paid Amount greater ] "
       ],
       "parentId": "bd8b3e61-d30e-4350-8631-704fabab67dc"
     },
@@ -332,7 +334,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/create"
@@ -395,7 +398,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/create"
@@ -519,7 +523,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/create"
@@ -637,7 +642,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/create"
@@ -700,7 +706,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/update/1"
@@ -818,7 +825,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/update/1"
@@ -918,7 +926,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/update/2"
@@ -1033,7 +1042,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/get-all"
@@ -1115,7 +1125,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/create"
@@ -1207,7 +1218,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/update/1"
@@ -1270,7 +1282,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/get-all"
@@ -1358,7 +1371,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/create"
@@ -1428,7 +1442,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/create"
@@ -1481,7 +1496,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/update/2"
@@ -1527,7 +1543,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/get-all"
@@ -1609,7 +1626,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/oauth/token"
@@ -1665,7 +1683,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/create"
@@ -1734,7 +1753,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/create"
@@ -1793,7 +1813,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/ledger/get-all"
@@ -1842,7 +1863,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/upload/temp-file/product-image"
@@ -1967,7 +1989,8 @@
           ]
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/product/get-by-barcode"
@@ -2015,7 +2038,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/product/get-by-category-id/1/3/1"
@@ -2063,7 +2087,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/product/get/1"
@@ -2117,7 +2142,8 @@
           ]
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/product/get-by-name-fragment/1/1"
@@ -2197,7 +2223,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/product/create"
@@ -2257,7 +2284,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/product/create"
@@ -2348,7 +2376,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/product/update/1"
@@ -2438,7 +2467,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/product/create"
@@ -2529,7 +2559,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/product/create"
@@ -2588,7 +2619,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/get-by-id/2"
@@ -2636,7 +2668,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/get-by-employee-id/1232"
@@ -2690,7 +2723,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/employee/get-by-type/ADMIN"
@@ -2744,7 +2778,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/get-by-id/1"
@@ -2792,7 +2827,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/get-by-supplier-id/3423"
@@ -2840,7 +2876,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/get-by-id/1"
@@ -2888,7 +2925,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/get-by-wholesaler-id/1231"
@@ -2936,7 +2974,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/ledger/get/wholesaler"
@@ -2984,7 +3023,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/ledger/get/supplier"
@@ -3032,7 +3072,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/ledger/get/employeeSalary"
@@ -3144,7 +3185,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/entry/make/payment"
@@ -3259,7 +3301,7 @@
         "bodyType": "Text",
         "autoSetLength": true,
         "textBodyEditorHeight": 526,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2}\n     \t]\n    },\n    {\"productId\":2,\"purchasePrice\":1.5,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1}\n     \t]\n    },\n    {\"productId\":3,\"purchasePrice\":1.3,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n     \t]\n    }\n  ],\n  \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":40.7}\n                              ],\n             \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":3}\n}"
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n  \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":40.7}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":9}\n}"
       },
       "headersType": "Raw",
       "uri": {
@@ -3275,7 +3317,7 @@
         "path": "/auth/api/shipment/create"
       },
       "id": "81c07e69-6012-4ab6-8385-7d9e3c44a682",
-      "lastModified": "2018-05-14T16:34:26.649+06:00",
+      "lastModified": "2018-05-21T13:48:14.791+06:00",
       "name": "Shipment Create",
       "headers": [
         {
@@ -4052,7 +4094,8 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/update/1"
@@ -4106,7 +4149,8 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2}\n     \t]\n    },\n    {\"productId\":2,\"purchasePrice\":1.5,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1}\n     \t]\n    },\n    {\"productId\":3,\"purchasePrice\":1.3,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n     \t]\n    }\n  ]\n    \n}"
+        "textBodyEditorHeight": 530,
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ]\n    \n}"
       },
       "headersType": "Form",
       "uri": {
@@ -4122,7 +4166,7 @@
         "path": "/auth/api/shipment/create"
       },
       "id": "267aea3b-d1ea-4144-8388-2365b441e1f8",
-      "lastModified": "2018-05-14T16:54:19.820+06:00",
+      "lastModified": "2018-05-18T17:08:48.121+06:00",
       "name": "Shipment Create C:3 [Total Due]",
       "headers": [
         {
@@ -4154,7 +4198,111 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2}\n     \t]\n    },\n    {\"productId\":2,\"purchasePrice\":1.5,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1}\n     \t]\n    },\n    {\"productId\":3,\"purchasePrice\":1.3,\n     \t\"details\":[\n          {\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n          {\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n     \t]\n    }\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":40.0}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":47}\n    \n}"
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":37.0}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":9}\n    \n}"
+      },
+      "headersType": "Raw",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/shipment/create"
+      },
+      "id": "ea663b09-e51a-41f2-b9c3-98a316b7ecd0",
+      "lastModified": "2018-05-21T13:50:48.210+06:00",
+      "name": "Shipment Create C:2 [ Full Paid ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":20000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1000000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":10000000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":10000000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":10000000000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20000000},\n                                 {\"ledgerId\":5,\"amount\":400000000}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":4799999}\n    \n}"
+      },
+      "headersType": "Raw",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/shipment/create"
+      },
+      "id": "d2c1e873-4a11-4105-9d64-df6967ed0266",
+      "lastModified": "2018-05-21T13:49:45.949+06:00",
+      "name": "Shipment Create C:2 [ Insufficient Balance]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "422"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n  \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":400.7}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":47}\n}"
       },
       "headersType": "Form",
       "uri": {
@@ -4169,9 +4317,9 @@
         "host": "{url}",
         "path": "/auth/api/shipment/create"
       },
-      "id": "ea663b09-e51a-41f2-b9c3-98a316b7ecd0",
-      "lastModified": "2018-05-14T16:54:28.489+06:00",
-      "name": "Shipment Create C:2 [ Total Paid ]",
+      "id": "0a786595-49ef-4194-bda0-bcd4b5fb52c7",
+      "lastModified": "2018-05-21T13:43:23.335+06:00",
+      "name": "Shipment Create C:3 [ Paid Amount greater ] ",
       "headers": [
         {
           "enabled": true,
@@ -4182,6 +4330,45 @@
           "enabled": true,
           "name": "Content-Type",
           "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "422"
+        },
+        {
+          "comparison": "Matches",
+          "subject": "ResponseJsonBody",
+          "path": "$[0].params",
+          "value": "/productPricePaymentAccount\\[0\\]|shippingCostPaymentAccount/g"
+        },
+        {
+          "comparison": "Matches",
+          "subject": "ResponseJsonBody",
+          "enabled": true,
+          "path": "$[1].params",
+          "value": "/productPricePaymentAccount\\[0\\]|shippingCostPaymentAccount/g"
+        },
+        {
+          "comparison": "Matches",
+          "subject": "ResponseJsonBody",
+          "path": "$[0].msg",
+          "value": "/.*greater.*/g"
+        },
+        {
+          "comparison": "Matches",
+          "subject": "ResponseJsonBody",
+          "path": "$[1].msg",
+          "value": "/.*greater.*/g"
+        },
+        {
+          "comparison": "LengthEqual",
+          "subject": "ResponseJsonBody",
+          "path": "$",
+          "value": "2"
         }
       ],
       "metaInfo": {},
