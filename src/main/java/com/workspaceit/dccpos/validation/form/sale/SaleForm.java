@@ -3,6 +3,7 @@ package com.workspaceit.dccpos.validation.form.sale;
 import com.workspaceit.dccpos.constant.SALE_TYPE;
 import com.workspaceit.dccpos.validation.form.personalIformation.PersonalInfoCreateForm;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -30,6 +31,7 @@ public class SaleForm {
      * existing consumer
      * */
     private Integer wholesalerId;
+    @Valid
     private PersonalInfoCreateForm consumerInfo;
     private Integer consumerInfoId;
 

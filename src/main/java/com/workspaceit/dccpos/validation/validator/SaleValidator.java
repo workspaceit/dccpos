@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
+import org.springframework.validation.Validator;
+
 @Component
 public class SaleValidator {
     private WholesalerService wholesalerService;
@@ -26,8 +28,13 @@ public class SaleValidator {
         this.personalInformationService = personalInformationService;
     }
 
+
+
     public void validate(SaleForm saleForm, Errors error){
         SALE_TYPE type = saleForm.getType();
+
+        if(error.hasFieldErrors("type"))return;
+
         switch (type){
             case WHOLESALE:
                 this.validateWholesaler(saleForm.getWholesalerId(),error);
@@ -47,16 +54,17 @@ public class SaleValidator {
             error.rejectValue("wholesalerId","Wholesaler not found by id : "+wholesalerId);
         }
     }
-    private void validateConsumer(Integer consumerId, PersonalInfoCreateForm consumerForm, Errors error){
+    private void validateConsumer(Integer consumerInfoId, PersonalInfoCreateForm consumerForm, Errors error){
 
-        if(consumerId!=null){
-            PersonalInformation personalInformation =  this.personalInformationService.getById(consumerId);
+        if(consumerInfoId!=null){
+            PersonalInformation personalInformation =  this.personalInformationService.getById(consumerInfoId);
             if(personalInformation==null){
-                error.rejectValue("consumerId","Consumer not found by id : "+consumerId);
+                error.rejectValue("consumerInfoId","Consumer not found by id : "+consumerInfoId);
             }
         }
 
-        if(consumerForm==null && (consumerId==null || consumerId>0)) {
+
+        if(consumerForm==null && (consumerInfoId==null || consumerInfoId>0)) {
             error.rejectValue("consumerId", "Consumer required");
         }
     }
