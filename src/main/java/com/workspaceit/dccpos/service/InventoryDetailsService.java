@@ -19,7 +19,7 @@ import java.util.OptionalDouble;
 @Service
 @Transactional
 public class InventoryDetailsService {
-    private InventoryDetailsDao inventoryDetailsDao;
+    /*private InventoryDetailsDao inventoryDetailsDao;
 
     @Autowired
     public void setInventoryDetailsDao(InventoryDetailsDao inventoryDetailsDao) {
@@ -46,9 +46,9 @@ public class InventoryDetailsService {
         inventoryDetails.setSellingPrice(inventoryCreateFrom.getSellingPrice());
         inventoryDetails.setInventoryCycle(INVENTORY_CYCLE.FROM_SUPPLIER);
 
-        /**
+        *//**
          * Initially all quantity are Available Quantity
-         * */
+         * *//*
         inventoryDetails.setAvailableQuantity(inventoryCreateFrom.getPurchaseQuantity());
         return inventoryDetails;
     }
@@ -76,25 +76,24 @@ public class InventoryDetailsService {
        return totalQuantity;
     }
 
-    public double getMinSellingPrice(Inventory inventory){
+    public double getMinSellingPrice(List<Inventory> inventories){
 
-        List<InventoryDetails> inventoryDetailsList = inventory.getInventoryDetails();
-        if(inventoryDetailsList==null)return 0d;
 
-        OptionalDouble min = inventoryDetailsList.stream()
+        if(inventories==null)return 0d;
+
+        OptionalDouble min = inventories.stream()
                 .mapToDouble(
                         inventoryDetails -> inventoryDetails.getSellingPrice()
                 ).min();
 
         return min.isPresent()?min.getAsDouble():0d;
     }
-    public double getMaxSellingPrice(Inventory inventory){
+    public double getMaxSellingPrice(List<Inventory> inventories){
 
-        List<InventoryDetails> inventoryDetailsList = inventory.getInventoryDetails();
-        if(inventoryDetailsList==null)return 0d;
+        if(inventories==null)return 0d;
 
 
-        OptionalDouble max = inventoryDetailsList.stream()
+        OptionalDouble max = inventories.stream()
                 .mapToDouble(
                         inventoryDetails -> inventoryDetails.getSellingPrice()
                 ).max();
@@ -102,14 +101,13 @@ public class InventoryDetailsService {
         return max.isPresent()?max.getAsDouble():0d;
 
     }
-    public int getAvailableQuantity(Inventory inventory, PRODUCT_CONDITION productCondition){
+    public int getAvailableQuantity(List<Inventory> inventories, PRODUCT_CONDITION productCondition){
 
-        List<InventoryDetails> inventoryDetailsList = inventory.getInventoryDetails();
-        if(inventoryDetailsList==null)return 0;
+        if(inventories==null)return 0;
 
-        return inventoryDetailsList.stream().filter(
-                inventoryDetails ->inventoryDetails.getCondition().equals(productCondition)
-                ).mapToInt(inventoryDetails -> inventoryDetails.getAvailableQuantity()
+        return inventories.stream().filter(
+                inventory ->inventory.getCondition().equals(productCondition)
+                ).mapToInt(inventory -> inventory.getAvailableQuantity()
                 ).sum();
     }
 
@@ -127,5 +125,5 @@ public class InventoryDetailsService {
     }
     private void update(List<InventoryDetails> inventoryDetailsList){
         this.inventoryDetailsDao.updateAll(inventoryDetailsList);
-    }
+    }*/
 }

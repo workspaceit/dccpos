@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InventoryDetailsForm {
-    @NotNull(message = "Selling price required")
+   /* @NotNull(message = "Selling price required")
     @Min(value = 1,message = "Selling can't be less then 1")
     private Double sellingPrice;
 
@@ -42,5 +42,5 @@ public class InventoryDetailsForm {
 
     public void setStatus(PRODUCT_CONDITION status) {
         this.status = status;
-    }
+    }*/
 }

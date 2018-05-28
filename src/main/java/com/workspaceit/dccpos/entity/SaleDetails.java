@@ -22,17 +22,15 @@ public class SaleDetails {
     @JoinColumn(name = "inventory_id")
     private Inventory inventory;
 
-    @ManyToOne
-    @JoinColumn(name = "inventory_details_id")
-    private InventoryDetails inventoryDetails;
-
     @Column(name = "quantity")
     private int quantity;
 
     @Column(name = "per_quantity_price")
     private double perQuantityPrice;
+
     @Column(name = "total_price")
     private double totalPrice;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "product_condition")
     private PRODUCT_CONDITION productCondition;
@@ -67,13 +65,6 @@ public class SaleDetails {
         this.inventory = inventory;
     }
 
-    public InventoryDetails getInventoryDetails() {
-        return inventoryDetails;
-    }
-
-    public void setInventoryDetails(InventoryDetails inventoryDetails) {
-        this.inventoryDetails = inventoryDetails;
-    }
 
     public int getQuantity() {
         return quantity;
@@ -129,8 +120,6 @@ public class SaleDetails {
         if (Double.compare(that.totalPrice, totalPrice) != 0) return false;
         if (sale != null ? !sale.equals(that.sale) : that.sale != null) return false;
         if (inventory != null ? !inventory.equals(that.inventory) : that.inventory != null) return false;
-        if (inventoryDetails != null ? !inventoryDetails.equals(that.inventoryDetails) : that.inventoryDetails != null)
-            return false;
         if (productCondition != that.productCondition) return false;
         return createdAt != null ? createdAt.equals(that.createdAt) : that.createdAt == null;
     }
@@ -142,7 +131,6 @@ public class SaleDetails {
         result = id;
         result = 31 * result + (sale != null ? sale.hashCode() : 0);
         result = 31 * result + (inventory != null ? inventory.hashCode() : 0);
-        result = 31 * result + (inventoryDetails != null ? inventoryDetails.hashCode() : 0);
         result = 31 * result + quantity;
         temp = Double.doubleToLongBits(perQuantityPrice);
         result = 31 * result + (int) (temp ^ (temp >>> 32));

@@ -18,6 +18,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.validation.Validator;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
 import java.util.*;
 
 @Configuration
@@ -145,6 +148,7 @@ public class WebConfig implements WebMvcConfigurer {
         ve.init(props);
         return ve;
     }
+
 
 
 }

@@ -1,5 +1,7 @@
 package com.workspaceit.dccpos.helper;
 
+import org.springframework.validation.Errors;
+
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -23,5 +25,7 @@ public class ValidationHelper {
         }
     }
 
+    public static void mergeError(Errors mainErrors, Errors errors){
 
+    }
 }

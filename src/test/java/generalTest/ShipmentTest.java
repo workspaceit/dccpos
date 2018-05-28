@@ -1,9 +1,9 @@
-package serviceTest;
+package generalTest;
 
 import com.workspaceit.dccpos.config.WebConfig;
-import com.workspaceit.dccpos.dao.EntryItemDao;
-import com.workspaceit.dccpos.entity.accounting.Ledger;
+import com.workspaceit.dccpos.entity.Shipment;
 import com.workspaceit.dccpos.helper.FormToNameValuePair;
+import com.workspaceit.dccpos.service.ShipmentService;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,19 +19,21 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import resetendpointTest.BaseTest;
 
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebConfig.class})
-public class LedgerServiceTest extends BaseTest{
-
+public class ShipmentTest extends BaseTest {
     private MockMvc mockMvc;
     private WebApplicationContext wac;
     private FormToNameValuePair formToNameValuePair;
-    private EntryItemDao entryItemDao;
+    private ShipmentService shipmentService;
 
     private LedgerService ledgerService;
+    private List<Shipment> shipments;
 
     @Autowired
     public void setLedgerService(LedgerService ledgerService) {
@@ -48,8 +50,24 @@ public class LedgerServiceTest extends BaseTest{
     }
 
     @Autowired
-    public void setEntryItemDao(EntryItemDao entryItemDao) {
-        this.entryItemDao = entryItemDao;
+    public void setShipmentService(ShipmentService shipmentService) {
+        this.shipmentService = shipmentService;
+    }
+
+    /**
+     * Fetch all shipment along with lazy elements
+     * */
+    @PostConstruct
+    public void fetchAllShipments(){
+        this.shipments =  new ArrayList<>();
+
+        long maxId = this.shipmentService.getMaxId();
+        long minId = this.shipmentService.getMinId();
+        for(long i=minId;i<=maxId;i++){
+          Shipment shipment =  this.shipmentService.getById(i);
+
+          if(shipment!=null)shipments.add(shipment);
+        }
     }
 
     @Before
@@ -57,18 +75,26 @@ public class LedgerServiceTest extends BaseTest{
         mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
+
     @Test
-    @Transactional(rollbackFor = Exception.class)
-    public void currentBalanceConsistenceTest() throws Exception {
-        List<Ledger> ledgerList = this.ledgerService.getAll();
-
-        for(Ledger ledger:ledgerList){
-           double balance  = this.ledgerService.getCurrentBalance(ledger.getId());
-
-            Assert.assertEquals(ledger.getName()+" Ledger balance in equal",balance,
-                    ledger.getCurrentBalance(),0);
+    @Transactional
+    public void costTest(){
+        for(  Shipment shipment :this.shipments){
+            double totalCost = shipment.getTotalCost();
+            double sumOfAllCost =  this.shipmentService.getTotalCost(shipment.getCosts());
+            Assert.assertEquals(shipment.getTrackingId()+": Total cost miss matched",totalCost,sumOfAllCost,0);
         }
 
+    }
+    @Test
+    @Transactional
+    public void paymentTest(){
+        for(  Shipment shipment :this.shipments){
+            double expectedPayment =  shipment.getTotalCost()+shipment.getTotalProductPrice();
+            double paidAmount =  shipment.getTotalPaid();
+            Assert.assertTrue(shipment.getTrackingId()+": Payment is greater then sum of price and cost",expectedPayment>=paidAmount);
+        }
 
     }
+
 }

@@ -6,6 +6,7 @@ import com.workspaceit.dccpos.dao.ShipmentDao;
 import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.TrackingIdGenerator;
+import com.workspaceit.dccpos.util.purchase.ShipmentFormUtil;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
 import com.workspaceit.dccpos.validation.form.shipment.ShipmentCreateForm;
 import com.workspaceit.dccpos.validation.form.shipment.ShipmentSearchForm;
@@ -23,6 +24,8 @@ public class ShipmentService {
     private SupplierService supplierService;
     private InventoryService inventoryService;
     private ShipmentCostService shipmentCostService;
+
+    private ShipmentFormUtil shipmentFormUtil;
 
     @Autowired
     public void setShipmentDao(ShipmentDao shipmentDao) {
@@ -42,6 +45,11 @@ public class ShipmentService {
     @Autowired
     public void setShipmentCostService(ShipmentCostService shipmentCostService) {
         this.shipmentCostService = shipmentCostService;
+    }
+
+    @Autowired
+    public void setShipmentFormUtil(ShipmentFormUtil shipmentFormUtil) {
+        this.shipmentFormUtil = shipmentFormUtil;
     }
 
     @Transactional
@@ -113,20 +121,19 @@ public class ShipmentService {
         ShipmentCreateForm shipmentCreateForm = purchaseForm.getShipment();
         Supplier supplier =  this.supplierService.getSupplier(shipmentCreateForm.getSupplierId());
 
-        double carryingCost = shipmentCreateForm.getCarryingCost()==null?0:shipmentCreateForm.getCarryingCost();
-        double cfCost = shipmentCreateForm.getCfCost()==null?0:shipmentCreateForm.getCfCost();
-        double laborCost = shipmentCreateForm.getLaborCost()==null?0:shipmentCreateForm.getLaborCost();
-        double otherCost = shipmentCreateForm.getOtherCost()==null?0:shipmentCreateForm.getOtherCost();
-        double totalCost = this.getTotalCost(shipmentCreateForm);
+        double totalCost = this.shipmentFormUtil.getTotalCost(shipmentCreateForm);
         double totalPaid = 0;
 
         Map<SHIPMENT_COST,ShipmentCost> shipmentCosts = new HashMap<>();
 
+        Map<SHIPMENT_COST,Double> shipmentCreateFormCosts = shipmentCreateForm.getCost();
+        if(shipmentCreateFormCosts!=null){
+            for (SHIPMENT_COST key :shipmentCreateFormCosts.keySet()){
+                double cost = shipmentCreateFormCosts.get(key)!=null?shipmentCreateFormCosts.get(key):0;
+                shipmentCosts.put(key,new ShipmentCost(key,cost));
+            }
+        }
 
-        shipmentCosts.put(SHIPMENT_COST.CARRYING,new ShipmentCost(SHIPMENT_COST.CARRYING,carryingCost));
-        shipmentCosts.put(SHIPMENT_COST.CF,new ShipmentCost(SHIPMENT_COST.CF,cfCost));
-        shipmentCosts.put(SHIPMENT_COST.LABOR,new ShipmentCost(SHIPMENT_COST.LABOR,laborCost));
-        shipmentCosts.put(SHIPMENT_COST.OTHERS,new ShipmentCost(SHIPMENT_COST.OTHERS,otherCost));
 
         /**
          * Create Inventory
@@ -174,7 +181,6 @@ public class ShipmentService {
 
         Set<SHIPMENT_COST> keySet =  costs.keySet();
         for(SHIPMENT_COST key :keySet){
-            System.out.println(costs.get(key).getId()+" "+  totalCost+" " +costs.get(key).getAmount());
             totalCost += costs.get(key).getAmount();
         }
 
@@ -184,21 +190,7 @@ public class ShipmentService {
     public void update(Shipment shipment){
         this.shipmentDao.update(shipment);
     }
-    public double getTotalCost(ShipmentCreateForm shipmentCreateForm){
-        double totalCost = 0;
-        double carryingCost = shipmentCreateForm.getCarryingCost()==null?0:shipmentCreateForm.getCarryingCost();
-        double cfCost = shipmentCreateForm.getCfCost()==null?0:shipmentCreateForm.getCfCost();
-        double laborCost = shipmentCreateForm.getLaborCost()==null?0:shipmentCreateForm.getLaborCost();
-        double otherCost = shipmentCreateForm.getOtherCost()==null?0:shipmentCreateForm.getOtherCost();
 
-
-        totalCost += carryingCost;
-        totalCost +=cfCost;
-        totalCost += laborCost;
-        totalCost +=otherCost;
-
-        return totalCost;
-    }
     private void save(Shipment shipment){
         this.shipmentDao.save(shipment);
     }
