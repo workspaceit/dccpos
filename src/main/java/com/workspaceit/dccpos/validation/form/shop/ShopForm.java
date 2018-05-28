@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -16,18 +17,14 @@ public class ShopForm {
     @Length(max = 100,message = "Value too large")
     private String address;
 
-    @NotNull(message = "Logo Required")
-    private String logo;
 
-    @NotNull(message = "Email Required")
+    @Pattern(regexp ="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(?:[a-zA-Z]{2,6})$", message="Email is not valid")
     private String email;
 
     @NotNull(message = "Phone Required")
     private String phone;
 
-    /**
-     * Receive Timestamp in milliseconds
-     * */
+    @NotNull(message = "Image Token Required")
     private Integer imageToken;
 
 
@@ -50,12 +47,6 @@ public class ShopForm {
     public String getEmail() {return email;}
 
     public void setEmail(String email) {this.email = email;}
-
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(String logo) {this.logo = logo;}
 
     public String getPhone() {
         return phone;

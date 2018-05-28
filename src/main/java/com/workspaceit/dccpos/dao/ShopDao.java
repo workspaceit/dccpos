@@ -24,4 +24,11 @@ public class ShopDao extends BaseDao{
                 .setMaxResults(1)
                 .uniqueResult();
     }
+
+    public ShopInformation getOne(){
+        Session session = this.getCurrentSession();
+        return (ShopInformation)session.createQuery(" FROM ShopInformation sp where 1")
+                .setMaxResults(1)
+                .uniqueResult();
+    }
 }

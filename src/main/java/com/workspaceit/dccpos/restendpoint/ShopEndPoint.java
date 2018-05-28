@@ -44,14 +44,18 @@ public class ShopEndPoint {
 
 
 
-    @RequestMapping(value = "/get/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/get",method = RequestMethod.GET)
     public ResponseEntity<?> create(@PathVariable("id") Integer id){
-        ShopInformation shop  =  this.shopService.getById(id);
-        return ResponseEntity.ok(shop);
+        try {
+            ShopInformation shop  =  this.shopService.getShop();
+            return ResponseEntity.ok(shop);
+        }catch (EntityNotFound ex){
+            return ResponseEntity.ok(ex);
+        }
     }
 
 
-    @RequestMapping(value = "/create",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/create-or-update",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> create(Authentication authentication,
                                     @Valid @RequestBody ShopForm shopForm, BindingResult bindingResult){
         ServiceResponse serviceResponse = ServiceResponse.getInstance();
@@ -65,28 +69,6 @@ public class ShopEndPoint {
         ShopInformation shop  = null;
         try {
             shop = this.shopService.create(shopForm);
-        } catch (EntityNotFound entityNotFound) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ServiceResponse.getMsgInMap(entityNotFound.getMessage()));
-        }
-
-
-        return ResponseEntity.ok(shop);
-    }
-
-    @RequestMapping(value = "/update/{id}",method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> create(@PathVariable("id") int id,
-                                    @Valid @RequestBody ShopForm shopForm, BindingResult bindingResult){
-        ServiceResponse serviceResponse = ServiceResponse.getInstance();
-        this.shopValidator.validate(shopForm,bindingResult);
-
-        if(bindingResult.hasErrors()){
-            serviceResponse.bindValidationError(bindingResult);
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
-        }
-
-        ShopInformation shop;
-        try {
-            shop = this.shopService.update(id,shopForm);
         } catch (EntityNotFound entityNotFound) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ServiceResponse.getMsgInMap(entityNotFound.getMessage()));
         }

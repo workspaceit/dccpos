@@ -40,9 +40,9 @@ public class ShopService {
 
 
     @Transactional
-    public ShopInformation getShop(int id) throws EntityNotFound {
-        ShopInformation shop =  this.shopDao.getById(id);
-        if(shop==null)throw new EntityNotFound("Product not found by id :"+id);
+    public ShopInformation getShop() throws EntityNotFound {
+        ShopInformation shop =  this.shopDao.getOne();
+        if(shop==null)shop = new ShopInformation();
 
         return shop;
     }
@@ -56,7 +56,7 @@ public class ShopService {
             imagePath = this.tempFileService.copyFileToCommonFolder(shopForm.getImageToken());
         }
 
-        ShopInformation shop = new ShopInformation();
+        ShopInformation shop = this.getShop();
 
         shop.setName(shopForm.getName());
         shop.setAddress(shopForm.getAddress());
@@ -68,28 +68,7 @@ public class ShopService {
 
         return shop;
     }
-    public ShopInformation update(int id,ShopForm shopForm) throws EntityNotFound {
-        FormFilterHelper.doBasicFiler(shopForm);
 
-        ShopInformation shop = this.getShop(id);
-
-
-        String imagePath = shop.getLogo();
-        if(shopForm.getImageToken()!=null && shopForm.getImageToken()>0){
-            imagePath = this.tempFileService.copyFileToCommonFolder(shopForm.getImageToken());
-        }
-
-
-        shop.setName(shopForm.getName());
-        shop.setAddress(shopForm.getAddress());
-        shop.setEmail(shopForm.getEmail());
-        shop.setLogo(imagePath);
-        shop.setPhone(shopForm.getPhone());
-
-        this.save(shop);
-
-        return shop;
-    }
 
 
     private void save(ShopInformation shopInformation){
