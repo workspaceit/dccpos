@@ -31,6 +31,7 @@ public class SaleForm {
      * existing consumer
      * */
     private Integer wholesalerId;
+
     @Valid
     private PersonalInfoCreateForm consumerInfo;
     private Integer consumerInfoId;

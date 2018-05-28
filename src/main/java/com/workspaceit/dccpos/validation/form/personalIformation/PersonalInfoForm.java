@@ -1,6 +1,7 @@
 package com.workspaceit.dccpos.validation.form.personalIformation;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -8,7 +9,7 @@ import java.util.Date;
 
 public class PersonalInfoForm {
 
-    @NotNull(message = "Full name required")
+    @NotBlank(message = "Full name required")
     @Length(max = 50,message = "Value too large")
     private String fullName;
 

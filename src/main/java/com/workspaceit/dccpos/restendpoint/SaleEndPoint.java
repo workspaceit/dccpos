@@ -30,6 +30,7 @@ public class SaleEndPoint {
     public ResponseEntity<?> create(Authentication authentication,
                                     @Valid @RequestBody SaleForm saleForm, BindingResult bindingResult){
         ServiceResponse serviceResponse = ServiceResponse.getInstance();
+        //
         this.saleValidator.validate(saleForm,bindingResult);
         if(bindingResult.hasErrors()){
             serviceResponse.bindValidationError(bindingResult);
