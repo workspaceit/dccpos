@@ -40,8 +40,11 @@ public class ShopService {
 
 
     @Transactional
-    public ShopInformation getShop() throws EntityNotFound {
+    public ShopInformation getShop(){
         ShopInformation shop =  this.shopDao.getOne();
+        /**
+         * For Avoiding null pointer exception
+         * */
         if(shop==null)shop = new ShopInformation();
 
         return shop;

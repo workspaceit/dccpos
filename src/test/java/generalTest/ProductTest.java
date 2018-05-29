@@ -2,6 +2,7 @@ package generalTest;
 
 import com.workspaceit.dccpos.config.WebConfig;
 import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
+import com.workspaceit.dccpos.constant.STOCK_STATUS;
 import com.workspaceit.dccpos.entity.Inventory;
 import com.workspaceit.dccpos.entity.Product;
 import com.workspaceit.dccpos.service.InventoryService;
@@ -81,8 +82,13 @@ public class ProductTest extends BaseTest {
             for(Inventory inventory : inventories ){
                 int expectedQuantity = inventory.getAvailableQuantity()+inventory.getSoldQuantity();;
                 int purchasedQuantity = inventory.getPurchaseQuantity();
+                int availableQuantity = inventory.getPurchaseQuantity();
+
+                Assert.assertTrue("IN STOCK Inventory Quantity " , availableQuantity>0);
 
                 Assert.assertEquals(product.getName()+" Quantity mismatched ",expectedQuantity,purchasedQuantity,0);
+
+
 
             }
 

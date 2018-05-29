@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 public class SaleForm {
 
     @NotNull(message = "Product required")
+    @Valid
     private InventorySaleForm[] inventories;
     private Double discount;
 

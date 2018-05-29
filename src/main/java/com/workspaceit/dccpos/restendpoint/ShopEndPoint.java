@@ -46,12 +46,8 @@ public class ShopEndPoint {
 
     @RequestMapping(value = "/get",method = RequestMethod.GET)
     public ResponseEntity<?> get(){
-        try {
-            ShopInformation shop  =  this.shopService.getShop();
-            return ResponseEntity.ok(shop);
-        }catch (EntityNotFound ex){
-            return ResponseEntity.ok(ex);
-        }
+        ShopInformation shop  =  this.shopService.getShop();
+        return ResponseEntity.ok(shop);
     }
 
 

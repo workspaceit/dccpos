@@ -43,6 +43,14 @@ public class InventoryService {
     public List<Inventory> getInStockByProductId(int productId) {
         return this.inventoryDao.findByProductIdAndStockStatus(productId,STOCK_STATUS.IN_STOCK);
     }
+    @Transactional
+    public List<Inventory> getAll() {
+        return this.inventoryDao.findAll();
+    }
+    @Transactional
+    public Inventory getById(int id){
+        return this.inventoryDao.findById(id);
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public List<Inventory> create(InventoryCreateFrom[] inventoryFroms) throws EntityNotFound {

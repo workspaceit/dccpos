@@ -6,13 +6,10 @@ import com.workspaceit.dccpos.entity.Wholesaler;
 import com.workspaceit.dccpos.service.PersonalInformationService;
 import com.workspaceit.dccpos.service.WholesalerService;
 import com.workspaceit.dccpos.validation.form.personalIformation.PersonalInfoCreateForm;
-import com.workspaceit.dccpos.validation.form.personalIformation.PersonalInfoForm;
 import com.workspaceit.dccpos.validation.form.sale.SaleForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
-
 
 @Component
 public class SaleValidator {
@@ -20,6 +17,7 @@ public class SaleValidator {
     private PersonalInformationService personalInformationService;
 
     private PersonalInfoValidator personalInfoValidator;
+    private InventoryValidator inventoryValidator;
 
     @Autowired
     public void setWholesalerService(WholesalerService wholesalerService) {
@@ -36,6 +34,11 @@ public class SaleValidator {
         this.personalInfoValidator = personalInfoValidator;
     }
 
+    @Autowired
+    public void setInventoryValidator(InventoryValidator inventoryValidator) {
+        this.inventoryValidator = inventoryValidator;
+    }
+
     public void validate(SaleForm saleForm, Errors error){
         SALE_TYPE type = saleForm.getType();
 
@@ -49,6 +52,7 @@ public class SaleValidator {
                 this.validateConsumer(saleForm.getConsumerInfoId(),saleForm.getConsumerInfo(),error);
                 break;
         }
+        this.inventoryValidator.validate("inventories",saleForm.getInventories(),error);
     }
     private void validateWholesaler(Integer wholesalerId, Errors error){
 
