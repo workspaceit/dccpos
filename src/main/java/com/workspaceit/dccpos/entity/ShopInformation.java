@@ -61,9 +61,7 @@ public class ShopInformation {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = name;
-    }
+    public void setAddress(String address) {this.address = address;}
 
     public String getLogo() {
         return logo;

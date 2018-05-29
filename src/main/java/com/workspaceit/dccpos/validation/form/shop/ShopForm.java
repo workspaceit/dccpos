@@ -14,7 +14,7 @@ public class ShopForm {
     @Length(max = 100,message = "Value too large")
     private String name;
 
-    @Length(max = 100,message = "Value too large")
+    @Length(max = 100,message = "Address too large")
     private String address;
 
 

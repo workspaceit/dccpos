@@ -45,7 +45,7 @@ public class ShopEndPoint {
 
 
     @RequestMapping(value = "/get",method = RequestMethod.GET)
-    public ResponseEntity<?> create(@PathVariable("id") Integer id){
+    public ResponseEntity<?> get(){
         try {
             ShopInformation shop  =  this.shopService.getShop();
             return ResponseEntity.ok(shop);
