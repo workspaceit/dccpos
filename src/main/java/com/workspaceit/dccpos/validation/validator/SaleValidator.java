@@ -44,8 +44,10 @@ public class SaleValidator {
         switch (type){
             case WHOLESALE:
                 this.validateWholesaler(saleForm.getWholesalerId(),error);
+                break;
             case CONSUMER_SALE:
                 this.validateConsumer(saleForm.getConsumerInfoId(),saleForm.getConsumerInfo(),error);
+                break;
         }
     }
     private void validateWholesaler(Integer wholesalerId, Errors error){

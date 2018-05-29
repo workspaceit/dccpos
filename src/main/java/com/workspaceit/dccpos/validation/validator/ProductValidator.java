@@ -3,8 +3,10 @@ package com.workspaceit.dccpos.validation.validator;
 import com.workspaceit.dccpos.constant.WEIGHT_UNIT;
 import com.workspaceit.dccpos.entity.Category;
 import com.workspaceit.dccpos.entity.Product;
+import com.workspaceit.dccpos.entity.TempFile;
 import com.workspaceit.dccpos.service.CategoryService;
 import com.workspaceit.dccpos.service.ProductService;
+import com.workspaceit.dccpos.service.TempFileService;
 import com.workspaceit.dccpos.validation.form.product.ProductCreateForm;
 import com.workspaceit.dccpos.validation.form.product.ProductUpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.validation.Errors;
 public class ProductValidator {
     private CategoryService categoryService;
     private ProductService productService;
+    private TempFileService tempFileService;
+
 
     @Autowired
     public void setCategoryService(CategoryService categoryService) {
@@ -24,6 +28,11 @@ public class ProductValidator {
     @Autowired
     public void setProductService(ProductService productService) {
         this.productService = productService;
+    }
+
+    @Autowired
+    public void setTempFileService(TempFileService tempFileService) {
+        this.tempFileService = tempFileService;
     }
 
     public void validate(ProductCreateForm productCreateForm, Errors error){
@@ -36,6 +45,9 @@ public class ProductValidator {
         if(!error.hasFieldErrors("barcode") && productCreateForm.getCategoryId()!=null){
             this.validateUniqueBarcode(productCreateForm.getBarcode(),error);
         }
+        if(!error.hasFieldErrors("imageToken") && productCreateForm.getImageToken()!=null && productCreateForm.getImageToken()>0){
+            this.validateImageToken(productCreateForm.getImageToken(),error);
+        }
     }
     public void validateForUpdate(int id,ProductUpdateForm productCreateForm, Errors error){
         if(!error.hasFieldErrors("categoryId") && productCreateForm.getCategoryId()!=null){
@@ -46,6 +58,13 @@ public class ProductValidator {
         }
         if(!error.hasFieldErrors("barcode") && productCreateForm.getCategoryId()!=null){
             this.validateUniqueBarcodeUsedByOthers(id,productCreateForm.getBarcode(),error);
+        }
+    }
+    public void validateImageToken(Integer imageToken,Errors error){
+        TempFile tempFile =  this.tempFileService.getByToken(imageToken);
+
+        if(tempFile==null){
+            error.rejectValue("imageToken","Image token not found ");
         }
     }
     public void validateCategory(int categoryId,Errors error){

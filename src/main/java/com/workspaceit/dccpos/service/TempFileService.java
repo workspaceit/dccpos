@@ -63,7 +63,10 @@ public class TempFileService {
 		tempFileDao.insert(tempFile);
 		return tempFile;
 	}
-
+	@Transactional
+	public TempFile getByToken(Integer token){
+		return tempFileDao.getByToken(token);
+	}
 	@Transactional(rollbackFor = Exception.class)
 	public void removeTempFile(Integer token){
 		TempFile tempFile = tempFileDao.getByToken(token);

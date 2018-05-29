@@ -6,7 +6,7 @@
       "type": "Project",
       "description": "",
       "id": "c4226841-a12e-441a-b046-9b49f4080e2d",
-      "lastModified": "2018-05-21T13:50:48.210+06:00",
+      "lastModified": "2018-05-29T11:26:35.841+06:00",
       "name": "POS"
     },
     {
@@ -21,10 +21,11 @@
       "type": "Scenario",
       "description": "",
       "id": "28508267-c995-4a6a-9e04-19a0c55423ca",
-      "lastModified": "2018-05-21T12:31:33.571+06:00",
+      "lastModified": "2018-05-25T11:59:11.235+06:00",
       "name": "Endpoints",
       "requestOrder": [
         "AUTHENTICATION",
+        "Shop Information Create",
         "Employee-Create-No-Param (1)",
         "Employee-Create-All-EMPTY_VALUE",
         "Employee-Create-No-Param",
@@ -86,7 +87,8 @@
         "Shipment Create C:3 [Total Due]",
         "Shipment Create C:2 [ Full Paid ]",
         "Shipment Create C:2 [ Insufficient Balance]",
-        "Shipment Create C:3 [ Paid Amount greater ] "
+        "Shipment Create C:3 [ Paid Amount greater ] ",
+        "Sale"
       ],
       "parentId": "bd8b3e61-d30e-4350-8631-704fabab67dc"
     },
@@ -185,6 +187,63 @@
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
     {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n\t\"name\":\"ssssdf\",\n\t\"address\":\"sdf\",\n\t\"imageToken\":1000777818,\n\t\"email\":\"sdf\",\n\t\"phone\":\"sdf\"\n}"
+      },
+      "headersType": "Raw",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/api/shop/create"
+      },
+      "id": "9998b0d9-4c93-4499-8d48-3601bd023504",
+      "lastModified": "2018-05-21T15:22:52.030+06:00",
+      "name": "Shop Information Create",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "enabled": true,
+          "path": "code",
+          "value": "422"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
       "uriEditor": true,
       "type": "Request",
       "method": {
@@ -222,7 +281,7 @@
         "path": "/auth/api/employee/create"
       },
       "id": "1c387a6f-b4bc-40af-8b89-802bac393ab5",
-      "lastModified": "2018-05-03T11:36:29.532+06:00",
+      "lastModified": "2018-05-21T13:59:20.501+06:00",
       "name": "Employee-Create-No-Param (1)",
       "headers": [
         {
@@ -334,8 +393,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/create"
@@ -398,8 +456,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/create"
@@ -523,8 +580,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/create"
@@ -642,8 +698,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/create"
@@ -706,8 +761,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/update/1"
@@ -825,8 +879,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/update/1"
@@ -926,8 +979,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/update/2"
@@ -1042,8 +1094,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/get-all"
@@ -1125,8 +1176,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/create"
@@ -1218,8 +1268,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/update/1"
@@ -1282,8 +1331,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/get-all"
@@ -1371,8 +1419,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/create"
@@ -1442,8 +1489,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/create"
@@ -1496,8 +1542,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/update/2"
@@ -1543,8 +1588,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/get-all"
@@ -1626,8 +1670,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/oauth/token"
@@ -1683,8 +1726,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/create"
@@ -1753,8 +1795,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/create"
@@ -1813,8 +1854,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/ledger/get-all"
@@ -1841,6 +1881,7 @@
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
     {
+      "bodyEvaluationDisabled": true,
       "type": "Request",
       "method": {
         "requestBody": true,
@@ -1851,10 +1892,17 @@
         "formBody": {
           "overrideContentType": true,
           "encoding": "multipart/form-data",
-          "items": []
+          "items": [
+            {
+              "enabled": true,
+              "type": "File",
+              "name": "file"
+            }
+          ]
         },
         "bodyType": "Form",
-        "autoSetLength": true
+        "autoSetLength": true,
+        "textBody": "------FormBoundaryShouldDifferAtRuntime\nContent-Disposition: form-data; name=\"file\"; filename=\"Screenshot from 2018-01-22 11:31:27.png\"\nContent-Type: image/png\n\n[message-part-body; type: image/png, size: 172621 bytes]\ndata:image/png;charset=utf-8;base64,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"
       },
       "headersType": "Form",
       "uri": {
@@ -1870,7 +1918,7 @@
         "path": "/auth/api/upload/temp-file/product-image"
       },
       "id": "54af63bb-5d7d-48a3-8db6-0d2075e96df0",
-      "lastModified": "2018-05-03T11:41:39.600+06:00",
+      "lastModified": "2018-05-21T15:25:00.799+06:00",
       "name": "File Upload",
       "headers": [
         {
@@ -1889,7 +1937,7 @@
           "comparison": "Equals",
           "subject": "ResponseStatus",
           "path": "code",
-          "value": "400"
+          "value": "422"
         },
         {
           "comparison": "Equals",
@@ -1989,8 +2037,7 @@
           ]
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/product/get-by-barcode"
@@ -2038,8 +2085,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/product/get-by-category-id/1/3/1"
@@ -2087,8 +2133,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/product/get/1"
@@ -2142,8 +2187,7 @@
           ]
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/product/get-by-name-fragment/1/1"
@@ -2223,8 +2267,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/product/create"
@@ -2284,8 +2327,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/product/create"
@@ -2376,8 +2418,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/product/update/1"
@@ -2467,8 +2508,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/product/create"
@@ -2559,8 +2599,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/product/create"
@@ -2619,8 +2658,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/get-by-id/2"
@@ -2668,8 +2706,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/get-by-employee-id/1232"
@@ -2723,8 +2760,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/employee/get-by-type/ADMIN"
@@ -2778,8 +2814,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/get-by-id/1"
@@ -2827,8 +2862,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/get-by-supplier-id/3423"
@@ -2876,8 +2910,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/get-by-id/1"
@@ -2925,8 +2958,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/get-by-wholesaler-id/1231"
@@ -2974,8 +3006,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/ledger/get/wholesaler"
@@ -3023,8 +3054,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/ledger/get/supplier"
@@ -3072,8 +3102,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/ledger/get/employeeSalary"
@@ -3185,8 +3214,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/entry/make/payment"
@@ -4094,8 +4122,7 @@
           "items": []
         },
         "scheme": {
-          "name": "http",
-          "version": "V11"
+          "name": "{scheme}"
         },
         "host": "{url}",
         "path": "/auth/api/wholesaler/update/1"
@@ -4304,7 +4331,7 @@
         "autoSetLength": true,
         "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n  \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":400.7}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":47}\n}"
       },
-      "headersType": "Form",
+      "headersType": "Raw",
       "uri": {
         "query": {
           "delimiter": "&",
@@ -4318,7 +4345,7 @@
         "path": "/auth/api/shipment/create"
       },
       "id": "0a786595-49ef-4194-bda0-bcd4b5fb52c7",
-      "lastModified": "2018-05-21T13:43:23.335+06:00",
+      "lastModified": "2018-05-25T12:02:39.934+06:00",
       "name": "Shipment Create C:3 [ Paid Amount greater ] ",
       "headers": [
         {
@@ -4369,6 +4396,54 @@
           "subject": "ResponseJsonBody",
           "path": "$",
           "value": "2"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{ \n  \"vat\":0,\n  \"paidAmount\":0,\n  \"type\":\"WHOLESALE\",\n  \"inventories\":[],\n  \"wholesalerId\":6,\n   \"consumerInfo\":{\n   \t\t\t\t\"fullName\":\"s\",\n   \t\t\t\t\"dob\":\"2012-01-12\",\n   \t\t\t\t\"email\":\"54@rfg.bom\",\n   \t\t\t\t\"phone\":\"\",\n   \t\t\t\t\"address\":\"\"\n                },\n \"consumerInfoId\":145\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/sale/create"
+      },
+      "id": "3ac41231-6e91-4032-84eb-810e1a698b60",
+      "lastModified": "2018-05-29T11:26:35.842+06:00",
+      "name": "Sale",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
         }
       ],
       "metaInfo": {},
