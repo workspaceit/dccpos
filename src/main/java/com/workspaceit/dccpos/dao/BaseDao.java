@@ -3,6 +3,7 @@ package com.workspaceit.dccpos.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
@@ -90,12 +91,22 @@ public class BaseDao {
     }
     public long findMaxId(Class<?> cls){
         String entityName = cls.getSimpleName();
-        long count =(Long)this.getCurrentSession().createQuery("select max(id) from "+entityName).uniqueResult();
+        Object maxId = this.getCurrentSession().createQuery("select max(id) as maxId from "+entityName).uniqueResult();
+        long count = 0;
+        if(maxId!=null){
+            count=(Long)maxId;
+        }
+
         return count;
     }
     public long findMinId(Class<?> cls){
         String entityName = cls.getSimpleName();
-        long count =(Long)this.getCurrentSession().createQuery("select min(id) from "+entityName).uniqueResult();
+        Object minId =this.getCurrentSession().createQuery("select min(id) from "+entityName).uniqueResult();
+        long count = 0;
+        if(minId!=null){
+            count=(Long)minId;
+        }
+
         return count;
     }
 }

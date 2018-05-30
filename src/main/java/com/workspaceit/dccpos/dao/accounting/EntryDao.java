@@ -10,6 +10,11 @@ import java.util.List;
 
 @Repository
 public class EntryDao extends BaseDao {
+    public List<Entry> findAll(){
+        Session session = this.getCurrentSession();
+        return session.createQuery("FROM Entry")
+                .list();
+    }
     public List<Entry> findByDate(Date startDate, Date endDate){
         Session session = this.getCurrentSession();
         return session.createQuery("FROM Entry")

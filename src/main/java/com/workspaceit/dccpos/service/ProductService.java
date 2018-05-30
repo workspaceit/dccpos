@@ -188,23 +188,18 @@ public class ProductService {
         return product;
     }
     @Transactional(rollbackFor = Exception.class)
-    public void resolveProductProperties(List<Inventory> inventories ){
+    public void resolveProductProperties(){
         List<Product> products = this.getAll();
         for(Product product :products){
-            List<Inventory> productInventories = inventories.stream()
-                    .filter(inventory -> inventory.getProduct().getId() == product.getId())
-                    .collect(Collectors.toList());
+            List<Inventory> productInventories = this.inventoryService.getInStockByProductId(product.getId());
             if(productInventories == null || productInventories.size() == 0 ){
                 continue;
             }
 
-            int goodAvailableQuantity =  product.getGoodQuantity();
-            int damagedAvailableQuantity =  product.getDamagedQuantity();
-
             double maxSellingPrice =  this.inventoryService.getMaxSellingPrice(productInventories);
             double minSellingPrice =  this.inventoryService.getMinSellingPrice(productInventories);
-            goodAvailableQuantity +=  this.inventoryService.getAvailableQuantity(productInventories, PRODUCT_CONDITION.GOOD);
-            damagedAvailableQuantity +=  this.inventoryService.getAvailableQuantity(productInventories, PRODUCT_CONDITION.DAMAGED);
+            int goodAvailableQuantity =  this.inventoryService.getAvailableQuantity(productInventories, PRODUCT_CONDITION.GOOD);
+            int damagedAvailableQuantity =  this.inventoryService.getAvailableQuantity(productInventories, PRODUCT_CONDITION.DAMAGED);
             int totalQuantity = goodAvailableQuantity+damagedAvailableQuantity;
 
 

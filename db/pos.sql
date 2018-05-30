@@ -456,7 +456,7 @@ CREATE TABLE IF NOT EXISTS `sale` (
   `total_refund_amount` decimal(15,2) NOT NULL,
   `total_refund_amount_paid` decimal(15,2) NOT NULL,
   `total_refund_amount_due` decimal(15,2) NOT NULL,
-  `note` text COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
   `date` date NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -469,7 +469,7 @@ CREATE TABLE IF NOT EXISTS `sale` (
 -- Dumping data for table `sale`
 --
 
-INSERT INTO `sale` (`id`, `employee_id`, `wholesaler_id`, `personal_info_id`, `type`, `discount`, `vat`, `total_quantity`, `total_returned_quantity`, `total_price`, `total_due`, `total_receive`, `total_refund_amount`, `total_refund_amount_paid`, `total_refund_amount_due`, `note`, `date`, `created_at`) VALUES
+INSERT INTO `sale` (`id`, `employee_id`, `wholesaler_id`, `personal_info_id`, `type`, `discount`, `vat`, `total_quantity`, `total_returned_quantity`, `total_price`, `total_due`, `total_receive`, `total_refund_amount`, `total_refund_amount_paid`, `total_refund_amount_due`, `description`, `date`, `created_at`) VALUES
   (7, 1, NULL, NULL, 'WHOLESALE', 12.00, 4.00, 4, 0, 13, 41, 1, 4.00, 12.00, 1.00, 'Illegal Weapon sold ', '2018-05-04', '2018-05-04 10:52:34');
 
 -- --------------------------------------------------------

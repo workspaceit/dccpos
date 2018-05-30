@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.workspaceit.dccpos.config.PersistenceConfig;
 import com.workspaceit.dccpos.constant.SHIPMENT_COST;
 import com.workspaceit.dccpos.entity.accounting.Entry;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -215,25 +216,9 @@ public class Shipment {
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (trackingId != null ? trackingId.hashCode() : 0);
-        result = 31 * result + (supplier != null ? supplier.hashCode() : 0);
-        result = 31 * result + (entry != null ? entry.hashCode() : 0);
-        result = 31 * result + (inventories != null ? inventories.hashCode() : 0);
-        result = 31 * result + (costs != null ? costs.hashCode() : 0);
-        result = 31 * result + totalQuantity;
-        temp = Double.doubleToLongBits(totalProductPrice);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(totalCost);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (transactions != null ? transactions.hashCode() : 0);
-        temp = Double.doubleToLongBits(totalPaid);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (purchasedBy != null ? purchasedBy.hashCode() : 0);
-        result = 31 * result + (purchasedDate != null ? purchasedDate.hashCode() : 0);
-        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-        return result;
+        HashCodeBuilder hcb = new HashCodeBuilder();
+        hcb.append(id);
+
+        return hcb.hashCode();
     }
 }

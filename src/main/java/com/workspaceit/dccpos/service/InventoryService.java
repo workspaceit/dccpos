@@ -7,6 +7,8 @@ import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
 import com.workspaceit.dccpos.dao.InventoryDao;
 import com.workspaceit.dccpos.entity.Inventory;
 import com.workspaceit.dccpos.entity.Product;
+import com.workspaceit.dccpos.entity.Sale;
+import com.workspaceit.dccpos.entity.SaleDetails;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.validation.form.inventory.InventoryCreateFrom;
 import com.workspaceit.dccpos.validation.form.inventory.InventoryFrom;
@@ -156,6 +158,34 @@ public class InventoryService {
                 inventory ->inventory.getCondition().equals(productCondition)
         ).mapToInt(inventory -> inventory.getAvailableQuantity()
         ).sum();
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void decreaseAfterSale(Sale sale){
+        List<Inventory> inventories  = new ArrayList<>();
+       Set<SaleDetails> saleDetailsList =   sale.getSaleDetails();
+
+       for(SaleDetails saleDetails:saleDetailsList){
+           Inventory inventory  = saleDetails.getInventory();
+           inventory = this.getById(inventory.getId());
+           int availableQuantity;
+           int purchaseQuantity = inventory.getPurchaseQuantity();
+           int soldQuantity = inventory.getSoldQuantity();
+           /**
+            * Sold quantity increase by Sale quantity
+           * */
+           soldQuantity += saleDetails.getQuantity();
+           availableQuantity = purchaseQuantity - soldQuantity;
+
+           inventory.setSoldQuantity(soldQuantity);
+           inventory.setAvailableQuantity(availableQuantity);
+
+           if(availableQuantity==0){
+               inventory.setStatus(STOCK_STATUS.SOLD_OUT);
+           }
+           inventories.add(inventory);
+       }
+
+       this.update(inventories);
     }
 
     private void save(Inventory inventoryDetails){

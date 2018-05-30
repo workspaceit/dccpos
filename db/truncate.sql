@@ -1,3 +1,4 @@
+
 /*Remove Personal Information*/
 SET FOREIGN_KEY_CHECKS =0;
 TRUNCATE TABLE  `reset_password_tokens`;
@@ -38,7 +39,6 @@ SET FOREIGN_KEY_CHECKS =0;
 TRUNCATE TABLE `shipment_cost`;
 TRUNCATE TABLE `shipment`;
 TRUNCATE TABLE `inventory`;
-TRUNCATE TABLE `inventory_details`;
 TRUNCATE TABLE `acc_entries`;
 TRUNCATE TABLE `acc_entry_items`;
 
@@ -49,4 +49,19 @@ SET FOREIGN_KEY_CHECKS =1;
 SET FOREIGN_KEY_CHECKS =0;
 DELETE from  `temp_file` where id>1;
 ALTER TABLE `temp_file` AUTO_INCREMENT = 2;
+SET FOREIGN_KEY_CHECKS =1;
+
+/*sale*/
+SET FOREIGN_KEY_CHECKS =0;
+TRUNCATE TABLE  `sale`;
+TRUNCATE TABLE  `sale_details`;
+ALTER TABLE `sale` AUTO_INCREMENT = 1;
+ALTER TABLE `sale_details` AUTO_INCREMENT = 1;
+
+SET FOREIGN_KEY_CHECKS =1;
+
+/*Others*/
+
+SET FOREIGN_KEY_CHECKS =0;
+TRUNCATE TABLE  `shop_information`;
 SET FOREIGN_KEY_CHECKS =1;

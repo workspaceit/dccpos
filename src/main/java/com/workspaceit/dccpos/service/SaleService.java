@@ -1,19 +1,24 @@
 package com.workspaceit.dccpos.service;
 
-import com.workspaceit.dccpos.constant.SALE_TYPE;
 import com.workspaceit.dccpos.dao.SaleDao;
-import com.workspaceit.dccpos.entity.Sale;
+import com.workspaceit.dccpos.entity.*;
+import com.workspaceit.dccpos.exception.EntityNotFound;
+import com.workspaceit.dccpos.helper.TrackingIdGenerator;
 import com.workspaceit.dccpos.validation.form.sale.SaleForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class SaleService {
     private SaleDao saleDao;
     private PersonalInformationService personalInformationService;
-    private EmployeeService employeeService;
+    private SaleDetailsService saleDetailsService;
+    private WholesalerService wholesalerService;
+    private InventoryService inventoryService;
 
 
     @Autowired
@@ -25,34 +30,80 @@ public class SaleService {
     public void setPersonalInformationService(PersonalInformationService personalInformationService) {
         this.personalInformationService = personalInformationService;
     }
+
     @Autowired
-    public void setEmployeeService(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public void setSaleDetailsService(SaleDetailsService saleDetailsService) {
+        this.saleDetailsService = saleDetailsService;
     }
 
-    public void create(SaleForm saleForm){
-        Sale sale = new Sale();
+    @Autowired
+    public void setWholesalerService(WholesalerService wholesalerService) {
+        this.wholesalerService = wholesalerService;
+    }
 
-        sale.setWholesaler(null);
-        sale.setConsumer(null);
-        sale.setDate(new Date());
-        sale.setDiscount(12d);
-        sale.setVat(4d);
-        sale.setSoldBy(this.employeeService.getById(1));
-        sale.setTotalDue(41d);
-        sale.setTotalPrice(13d);
-        sale.setTotalQuantity(4);
-        sale.setTotalReceive(1d);
-        sale.setTotalRefundAmount(4d);
-        sale.setTotalRefundAmountDue(1d);
-        sale.setTotalRefundAmountPaid(12d);
-        sale.setType(SALE_TYPE.WHOLESALE);
-        sale.setNote("Illegal Weapon sold ");
-        System.out.println(sale.getId());
+    @Autowired
+    public void setInventoryService(InventoryService inventoryService) {
+        this.inventoryService = inventoryService;
+    }
+
+    @Transactional
+    public Sale getById(long id){
+        return this.saleDao.getById(id);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public Sale create(SaleForm saleForm, Employee employee) throws EntityNotFound {
+        Sale sale = new Sale();
+        Set<SaleDetails> saleDetailsList = this.saleDetailsService.getSaleDetails(saleForm.getInventories());
+        Wholesaler wholesaler = null;
+        PersonalInformation consumer = null;
+        double totalDue = 0;
+        double totalPrice = 0;
+        int totalQuantity = 0;
+
+        switch (saleForm.getType()){
+            case WHOLESALE:
+                wholesaler = this.wholesalerService.getWholesaler(saleForm.getWholesalerId());
+                break;
+            case CONSUMER_SALE:
+                if(saleForm.getConsumerInfoId()!=null && saleForm.getConsumerInfoId()>0)
+                    consumer = this.personalInformationService.getById(saleForm.getConsumerInfoId());
+                else
+                    consumer = this.personalInformationService.create(saleForm.getConsumerInfo());
+                break;
+        }
+
+
+        sale.setTrackingId(TrackingIdGenerator.getSaleTrackingId(this.saleDao.findMaxId(Sale.class)+1));
+        sale.setWholesaler(wholesaler);
+        sale.setConsumer(consumer);
+        sale.setDate(saleForm.getDate());
+        sale.setDiscount(saleForm.getDiscount());
+        sale.setVat(saleForm.getVat());
+        sale.setSoldBy(employee);
+        sale.setTotalDue(totalDue);
+        sale.setTotalPrice(totalPrice);
+        sale.setTotalQuantity(totalQuantity);
+        sale.setTotalReceive(0);
+        sale.setTotalRefundAmount(0);
+        sale.setTotalRefundAmountDue(0);
+        sale.setTotalRefundAmountPaid(0);
+        sale.setType(saleForm.getType());
+        sale.setDescription(saleForm.getDescription());
+        sale.setSaleDetails(saleDetailsList);
+
         this.save(sale);
+
+
+        /**
+         * After Sale
+         * */
+        this.inventoryService.decreaseAfterSale(sale);
+
+        return sale;
     }
     public Sale save(Sale sale){
         this.saleDao.save(sale);
         return sale;
     }
+
 }

@@ -14,7 +14,7 @@ public class SaleDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sale_id",referencedColumnName = "id")
     private Sale sale;
 
@@ -114,11 +114,13 @@ public class SaleDetails {
 
         SaleDetails that = (SaleDetails) o;
 
+
+
+
         if (id != that.id) return false;
         if (quantity != that.quantity) return false;
         if (Double.compare(that.perQuantityPrice, perQuantityPrice) != 0) return false;
         if (Double.compare(that.totalPrice, totalPrice) != 0) return false;
-        if (sale != null ? !sale.equals(that.sale) : that.sale != null) return false;
         if (inventory != null ? !inventory.equals(that.inventory) : that.inventory != null) return false;
         if (productCondition != that.productCondition) return false;
         return createdAt != null ? createdAt.equals(that.createdAt) : that.createdAt == null;
@@ -129,7 +131,6 @@ public class SaleDetails {
         int result;
         long temp;
         result = id;
-        result = 31 * result + (sale != null ? sale.hashCode() : 0);
         result = 31 * result + (inventory != null ? inventory.hashCode() : 0);
         result = 31 * result + quantity;
         temp = Double.doubleToLongBits(perQuantityPrice);

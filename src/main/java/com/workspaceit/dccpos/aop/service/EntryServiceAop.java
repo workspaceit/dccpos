@@ -3,6 +3,7 @@ package com.workspaceit.dccpos.aop.service;
 
 import com.workspaceit.dccpos.constant.accounting.ACCOUNTING_ENTRY;
 import com.workspaceit.dccpos.constant.accounting.GROUP_CODE;
+import com.workspaceit.dccpos.entity.Sale;
 import com.workspaceit.dccpos.entity.Shipment;
 import com.workspaceit.dccpos.entity.accounting.Entry;
 import com.workspaceit.dccpos.entity.accounting.EntryItem;
@@ -78,5 +79,32 @@ public class EntryServiceAop {
 
         this.ledgerService.resolveCurrentBalance(entryItems,true);
     }
+    @AfterReturning(pointcut = "execution(* com.workspaceit.dccpos.service.SaleService.create(..))",returning="saleReturnObj")
+    public void sale(JoinPoint joinPoint, Object saleReturnObj) throws Exception {
 
+        Sale sale = null;
+        if(saleReturnObj instanceof Sale){
+            sale =   ((Sale)saleReturnObj);
+        }
+
+
+        if(sale==null)return;
+
+      /*
+        Entry  entry = this.entryService.createShipmentEntry(shipment,purchaseForm);
+        double paidAmount = this.entryService.getTotalEntryItemsAmount(entry, GROUP_CODE.ASSET, ACCOUNTING_ENTRY.CR);
+
+        shipment.setTotalPaid(paidAmount);
+        shipment.setEntry(entry);
+        this.shipmentService.update(shipment);
+
+        *//**
+         * Calculate Current balance of ledger and update
+         * *//*
+        List<EntryItem> entryItems =  entry.getEntryItems();
+
+        if(entryItems==null)return;*/
+
+       // this.ledgerService.resolveCurrentBalance(entryItems,true);
+    }
 }

@@ -1,22 +1,25 @@
 package com.workspaceit.dccpos.validation.form.sale;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.workspaceit.dccpos.constant.SALE_TYPE;
+import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
 import com.workspaceit.dccpos.validation.form.personalIformation.PersonalInfoCreateForm;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
+import java.util.Date;
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SaleForm {
 
     @NotNull(message = "Product required")
     @Valid
     private InventorySaleForm[] inventories;
-    private Double discount;
 
-    @NotNull(message = "Paid amount required")
-    @Min(value = 0,message = "Amount can't be less equal zero")
-    private Double paidAmount;
+    /**
+     * double For default value 0
+     * */
+    private double discount;
 
     @NotNull(message = "Vat required")
     @Min(value = 0,message = "Amount can't be less equal zero")
@@ -25,6 +28,11 @@ public class SaleForm {
     @NotNull(message = "Sale type required")
     private SALE_TYPE type;
 
+    @NotNull
+    private Date date;
+
+    private String description;
+
     /**
      * Sale to
      * wholesaler or
@@ -32,6 +40,9 @@ public class SaleForm {
      * existing consumer
      * */
     private Integer wholesalerId;
+
+    @Valid
+    private LedgerEntryForm[] paymentAccount;
 
     @Valid
     private PersonalInfoCreateForm consumerInfo;
@@ -45,21 +56,14 @@ public class SaleForm {
         this.inventories = inventories;
     }
 
-    public Double getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Double discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 
-    public Double getPaidAmount() {
-        return paidAmount;
-    }
-
-    public void setPaidAmount(Double paidAmount) {
-        this.paidAmount = paidAmount;
-    }
 
     public Double getVat() {
         return vat;
@@ -73,8 +77,24 @@ public class SaleForm {
         return type;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public void setType(SALE_TYPE type) {
         this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getWholesalerId() {
@@ -99,5 +119,13 @@ public class SaleForm {
 
     public void setConsumerInfoId(Integer consumerInfoId) {
         this.consumerInfoId = consumerInfoId;
+    }
+
+    public LedgerEntryForm[] getPaymentAccount() {
+        return paymentAccount;
+    }
+
+    public void setPaymentAccount(LedgerEntryForm[] paymentAccount) {
+        this.paymentAccount = paymentAccount;
     }
 }

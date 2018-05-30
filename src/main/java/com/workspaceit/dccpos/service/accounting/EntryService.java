@@ -6,6 +6,7 @@ import com.workspaceit.dccpos.constant.accounting.GROUP_CODE;
 import com.workspaceit.dccpos.constant.accounting.LEDGER_CODE;
 import com.workspaceit.dccpos.dao.accounting.EntryDao;
 import com.workspaceit.dccpos.entity.Employee;
+import com.workspaceit.dccpos.entity.Sale;
 import com.workspaceit.dccpos.entity.Shipment;
 import com.workspaceit.dccpos.entity.Supplier;
 import com.workspaceit.dccpos.entity.accounting.Entry;
@@ -53,7 +54,10 @@ public class EntryService {
     public List<Entry> getByDate(Date startDate, Date endDate){
         return this.entryDao.findByDate(null,null);
     }
-
+    @Transactional
+    public List<Entry> getAll(){
+        return this.entryDao.findAll();
+    }
 
 
 
@@ -170,6 +174,37 @@ public class EntryService {
             EntryItem entryItemSupplier = this.getEntryItem(priceBalance,supplierLedger,ACCOUNTING_ENTRY.CR);
             entryItems.add(entryItemSupplier);
         }
+
+
+        this.entryItemService.saveAll(entry,entryItems);
+        entry.setEntryItems(entryItems);
+
+        return entry;
+
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public Entry createSaleEntry(Sale sale, PurchaseForm purchaseForm) throws EntityNotFound {
+        List<EntryItem> entryItems = new ArrayList<>();
+        EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
+
+
+        double totalPrice = sale.getTotalPrice();
+        double totalReceive = sale.getTotalReceive();
+
+
+        Ledger  wholeSalerLedger = this.ledgerService.getByCompanyIdAndCode(sale.getWholesaler().getId(), GROUP_CODE.WHOLESALER);
+
+        Entry entry = new Entry();
+        entry.setDrTotal(totalPrice);
+        entry.setCrTotal(totalPrice);
+        entry.setEntryType(entryType);
+        entry.setCreatedBy(sale.getSoldBy());
+        entry.setDate(sale.getDate());
+        entry.setNarration("Product sold");
+        this.save(entry);
+
+
+
 
 
         this.entryItemService.saveAll(entry,entryItems);

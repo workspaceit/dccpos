@@ -15,23 +15,25 @@ public class Sale {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
+
+    @Column(name = "tracking_id")
+    private String trackingId;
 
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id",referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sold_by",referencedColumnName = "id")
     private Employee soldBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wholesaler_id",referencedColumnName = "id")
     private Wholesaler wholesaler;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "personal_info_id")
     private PersonalInformation consumer;
 
-    @OneToMany
-    @JoinColumn(name = "sale_id",referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "sale")
     private Set<SaleDetails> saleDetails;
 
     @Enumerated(EnumType.STRING)
@@ -68,8 +70,8 @@ public class Sale {
     @Column(name = "total_refund_amount_due")
     private double totalRefundAmountDue;
 
-    @Column(name = "note")
-    private String note;
+    @Column(name = "description")
+    private String description;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",timezone = PersistenceConfig.DateConfig.timeZone)
     @Column(name = "date")
@@ -83,12 +85,20 @@ public class Sale {
     private Date createdAt;
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTrackingId() {
+        return trackingId;
+    }
+
+    public void setTrackingId(String trackingId) {
+        this.trackingId = trackingId;
     }
 
     public Employee getSoldBy() {
@@ -211,12 +221,12 @@ public class Sale {
         this.totalRefundAmountDue = totalRefundAmountDue;
     }
 
-    public String getNote() {
-        return note;
+    public String getDescription() {
+        return description;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getDate() {
@@ -259,7 +269,7 @@ public class Sale {
         if (consumer != null ? !consumer.equals(sale.consumer) : sale.consumer != null) return false;
         if (saleDetails != null ? !saleDetails.equals(sale.saleDetails) : sale.saleDetails != null) return false;
         if (type != sale.type) return false;
-        if (note != null ? !note.equals(sale.note) : sale.note != null) return false;
+        if (description != null ? !description.equals(sale.description) : sale.description != null) return false;
         if (date != null ? !date.equals(sale.date) : sale.date != null) return false;
         return createdAt != null ? createdAt.equals(sale.createdAt) : sale.createdAt == null;
     }
@@ -268,7 +278,7 @@ public class Sale {
     public int hashCode() {
         int result;
         long temp;
-        result = id;
+        result = (int)id;
         result = 31 * result + (soldBy != null ? soldBy.hashCode() : 0);
         result = 31 * result + (wholesaler != null ? wholesaler.hashCode() : 0);
         result = 31 * result + (consumer != null ? consumer.hashCode() : 0);
@@ -292,7 +302,7 @@ public class Sale {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(totalRefundAmountDue);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (note != null ? note.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
         return result;

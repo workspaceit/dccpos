@@ -2,6 +2,7 @@ package com.workspaceit.dccpos.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.workspaceit.dccpos.constant.SHIPMENT_COST;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -90,23 +91,17 @@ public class ShipmentCost {
 
         ShipmentCost that = (ShipmentCost) o;
 
-        if (id != that.id) return false;
-        if (Double.compare(that.amount, amount) != 0) return false;
-        if (shipment != null ? !shipment.equals(that.shipment) : that.shipment != null) return false;
-        if (name != that.name) return false;
-        return createdAt != null ? createdAt.equals(that.createdAt) : that.createdAt == null;
+        if (id != that.id)
+            return true;
+        return false;
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = id;
-        result = 31 * result + (shipment != null ? shipment.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        temp = Double.doubleToLongBits(amount);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-        return result;
+
+        HashCodeBuilder hcb = new HashCodeBuilder();
+        hcb.append(id);
+
+        return hcb.hashCode();
     }
 }
