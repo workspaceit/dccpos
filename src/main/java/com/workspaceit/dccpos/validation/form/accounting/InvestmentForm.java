@@ -7,7 +7,7 @@ import java.util.Date;
 public class InvestmentForm {
     @Valid
     @NotNull
-    private LedgerEntryForm[] cashOrBank;
+    private PaymentLedgerForm[] cashOrBank;
 
      private String narration;
 
@@ -15,11 +15,11 @@ public class InvestmentForm {
     private Date date;
 
 
-    public LedgerEntryForm[] getCashOrBank() {
+    public PaymentLedgerForm[] getCashOrBank() {
         return cashOrBank;
     }
 
-    public void setCashOrBank(LedgerEntryForm[] cashOrBank) {
+    public void setCashOrBank(PaymentLedgerForm[] cashOrBank) {
         this.cashOrBank = cashOrBank;
     }
 

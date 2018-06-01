@@ -49,10 +49,6 @@ public class Ledger {
     private double currentBalance;
 
     @Enumerated(EnumType.STRING)
-    @Column(name =  "current_balance_dc")
-    private ACCOUNTING_ENTRY currentBalanceEntryType;
-
-    @Enumerated(EnumType.STRING)
     @Column(name =  "type")
     private LEDGER_TYPE ledgerType;
 
@@ -139,14 +135,6 @@ public class Ledger {
         this.currentBalance = currentBalance;
     }
 
-    public ACCOUNTING_ENTRY getCurrentBalanceEntryType() {
-        return currentBalanceEntryType;
-    }
-
-    public void setCurrentBalanceEntryType(ACCOUNTING_ENTRY currentBalanceEntryType) {
-        this.currentBalanceEntryType = currentBalanceEntryType;
-    }
-
     public ACCOUNTING_ENTRY getOpeningBalanceEntryType() {
         return openingBalanceEntryType;
     }
@@ -199,7 +187,6 @@ public class Ledger {
         if (code != ledger.code) return false;
         if (name != null ? !name.equals(ledger.name) : ledger.name != null) return false;
         if (openingBalanceEntryType != ledger.openingBalanceEntryType) return false;
-        if (currentBalanceEntryType != ledger.currentBalanceEntryType) return false;
         if (ledgerType != ledger.ledgerType) return false;
         if (notes != null ? !notes.equals(ledger.notes) : ledger.notes != null) return false;
         return createdAt != null ? createdAt.equals(ledger.createdAt) : ledger.createdAt == null;
@@ -220,7 +207,6 @@ public class Ledger {
         result = 31 * result + (openingBalanceEntryType != null ? openingBalanceEntryType.hashCode() : 0);
         temp = Double.doubleToLongBits(currentBalance);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (currentBalanceEntryType != null ? currentBalanceEntryType.hashCode() : 0);
         result = 31 * result + (ledgerType != null ? ledgerType.hashCode() : 0);
         result = 31 * result + reconciliation;
         result = 31 * result + (notes != null ? notes.hashCode() : 0);

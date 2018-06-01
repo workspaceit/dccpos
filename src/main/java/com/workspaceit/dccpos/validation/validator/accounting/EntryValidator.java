@@ -4,7 +4,7 @@ import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
 import com.workspaceit.dccpos.validation.form.accounting.InvestmentForm;
-import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
+import com.workspaceit.dccpos.validation.form.accounting.PaymentLedgerForm;
 import com.workspaceit.dccpos.validation.form.accounting.TransactionForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class EntryValidator {
         if( paymentForm.getBeneficial()==null || paymentForm.getCashOrBank() == null)return;
 
         Integer beneficialLedgerId =   paymentForm.getBeneficial().getLedgerId();
-        LedgerEntryForm[] ledgerEntryForms = paymentForm.getCashOrBank();
+        PaymentLedgerForm[] ledgerEntryForms = paymentForm.getCashOrBank();
 
         this.validateLedger("beneficial.ledgerId",beneficialLedgerId,errors);
 
@@ -49,7 +49,7 @@ public class EntryValidator {
         if( paymentForm.getBeneficial()==null || paymentForm.getCashOrBank() == null)return;
 
         Integer beneficialLedgerId =   paymentForm.getBeneficial().getLedgerId();
-        LedgerEntryForm[] ledgerEntryForms = paymentForm.getCashOrBank();
+        PaymentLedgerForm[] ledgerEntryForms = paymentForm.getCashOrBank();
 
         this.validateLedger("beneficial.ledgerId",beneficialLedgerId,errors);
 
@@ -73,7 +73,7 @@ public class EntryValidator {
     public void validateInvestment(InvestmentForm investmentForm, Errors errors){
         if( investmentForm.getCashOrBank() == null)return;
 
-       LedgerEntryForm[] ledgerEntryForms = investmentForm.getCashOrBank();
+       PaymentLedgerForm[] ledgerEntryForms = investmentForm.getCashOrBank();
 
 
         for(int i=0;i<ledgerEntryForms.length;i++){
@@ -94,10 +94,10 @@ public class EntryValidator {
 
     }
 
-    public void validateDuplicateLedger(String refName,LedgerEntryForm[] ledgerEntryForms, Errors errors){
+    public void validateDuplicateLedger(String refName, PaymentLedgerForm[] ledgerEntryForms, Errors errors){
         if( ledgerEntryForms == null || ledgerEntryForms.length==0)return;
         for(int i=0;i<ledgerEntryForms.length;i++){
-            LedgerEntryForm  ledgerEntryForm =   ledgerEntryForms[i];
+            PaymentLedgerForm ledgerEntryForm =   ledgerEntryForms[i];
             boolean flag = Arrays.stream(ledgerEntryForms).anyMatch(ledgerEntry->(!ledgerEntry.equals(ledgerEntryForm))
                     && ledgerEntry.getLedgerId()== ledgerEntryForm.getLedgerId());
 
@@ -113,7 +113,7 @@ public class EntryValidator {
 
         Integer beneficialLedgerId =   paymentForm.getBeneficial().getLedgerId();
         Double  beneficialAmount = paymentForm.getBeneficial().getAmount();
-        LedgerEntryForm[] ledgerEntryForms = paymentForm.getCashOrBank();
+        PaymentLedgerForm[] ledgerEntryForms = paymentForm.getCashOrBank();
         double totalDrAmount = (beneficialAmount!=null)?beneficialAmount:0;
         double totalCrAmount = 0;
 

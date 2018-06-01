@@ -45,7 +45,7 @@ public class LedgerServiceAop {
 
        List<EntryItem> entryItems =  entry.getEntryItems();
 
-        this.ledgerService.resolveCurrentBalance(entryItems,true);
+        this.ledgerService.resolveCurrentBalance(entryItems);
 
     }
 

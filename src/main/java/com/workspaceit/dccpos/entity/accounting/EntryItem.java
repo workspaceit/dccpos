@@ -41,9 +41,6 @@ public class EntryItem {
     @Column(name = "created_at")
     private Date   createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by",referencedColumnName = "id")
-    private Employee createdBy;
 
 
     public int getId() {
@@ -100,13 +97,5 @@ public class EntryItem {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public Employee getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Employee createdBy) {
-        this.createdBy = createdBy;
     }
 }

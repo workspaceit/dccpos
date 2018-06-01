@@ -104,7 +104,6 @@ public class LedgerService {
         ledger.setOpeningBalance(0d);
         ledger.setOpeningBalanceEntryType(ledgerForm.getLedgerAccountingEntry());
         ledger.setCurrentBalance(0d);
-        ledger.setCurrentBalanceEntryType(ledgerForm.getLedgerAccountingEntry());
         ledger.setNotes(ledgerForm.getLedgerNote());
         ledger.setPersonalInformation(personalInformation);
         ledger.setReconciliation(0);
@@ -124,7 +123,6 @@ public class LedgerService {
         ledger.setOpeningBalance(0d);
         ledger.setOpeningBalanceEntryType(ACCOUNTING_ENTRY.DR);
         ledger.setCurrentBalance(0d);
-        ledger.setCurrentBalanceEntryType(ACCOUNTING_ENTRY.DR);
         ledger.setNotes("");
         ledger.setPersonalInformation(personalInformation);
         ledger.setReconciliation(0);
@@ -145,7 +143,6 @@ public class LedgerService {
         ledger.setOpeningBalance(0d);
         ledger.setOpeningBalanceEntryType(ACCOUNTING_ENTRY.CR);
         ledger.setCurrentBalance(0d);
-        ledger.setCurrentBalanceEntryType(ACCOUNTING_ENTRY.CR);
         ledger.setNotes("");
         ledger.setCompany(company);
         ledger.setReconciliation(0);
@@ -164,7 +161,6 @@ public class LedgerService {
         ledger.setOpeningBalance(0d);
         ledger.setOpeningBalanceEntryType(ACCOUNTING_ENTRY.CR);
         ledger.setCurrentBalance(0d);
-        ledger.setCurrentBalanceEntryType(ACCOUNTING_ENTRY.CR);
         ledger.setNotes("");
         ledger.setCompany(company);
         ledger.setReconciliation(0);
@@ -290,13 +286,9 @@ public class LedgerService {
         return  NumberHelper.round(balance,2);
     }
     @Transactional
-    public void resolveCurrentBalance(Collection<EntryItem> entryItems,boolean calculateFromEntireEntry){
+    public void resolveCurrentBalance(Collection<EntryItem> entryItems){
 
-        if(calculateFromEntireEntry){
-            this.resolveCurrentBalanceByCalculateFromEntireEntry(entryItems);
-        }else{
-            // Need equation
-        }
+        this.resolveCurrentBalanceByCalculateFromEntireEntry(entryItems);
     }
     private void resolveCurrentBalanceByCalculateFromEntireEntry(Collection<EntryItem> entryItems){
         List<Ledger> ledgerList = new ArrayList<>();

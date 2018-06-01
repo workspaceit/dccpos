@@ -1,15 +1,15 @@
-package com.workspaceit.dccpos.util.purchase;
+package com.workspaceit.dccpos.util.validation;
 
-import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
+import com.workspaceit.dccpos.validation.form.accounting.PaymentLedgerForm;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LedgerEntryFormUtil {
-    public double getTotalAmount(LedgerEntryForm[] ledgerEntryForms){
+public class PaymentLedgerUtil {
+    public double sumAmount(PaymentLedgerForm[] ledgerEntryForms){
         double totalAmount = 0d;
 
         if(ledgerEntryForms==null)return totalAmount;
-        for (LedgerEntryForm ledgerEntryForm: ledgerEntryForms) {
+        for (PaymentLedgerForm ledgerEntryForm: ledgerEntryForms) {
             double amount = ledgerEntryForm.getAmount()!=null?ledgerEntryForm.getAmount():0;
             totalAmount += amount;
         }

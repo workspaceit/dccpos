@@ -1,4 +1,4 @@
-package com.workspaceit.dccpos.util;
+package com.workspaceit.dccpos.util.validation;
 
 import org.springframework.util.Assert;
 import org.springframework.validation.Errors;

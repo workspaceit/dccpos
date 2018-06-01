@@ -15,10 +15,15 @@ import com.workspaceit.dccpos.entity.accounting.EntryType;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.AccountPaymentFormHelper;
+import com.workspaceit.dccpos.util.SaleDetailsUtil;
+import com.workspaceit.dccpos.util.validation.PaymentLedgerUtil;
+import com.workspaceit.dccpos.util.validation.SaleFormUtil;
 import com.workspaceit.dccpos.validation.form.accounting.InvestmentForm;
-import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
+import com.workspaceit.dccpos.validation.form.accounting.LedgerForm;
+import com.workspaceit.dccpos.validation.form.accounting.PaymentLedgerForm;
 import com.workspaceit.dccpos.validation.form.accounting.TransactionForm;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;;
+import com.workspaceit.dccpos.validation.form.sale.SaleForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +37,10 @@ public class EntryService {
     private LedgerService ledgerService;
     private EntryTypeService entryTypeService;
     private EntryItemService entryItemService;
+    private SaleDetailsUtil saleDetailsUtil;
+    private PaymentLedgerUtil ledgerEntryFormUtil;
+    private SaleFormUtil saleFormUtil;
+    private PaymentLedgerUtil paymentLedgerUtil;
 
     @Autowired
     public void setEntryDao(EntryDao entryDao) {
@@ -49,6 +58,22 @@ public class EntryService {
     public void setEntryItemService(EntryItemService entryItemService) {
         this.entryItemService = entryItemService;
     }
+    @Autowired
+    public void setSaleDetailsUtil(SaleDetailsUtil saleDetailsUtil) {
+        this.saleDetailsUtil = saleDetailsUtil;
+    }
+    @Autowired
+    public void setLedgerEntryFormUtil(PaymentLedgerUtil ledgerEntryFormUtil) {
+        this.ledgerEntryFormUtil = ledgerEntryFormUtil;
+    }
+    @Autowired
+    public void setSaleFormUtil(SaleFormUtil saleFormUtil) {
+        this.saleFormUtil = saleFormUtil;
+    }
+    @Autowired
+    public void setPaymentLedgerUtil(PaymentLedgerUtil paymentLedgerUtil) {
+        this.paymentLedgerUtil = paymentLedgerUtil;
+    }
 
     @Transactional
     public List<Entry> getByDate(Date startDate, Date endDate){
@@ -59,14 +84,102 @@ public class EntryService {
         return this.entryDao.findAll();
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public Entry decreaseInventory(double amount,Date date,String narration,Employee createdBy){
+        List<EntryItem> entryItems = new ArrayList<>();
+        EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
+        EntryItem entryItemCogs = this.getEntryItem(amount,LEDGER_CODE.COGS,ACCOUNTING_ENTRY.DR);
+        EntryItem entryItemInventory = this.getEntryItem(amount,LEDGER_CODE.INVENTORY,ACCOUNTING_ENTRY.CR);
 
+
+        entryItems.add(entryItemCogs);
+        entryItems.add(entryItemInventory);
+
+        Entry entry = new Entry();
+
+        entry.setDrTotal(amount);
+        entry.setCrTotal(amount);
+        entry.setEntryType(entryType);
+        entry.setCreatedBy(createdBy);
+        entry.setDate(date);
+        entry.setNarration(narration);
+
+
+
+        this.save(entry);
+
+        this.entryItemService.saveAll(entry,entryItems);
+        entry.setEntryItems(entryItems);
+
+        this.ledgerService.resolveCurrentBalance(entryItems);
+        return entry;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Entry createSaleEntry(Sale sale, SaleForm saleForm) throws EntityNotFound {
+        Entry entry = new Entry();
+        double totalAmount =  this.saleFormUtil.getTotalPayablePrice(saleForm);
+        List<EntryItem> entryItems = new ArrayList<>();
+
+        EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
+        double cogs = this.saleDetailsUtil.getTotalPurchasePrice(sale.getSaleDetails());
+        EntryItem entryItemSale = this.getEntryItem(totalAmount,LEDGER_CODE.SALE,ACCOUNTING_ENTRY.CR);
+        entryItems.add(entryItemSale);
+
+        double totalReceive = this.paymentLedgerUtil.sumAmount(saleForm.getPaymentAccount());
+
+        /**
+         * Payment entry items
+         * */
+        if(totalReceive>0){
+            PaymentLedgerForm[]  ledgerEntryForms =  saleForm.getPaymentAccount();
+
+            for(PaymentLedgerForm ledgerEntryForm:ledgerEntryForms){
+
+                Ledger ledger = this.ledgerService.getLedger(ledgerEntryForm.getLedgerId());
+                EntryItem entryItemPayment = this.getEntryItem(ledgerEntryForm.getAmount(),ledger,ACCOUNTING_ENTRY.DR);
+
+                entryItems.add(entryItemPayment);
+            }
+        }
+
+        if(totalReceive!=totalAmount){
+            double dueAmount = totalAmount - totalReceive;
+            switch (saleForm.getType()){
+                case CONSUMER_SALE:
+                    EntryItem entryItemDueSale = this.getEntryItem(dueAmount,LEDGER_CODE.DUE_SALE,ACCOUNTING_ENTRY.DR);
+                    entryItems.add(entryItemDueSale);
+                    break;
+                case WHOLESALE:
+                    Ledger wholeSellerLedger = this.ledgerService.getById(saleForm.getWholesalerId());
+                    EntryItem entryItemWholeSeller = this.getEntryItem(dueAmount,wholeSellerLedger,ACCOUNTING_ENTRY.DR);
+                    entryItems.add(entryItemWholeSeller);
+                    break;
+            }
+        }
+        entry.setDrTotal(totalAmount);
+        entry.setCrTotal(totalAmount);
+        entry.setEntryType(entryType);
+        entry.setCreatedBy(sale.getSoldBy());
+        entry.setDate(sale.getDate());
+        entry.setNarration(sale.getDescription());
+
+        this.save(entry);
+
+        this.entryItemService.saveAll(entry,entryItems);
+        entry.setEntryItems(entryItems);
+
+        this.decreaseInventory(cogs,sale.getDate(), "Inventory sold",sale.getSoldBy());
+
+        return entry;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public Entry createShipmentEntry(Shipment shipment, PurchaseForm purchaseForm) throws EntityNotFound {
         List<EntryItem> entryItems = new ArrayList<>();
         EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
-        LedgerEntryForm[]  productPricePaymentAccounts =  purchaseForm.getProductPricePaymentAccount();
-        LedgerEntryForm shippingCostPaymentAccount =  purchaseForm.getShippingCostPaymentAccount();
+        PaymentLedgerForm[]  productPricePaymentAccounts =  purchaseForm.getProductPricePaymentAccount();
+        PaymentLedgerForm shippingCostPaymentAccount =  purchaseForm.getShippingCostPaymentAccount();
 
         double totalShippingCost = shipment.getTotalCost();
         double totalInventoryPrice = shipment.getTotalProductPrice();
@@ -100,7 +213,7 @@ public class EntryService {
          * if Due
          *  Due Shipping Cost Cr
          * */
-        EntryItem entryItemShipmentCost = this.getShipmentEntryItem(totalShippingCost,LEDGER_CODE.SHIPMENT_COST,ACCOUNTING_ENTRY.DR);
+        EntryItem entryItemShipmentCost = this.getEntryItem(totalShippingCost,LEDGER_CODE.SHIPMENT_COST,ACCOUNTING_ENTRY.DR);
         double paidShippingCostBalance = 0;
 
         entryItems.add(entryItemShipmentCost);
@@ -123,7 +236,7 @@ public class EntryService {
 
 
         if(paidShippingCostBalance>0){
-            EntryItem entryItemDueShipmentCost = this.getShipmentEntryItem(paidShippingCostBalance,LEDGER_CODE.DUE_SHIPMENT_COST,ACCOUNTING_ENTRY.CR);
+            EntryItem entryItemDueShipmentCost = this.getEntryItem(paidShippingCostBalance,LEDGER_CODE.DUE_SHIPMENT_COST,ACCOUNTING_ENTRY.CR);
             entryItems.add(entryItemDueShipmentCost);
         }
 
@@ -146,13 +259,13 @@ public class EntryService {
          * */
 
 
-        EntryItem entryItemInventory = this.getShipmentEntryItem(totalInventoryPrice,LEDGER_CODE.INVENTORY,ACCOUNTING_ENTRY.DR);
+        EntryItem entryItemInventory = this.getEntryItem(totalInventoryPrice,LEDGER_CODE.INVENTORY,ACCOUNTING_ENTRY.DR);
         double priceBalance = 0;
 
         entryItems.add(entryItemInventory);
 
         if(productPricePaymentAccounts!=null){
-            for(LedgerEntryForm accountPaymentForm  :productPricePaymentAccounts){
+            for(PaymentLedgerForm accountPaymentForm  :productPricePaymentAccounts){
                 int ledgerId = accountPaymentForm.getLedgerId();
 
                 Ledger cashOrBankLedger = this.ledgerService.getLedger(ledgerId);
@@ -183,37 +296,6 @@ public class EntryService {
 
     }
     @Transactional(rollbackFor = Exception.class)
-    public Entry createSaleEntry(Sale sale, PurchaseForm purchaseForm) throws EntityNotFound {
-        List<EntryItem> entryItems = new ArrayList<>();
-        EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
-
-
-        double totalPrice = sale.getTotalPrice();
-        double totalReceive = sale.getTotalReceive();
-
-
-        Ledger  wholeSalerLedger = this.ledgerService.getByCompanyIdAndCode(sale.getWholesaler().getId(), GROUP_CODE.WHOLESALER);
-
-        Entry entry = new Entry();
-        entry.setDrTotal(totalPrice);
-        entry.setCrTotal(totalPrice);
-        entry.setEntryType(entryType);
-        entry.setCreatedBy(sale.getSoldBy());
-        entry.setDate(sale.getDate());
-        entry.setNarration("Product sold");
-        this.save(entry);
-
-
-
-
-
-        this.entryItemService.saveAll(entry,entryItems);
-        entry.setEntryItems(entryItems);
-
-        return entry;
-
-    }
-    @Transactional(rollbackFor = Exception.class)
     public Entry createPaymentEntry(Employee employee, TransactionForm transactionForm) throws EntityNotFound {
         return this.createPaymentOrReceiveEntry(employee,transactionForm,ENTRY_TYPES.PAYMENT);
     }
@@ -226,14 +308,14 @@ public class EntryService {
         List<EntryItem> entryItems = new ArrayList<>();
         double totalInvestment = 0;
 
-        LedgerEntryForm[]  cashOrBankList = investmentForm.getCashOrBank();
+        PaymentLedgerForm[]  cashOrBankList = investmentForm.getCashOrBank();
         Ledger ownersLedgerLedger = this.ledgerService.getByCode(LEDGER_CODE.INVESTMENT);
         EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
 
         /**
          * Getting all amount of cash or bank ledger
          * */
-        for(LedgerEntryForm cashOrBank : cashOrBankList){
+        for(PaymentLedgerForm cashOrBank : cashOrBankList){
 
             Ledger entryCashOrBankLedger = this.ledgerService.getLedger(cashOrBank.getLedgerId());
             EntryItem entryCashOrBank = this.getEntryItem(cashOrBank.getAmount(),entryCashOrBankLedger,ACCOUNTING_ENTRY.DR);
@@ -279,8 +361,8 @@ public class EntryService {
 
         List<EntryItem> entryItems = new ArrayList<>();
         EntryType entryType = this.entryTypeService.getByLabel(_EntryType);
-        LedgerEntryForm beneficialForm =  transactionForm.getBeneficial();
-        LedgerEntryForm[] cashOrBankList = transactionForm.getCashOrBank();
+        PaymentLedgerForm beneficialForm =  transactionForm.getBeneficial();
+        PaymentLedgerForm[] cashOrBankList = transactionForm.getCashOrBank();
 
         double totalEntryDcAmount = beneficialForm.getAmount();
 
@@ -303,7 +385,7 @@ public class EntryService {
         /**
          * Getting all amount of cash or bank ledger
          * */
-        for(LedgerEntryForm cashOrBank : cashOrBankList){
+        for(PaymentLedgerForm cashOrBank : cashOrBankList){
 
             Ledger entryCashOrBankLedger = this.ledgerService.getLedger(cashOrBank.getLedgerId());
             EntryItem entryCashOrBank = this.getEntryItem(cashOrBank.getAmount(),entryCashOrBankLedger,accountTypeCashBank);
@@ -319,16 +401,9 @@ public class EntryService {
         return entry;
 
     }
-    private EntryItem getShipmentEntryItem(double amount ,LEDGER_CODE ledgerCode,ACCOUNTING_ENTRY accountingEntry){
+    private EntryItem getEntryItem(double amount , LEDGER_CODE ledgerCode, ACCOUNTING_ENTRY accountingEntry){
         Ledger ledger = this.ledgerService.getByCode(ledgerCode);
-
-        EntryItem entryItem = new EntryItem();
-
-        entryItem.setLedger(ledger);
-        entryItem.setAccountingEntry(accountingEntry);
-        entryItem.setAmount(amount);
-
-        return entryItem;
+        return this.getEntryItem(amount,ledger,accountingEntry);
     }
     private EntryItem getEntryItem(double amount , Ledger ledger, ACCOUNTING_ENTRY accountingEntry){
 

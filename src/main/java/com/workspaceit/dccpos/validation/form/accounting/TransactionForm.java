@@ -7,30 +7,30 @@ import java.util.Date;
 public class TransactionForm {
     @Valid
     @NotNull
-    private LedgerEntryForm beneficial;
+    private PaymentLedgerForm beneficial;
 
     @Valid
     @NotNull
-    private LedgerEntryForm[] cashOrBank;
+    private PaymentLedgerForm[] cashOrBank;
 
     private String narration;
 
     @NotNull(message = "Date required")
     private Date date;
 
-    public LedgerEntryForm getBeneficial() {
+    public PaymentLedgerForm getBeneficial() {
         return beneficial;
     }
 
-    public void setBeneficial(LedgerEntryForm beneficial) {
+    public void setBeneficial(PaymentLedgerForm beneficial) {
         this.beneficial = beneficial;
     }
 
-    public LedgerEntryForm[] getCashOrBank() {
+    public PaymentLedgerForm[] getCashOrBank() {
         return cashOrBank;
     }
 
-    public void setCashOrBank(LedgerEntryForm[] cashOrBank) {
+    public void setCashOrBank(PaymentLedgerForm[] cashOrBank) {
         this.cashOrBank = cashOrBank;
     }
 

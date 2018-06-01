@@ -59,6 +59,8 @@ public class SaleService {
         double totalDue = 0;
         double totalPrice = 0;
         int totalQuantity = 0;
+        double discount = saleForm.getDiscount()!=null?saleForm.getDiscount():0d;
+        double vat =  saleForm.getVat()!=null?saleForm.getVat():0d;
 
         switch (saleForm.getType()){
             case WHOLESALE:
@@ -72,13 +74,12 @@ public class SaleService {
                 break;
         }
 
-
         sale.setTrackingId(TrackingIdGenerator.getSaleTrackingId(this.saleDao.findMaxId(Sale.class)+1));
         sale.setWholesaler(wholesaler);
         sale.setConsumer(consumer);
         sale.setDate(saleForm.getDate());
-        sale.setDiscount(saleForm.getDiscount());
-        sale.setVat(saleForm.getVat());
+        sale.setDiscount(discount);
+        sale.setVat(vat);
         sale.setSoldBy(employee);
         sale.setTotalDue(totalDue);
         sale.setTotalPrice(totalPrice);

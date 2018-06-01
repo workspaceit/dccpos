@@ -5,6 +5,9 @@ import com.workspaceit.dccpos.entity.PersonalInformation;
 import com.workspaceit.dccpos.entity.Wholesaler;
 import com.workspaceit.dccpos.service.PersonalInformationService;
 import com.workspaceit.dccpos.service.WholesalerService;
+import com.workspaceit.dccpos.util.validation.InventorySaleUtil;
+import com.workspaceit.dccpos.util.validation.PaymentLedgerUtil;
+import com.workspaceit.dccpos.util.validation.SaleFormUtil;
 import com.workspaceit.dccpos.validation.form.personalIformation.PersonalInfoCreateForm;
 import com.workspaceit.dccpos.validation.form.sale.SaleForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,10 @@ public class SaleValidator {
 
     private PersonalInfoValidator personalInfoValidator;
     private InventoryValidator inventoryValidator;
+    private PaymentLedgerValidator ledgerEntryValidator;
+    private PaymentLedgerUtil paymentLedgerValidatorUtil;
+    private InventorySaleUtil inventorySaleValidatorUtil;
+    private SaleFormUtil saleValidatorUtil;
 
     @Autowired
     public void setWholesalerService(WholesalerService wholesalerService) {
@@ -39,6 +46,26 @@ public class SaleValidator {
         this.inventoryValidator = inventoryValidator;
     }
 
+    @Autowired
+    public void setLedgerEntryValidator(PaymentLedgerValidator ledgerEntryValidator) {
+        this.ledgerEntryValidator = ledgerEntryValidator;
+    }
+
+    @Autowired
+    public void setPaymentLedgerValidatorUtil(PaymentLedgerUtil paymentLedgerValidatorUtil) {
+        this.paymentLedgerValidatorUtil = paymentLedgerValidatorUtil;
+    }
+
+    @Autowired
+    public void setInventorySaleValidatorUtil(InventorySaleUtil inventorySaleValidatorUtil) {
+        this.inventorySaleValidatorUtil = inventorySaleValidatorUtil;
+    }
+
+    @Autowired
+    public void setSaleValidatorUtil(SaleFormUtil saleValidatorUtil) {
+        this.saleValidatorUtil = saleValidatorUtil;
+    }
+
     public void validate(SaleForm saleForm, Errors error){
         SALE_TYPE type = saleForm.getType();
 
@@ -53,6 +80,23 @@ public class SaleValidator {
                 break;
         }
         this.inventoryValidator.validate("inventories",saleForm.getInventories(),error);
+        this.ledgerEntryValidator.validateReceived("paymentAccount",saleForm.getPaymentAccount(),error);
+
+        double discount = saleForm.getDiscount()!=null?saleForm.getDiscount():0;
+        double totalInventoryPrice =  this.inventorySaleValidatorUtil.sumAmount(saleForm.getInventories());
+        double totalPaymentAmount = this.paymentLedgerValidatorUtil.sumAmount(saleForm.getPaymentAccount());
+        double totalPayablePrice = this.saleValidatorUtil.getTotalPayablePrice(saleForm);
+
+
+        if(totalPaymentAmount > totalPayablePrice){
+            error.rejectValue("paymentAccount[0].amount", "Paid amount is higher then total payable price");
+            return;
+        }
+        if(discount > totalInventoryPrice){
+            error.rejectValue("discount", "Discount amount is higher then inventory price");
+            return;
+        }
+
     }
     private void validateWholesaler(Integer wholesalerId, Errors error){
 

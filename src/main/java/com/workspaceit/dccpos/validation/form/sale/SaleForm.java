@@ -2,7 +2,7 @@ package com.workspaceit.dccpos.validation.form.sale;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.workspaceit.dccpos.constant.SALE_TYPE;
-import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
+import com.workspaceit.dccpos.validation.form.accounting.PaymentLedgerForm;
 import com.workspaceit.dccpos.validation.form.personalIformation.PersonalInfoCreateForm;
 
 import javax.validation.Valid;
@@ -19,7 +19,7 @@ public class SaleForm {
     /**
      * double For default value 0
      * */
-    private double discount;
+    private Double discount;
 
     @NotNull(message = "Vat required")
     @Min(value = 0,message = "Amount can't be less equal zero")
@@ -42,7 +42,7 @@ public class SaleForm {
     private Integer wholesalerId;
 
     @Valid
-    private LedgerEntryForm[] paymentAccount;
+    private PaymentLedgerForm[] paymentAccount;
 
     @Valid
     private PersonalInfoCreateForm consumerInfo;
@@ -56,11 +56,11 @@ public class SaleForm {
         this.inventories = inventories;
     }
 
-    public double getDiscount() {
+    public Double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(Double discount) {
         this.discount = discount;
     }
 
@@ -121,11 +121,11 @@ public class SaleForm {
         this.consumerInfoId = consumerInfoId;
     }
 
-    public LedgerEntryForm[] getPaymentAccount() {
+    public PaymentLedgerForm[] getPaymentAccount() {
         return paymentAccount;
     }
 
-    public void setPaymentAccount(LedgerEntryForm[] paymentAccount) {
+    public void setPaymentAccount(PaymentLedgerForm[] paymentAccount) {
         this.paymentAccount = paymentAccount;
     }
 }

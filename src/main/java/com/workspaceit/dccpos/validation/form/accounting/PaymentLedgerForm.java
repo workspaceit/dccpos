@@ -4,7 +4,7 @@ package com.workspaceit.dccpos.validation.form.accounting;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class LedgerEntryForm {
+public class PaymentLedgerForm {
     @NotNull(message = "Ledger Id required")
     @Min(value = 0,message = "Ledger Id required")
     private Integer ledgerId;

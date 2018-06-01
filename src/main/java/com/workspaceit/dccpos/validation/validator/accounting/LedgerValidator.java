@@ -1,6 +1,6 @@
 package com.workspaceit.dccpos.validation.validator.accounting;
 
-import com.workspaceit.dccpos.util.CustomValidationUtil;
+import com.workspaceit.dccpos.util.validation.CustomValidationUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 

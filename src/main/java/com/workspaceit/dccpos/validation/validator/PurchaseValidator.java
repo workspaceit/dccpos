@@ -1,9 +1,9 @@
 package com.workspaceit.dccpos.validation.validator;
 
 import com.workspaceit.dccpos.util.purchase.InventoryFormUtil;
-import com.workspaceit.dccpos.util.purchase.LedgerEntryFormUtil;
+import com.workspaceit.dccpos.util.validation.PaymentLedgerUtil;
 import com.workspaceit.dccpos.util.purchase.ShipmentFormUtil;
-import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
+import com.workspaceit.dccpos.validation.form.accounting.PaymentLedgerForm;
 import com.workspaceit.dccpos.validation.form.inventory.InventoryCreateFrom;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
 import com.workspaceit.dccpos.validation.form.shipment.ShipmentForm;
@@ -15,11 +15,11 @@ import org.springframework.validation.Errors;
 public class PurchaseValidator {
     private InventoryValidator inventoryValidator;
     private ShipmentValidator shipmentValidator;
-    private PurchasePaymentValidator purchasePaymentValidator;
+    private PaymentLedgerValidator purchasePaymentValidator;
 
     private ShipmentFormUtil shipmentFormUtil;
     private InventoryFormUtil inventoryFormUtil;
-    private LedgerEntryFormUtil ledgerEntryFormUtil;
+    private PaymentLedgerUtil ledgerEntryFormUtil;
 
     @Autowired
     public void setInventoryValidator(InventoryValidator inventoryValidator) {
@@ -32,7 +32,7 @@ public class PurchaseValidator {
     }
 
     @Autowired
-    public void setPurchasePaymentValidator(PurchasePaymentValidator purchasePaymentValidator) {
+    public void setPurchasePaymentValidator(PaymentLedgerValidator purchasePaymentValidator) {
         this.purchasePaymentValidator = purchasePaymentValidator;
     }
 
@@ -48,7 +48,7 @@ public class PurchaseValidator {
 
 
     @Autowired
-    public void setLedgerEntryFormUtil(LedgerEntryFormUtil ledgerEntryFormUtil) {
+    public void setLedgerEntryFormUtil(PaymentLedgerUtil ledgerEntryFormUtil) {
         this.ledgerEntryFormUtil = ledgerEntryFormUtil;
     }
 
@@ -57,13 +57,13 @@ public class PurchaseValidator {
         boolean validateShipmentAmountFlag=true;
 
         ShipmentForm shipmentForm = purchaseForm.getShipment();
-        LedgerEntryForm shippingCostPaymentAccount =  purchaseForm.getShippingCostPaymentAccount();
-        LedgerEntryForm[] pricePaymentAccounts = purchaseForm.getProductPricePaymentAccount();
+        PaymentLedgerForm shippingCostPaymentAccount =  purchaseForm.getShippingCostPaymentAccount();
+        PaymentLedgerForm[] pricePaymentAccounts = purchaseForm.getProductPricePaymentAccount();
         InventoryCreateFrom[] inventoryCreateFroms =  purchaseForm.getInventories();
 
         this.shipmentValidator.validate("shipment",purchaseForm.getShipment(),errors);
         this.inventoryValidator.validate("inventories",purchaseForm.getInventories(),errors);
-        this.purchasePaymentValidator.validate("productPricePaymentAccount",purchaseForm.getProductPricePaymentAccount(),errors);
+        this.purchasePaymentValidator.validatePayment("productPricePaymentAccount",purchaseForm.getProductPricePaymentAccount(),errors);
         this.purchasePaymentValidator.validateAccountPayment("shippingCostPaymentAccount",purchaseForm.getShippingCostPaymentAccount(),errors);
 
 
@@ -89,19 +89,19 @@ public class PurchaseValidator {
         }
     }
     private void validatePaymentAmount(InventoryCreateFrom[] inventoryCreateFroms,
-                                       LedgerEntryForm[] ledgerEntryForms,Errors errors){
-      double totalPrice =   this.inventoryFormUtil.getTotalProductPrice(inventoryCreateFroms);
-      double totalPaidAmount = this.ledgerEntryFormUtil.getTotalAmount(ledgerEntryForms);
+                                       PaymentLedgerForm[] ledgerEntryForms, Errors errors){
+        double totalPrice =   this.inventoryFormUtil.getTotalProductPrice(inventoryCreateFroms);
+        double totalPaidAmount = this.ledgerEntryFormUtil.sumAmount(ledgerEntryForms);
 
 
         if(totalPaidAmount>totalPrice){
           String amountFieldName = "productPricePaymentAccount[0]";
           errors.rejectValue(amountFieldName,"Payment amount is greater then product price");
-      }
+        }
 
     }
     private void validateShipmentCost(ShipmentForm shipmentForm,
-                                       LedgerEntryForm ledgerEntryForm,
+                                       PaymentLedgerForm ledgerEntryForm,
                                        Errors errors){
         double totalCost = this.shipmentFormUtil.getTotalCost(shipmentForm);
         double totalPaidAmount = ledgerEntryForm.getAmount();

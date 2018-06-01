@@ -1,7 +1,7 @@
 package com.workspaceit.dccpos.validation.form.purchase;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.workspaceit.dccpos.validation.form.accounting.LedgerEntryForm;
+import com.workspaceit.dccpos.validation.form.accounting.PaymentLedgerForm;
 import com.workspaceit.dccpos.validation.form.inventory.InventoryCreateFrom;
 import com.workspaceit.dccpos.validation.form.shipment.ShipmentCreateForm;
 
@@ -20,10 +20,10 @@ public class PurchaseForm {
     private ShipmentCreateForm shipment;
 
     @Valid
-    private LedgerEntryForm[] productPricePaymentAccount;
+    private PaymentLedgerForm[] productPricePaymentAccount;
 
     @Valid
-    private LedgerEntryForm shippingCostPaymentAccount;
+    private PaymentLedgerForm shippingCostPaymentAccount;
 
 
 
@@ -45,19 +45,19 @@ public class PurchaseForm {
     }
 
 
-    public LedgerEntryForm[] getProductPricePaymentAccount() {
+    public PaymentLedgerForm[] getProductPricePaymentAccount() {
         return productPricePaymentAccount;
     }
 
-    public void setProductPricePaymentAccount(LedgerEntryForm[] productPricePaymentAccount) {
+    public void setProductPricePaymentAccount(PaymentLedgerForm[] productPricePaymentAccount) {
         this.productPricePaymentAccount = productPricePaymentAccount;
     }
 
-    public LedgerEntryForm getShippingCostPaymentAccount() {
+    public PaymentLedgerForm getShippingCostPaymentAccount() {
         return shippingCostPaymentAccount;
     }
 
-    public void setShippingCostPaymentAccount(LedgerEntryForm shippingCostPaymentAccount) {
+    public void setShippingCostPaymentAccount(PaymentLedgerForm shippingCostPaymentAccount) {
         this.shippingCostPaymentAccount = shippingCostPaymentAccount;
     }
 

@@ -31,6 +31,7 @@ public class SaleDetailsService {
         this.inventoryService = inventoryService;
     }
 
+
     @Transactional(rollbackFor = Exception.class)
     public Set<SaleDetails> getSaleDetails(InventorySaleForm[] inventorySaleForms) throws EntityNotFound {
         Set<SaleDetails> saleDetailsList = new HashSet<>();
