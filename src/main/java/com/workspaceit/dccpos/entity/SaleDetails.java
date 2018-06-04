@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -14,6 +15,7 @@ public class SaleDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sale_id",referencedColumnName = "id")
     private Sale sale;

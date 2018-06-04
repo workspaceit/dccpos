@@ -54,7 +54,7 @@ public class ProductEndPoint {
         long totalRowCount = this.productService.getCountOfAll(productSearchForm);
         List<Product> productList = this.productService.getAll(limit,offset,productSearchForm);
 
-        return ResponseEntity.ok(serviceResponse.getResult(totalRowCount,productList));
+        return ResponseEntity.ok(ServiceResponse.getListResult(totalRowCount,productList));
     }
     @RequestMapping("/get-by-category-id/{categoryId}/{limit}/{offset}")
     public ResponseEntity<?> getAll(@PathVariable("categoryId")int categoryId,
@@ -67,7 +67,7 @@ public class ProductEndPoint {
         long totalRowCount = this.productService.getByCategoryIdCount(categoryId);
         List<Product> productList = this.productService.getByCategoryId(categoryId,limit,offset);
 
-        return ResponseEntity.ok(serviceResponse.getResult(totalRowCount,productList));
+        return ResponseEntity.ok(ServiceResponse.getListResult(totalRowCount,productList));
     }
 
     @RequestMapping(value = "/get/{id}",method = RequestMethod.GET)
@@ -88,7 +88,7 @@ public class ProductEndPoint {
         }
         long totalRowCount = this.productService.getByNameLikeCount(name);
         List<Product> productList = this.productService.getByNameLike(name,limit,offset);
-        return ResponseEntity.ok(serviceResponse.getResult(totalRowCount,productList));
+        return ResponseEntity.ok(ServiceResponse.getListResult(totalRowCount,productList));
     }
 
 

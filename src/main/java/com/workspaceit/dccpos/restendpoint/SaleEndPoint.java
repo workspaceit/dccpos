@@ -65,8 +65,10 @@ public class SaleEndPoint {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(this.saleService.getById(sale.getId()));
-
     }
-
+    @RequestMapping(value = "/get-all")
+    public ResponseEntity<?> getAll(){
+        return ResponseEntity.ok(ServiceResponse.getListResult(0,saleService.getAll()));
+    }
 
 }

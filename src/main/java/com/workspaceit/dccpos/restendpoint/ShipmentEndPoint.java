@@ -13,7 +13,6 @@ import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
 import com.workspaceit.dccpos.validation.form.shipment.ShipmentSearchForm;
 import com.workspaceit.dccpos.validation.validator.PurchaseValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -108,7 +106,7 @@ public class ShipmentEndPoint {
         shipments = this.shipmentService.getAll(limit,offset,shipmentSearchForm);
 
 
-        return ResponseEntity.ok(serviceResponse.getResult(totalCount,shipments));
+        return ResponseEntity.ok(serviceResponse.getListResult(totalCount,shipments));
     }
 
 }

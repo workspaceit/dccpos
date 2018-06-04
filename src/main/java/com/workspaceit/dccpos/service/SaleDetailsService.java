@@ -31,9 +31,7 @@ public class SaleDetailsService {
         this.inventoryService = inventoryService;
     }
 
-
-    @Transactional(rollbackFor = Exception.class)
-    public Set<SaleDetails> getSaleDetails(InventorySaleForm[] inventorySaleForms) throws EntityNotFound {
+    protected Set<SaleDetails> getSaleDetails(Sale sale,InventorySaleForm[] inventorySaleForms) throws EntityNotFound {
         Set<SaleDetails> saleDetailsList = new HashSet<>();
         for(InventorySaleForm inventorySaleForm:inventorySaleForms){
             SaleDetails saleDetails = new SaleDetails();
@@ -41,6 +39,7 @@ public class SaleDetailsService {
             PRODUCT_CONDITION productCondition = inventory.getCondition();
             double totalPrice = inventorySaleForm.getQuantity()*inventorySaleForm.getSellingPrice();
 
+            saleDetails.setSale(sale);
             saleDetails.setInventory(inventory);
             saleDetails.setProductCondition(productCondition);
             saleDetails.setQuantity(inventorySaleForm.getQuantity());

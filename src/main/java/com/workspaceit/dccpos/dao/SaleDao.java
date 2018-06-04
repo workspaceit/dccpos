@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public class SaleDao extends BaseDao{
     public Sale getById(long id){
         Session session = this.getCurrentSession();
-        return (Sale)session.createQuery("FROM Sale s " +
+        return (Sale)session.createQuery("select distinct s FROM Sale s " +
                 " left join fetch s.soldBy " +
                 " left join fetch s.wholesaler " +
                 " left join fetch s.consumer " +
@@ -17,5 +17,10 @@ public class SaleDao extends BaseDao{
                 .setParameter("id",id)
                 .setMaxResults(1)
                 .uniqueResult();
+    }
+    public Sale getAll(){
+        Session session = this.getCurrentSession();
+        return (Sale)session.createQuery("FROM Sale s ")
+                .list();
     }
 }

@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -33,6 +34,7 @@ public class ShopInformation {
     @Column(name = "phone")
     private String phone;
 
+    @JsonIgnore
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")

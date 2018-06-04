@@ -45,7 +45,10 @@ public class SaleService {
     public void setInventoryService(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
-
+    @Transactional
+    public Sale getAll(){
+        return this.saleDao.getAll();
+    }
     @Transactional
     public Sale getById(long id){
         return this.saleDao.getById(id);
@@ -53,7 +56,7 @@ public class SaleService {
     @Transactional(rollbackFor = Exception.class)
     public Sale create(SaleForm saleForm, Employee employee) throws EntityNotFound {
         Sale sale = new Sale();
-        Set<SaleDetails> saleDetailsList = this.saleDetailsService.getSaleDetails(saleForm.getInventories());
+        Set<SaleDetails> saleDetailsList = this.saleDetailsService.getSaleDetails(sale,saleForm.getInventories());
         Wholesaler wholesaler = null;
         PersonalInformation consumer = null;
         double totalDue = 0;

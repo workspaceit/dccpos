@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(EndpointRequestUriPrefix.endPointPublic+"/shop")
+@RequestMapping(EndpointRequestUriPrefix.endPointAuth+"/shop")
 
 public class ShopEndPoint {
 
