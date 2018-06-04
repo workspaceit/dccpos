@@ -91,6 +91,10 @@ public class ShipmentEndPoint {
         Shipment shipment  =  this.shipmentService.getByTrackingId(trackingId);
         return ResponseEntity.ok(shipment);
     }
+    /**
+     * Change it to Create Criteria
+     * and Limit offset
+     * */
     @GetMapping("/get-all/{limit}/{offset}")
     public ResponseEntity<?> getAll(@PathVariable int limit, @PathVariable int offset,
                                     @Valid ShipmentSearchForm shipmentSearchForm,BindingResult bindingResult){

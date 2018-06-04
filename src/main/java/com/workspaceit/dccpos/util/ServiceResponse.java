@@ -92,7 +92,7 @@ public class ServiceResponse {
     public List<Map<String, String>> getFormError() {
         return formError;
     }
-    public static Map<String, Object> getListResult(long totalResult, Object result){
+    public static Map<String, Object> getListResult(long totalResult, Collection<? extends Object> result){
         Map<String, Object> map = new HashMap<>();
         map.put("totalResult",totalResult);
         map.put("result",result);

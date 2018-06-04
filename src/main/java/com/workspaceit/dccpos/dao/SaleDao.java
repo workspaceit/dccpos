@@ -4,6 +4,8 @@ import com.workspaceit.dccpos.entity.Sale;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class SaleDao extends BaseDao{
     public Sale getById(long id){
@@ -18,9 +20,9 @@ public class SaleDao extends BaseDao{
                 .setMaxResults(1)
                 .uniqueResult();
     }
-    public Sale getAll(){
+    public List<Sale> getAll(){
         Session session = this.getCurrentSession();
-        return (Sale)session.createQuery("FROM Sale s ")
+        return session.createQuery("FROM Sale s ")
                 .list();
     }
 }

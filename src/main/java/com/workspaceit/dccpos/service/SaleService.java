@@ -46,7 +46,7 @@ public class SaleService {
         this.inventoryService = inventoryService;
     }
     @Transactional
-    public Sale getAll(){
+    public List<Sale> getAll(){
         return this.saleDao.getAll();
     }
     @Transactional
