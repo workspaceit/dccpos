@@ -26,7 +26,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(EndpointRequestUriPrefix.endPointAuth+"/shop")
-
+@CrossOrigin
 public class ShopEndPoint {
 
     private ShopService shopService;

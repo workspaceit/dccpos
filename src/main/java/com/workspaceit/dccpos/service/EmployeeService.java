@@ -1,12 +1,10 @@
 package com.workspaceit.dccpos.service;
 
 import com.workspaceit.dccpos.constant.ACCESS_ROLE;
+import com.workspaceit.dccpos.constant.COMPANY_ROLE;
 import com.workspaceit.dccpos.constant.EMPLOYEE_TYPE;
 import com.workspaceit.dccpos.dao.EmployeeDao;
-import com.workspaceit.dccpos.entity.AccessRole;
-import com.workspaceit.dccpos.entity.AuthCredential;
-import com.workspaceit.dccpos.entity.Employee;
-import com.workspaceit.dccpos.entity.PersonalInformation;
+import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
 import com.workspaceit.dccpos.validation.form.employee.EmployeeCreateForm;
@@ -15,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -93,7 +89,7 @@ public class EmployeeService {
     }
     @Transactional(rollbackFor = Exception.class)
     public Employee create(EmployeeCreateForm employeeForm){
-        PersonalInformation personalInfo = this.personalInformationService.create(employeeForm.getPersonalInfo());
+        PersonalInformation personalInfo = this.personalInformationService.create(employeeForm.getPersonalInfo(),COMPANY_ROLE.EMPLOYEE);
 
 
         Employee employee = new Employee();
@@ -103,6 +99,8 @@ public class EmployeeService {
         employee.setType(employeeForm.getType());
 
         this.save(employee);
+
+
 
         /**
          * Creating login credential

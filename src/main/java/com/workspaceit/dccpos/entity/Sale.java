@@ -3,6 +3,7 @@ package com.workspaceit.dccpos.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workspaceit.dccpos.config.PersistenceConfig;
 import com.workspaceit.dccpos.constant.SALE_TYPE;
+import com.workspaceit.dccpos.entity.accounting.Entry;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -24,6 +25,10 @@ public class Sale {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sold_by",referencedColumnName = "id")
     private Employee soldBy;
+
+    @ManyToOne
+    @JoinColumn(name = "entry_id",referencedColumnName = "id")
+    private Entry entry;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wholesaler_id",referencedColumnName = "id")
@@ -89,7 +94,7 @@ public class Sale {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -115,6 +120,14 @@ public class Sale {
 
     public void setWholesaler(Wholesaler wholesaler) {
         this.wholesaler = wholesaler;
+    }
+
+    public Entry getEntry() {
+        return entry;
+    }
+
+    public void setEntry(Entry entry) {
+        this.entry = entry;
     }
 
     public PersonalInformation getConsumer() {
@@ -264,7 +277,9 @@ public class Sale {
         if (Double.compare(sale.totalRefundAmount, totalRefundAmount) != 0) return false;
         if (Double.compare(sale.totalRefundAmountPaid, totalRefundAmountPaid) != 0) return false;
         if (Double.compare(sale.totalRefundAmountDue, totalRefundAmountDue) != 0) return false;
+        if (trackingId != null ? !trackingId.equals(sale.trackingId) : sale.trackingId != null) return false;
         if (soldBy != null ? !soldBy.equals(sale.soldBy) : sale.soldBy != null) return false;
+        if (entry != null ? !entry.equals(sale.entry) : sale.entry != null) return false;
         if (wholesaler != null ? !wholesaler.equals(sale.wholesaler) : sale.wholesaler != null) return false;
         if (consumer != null ? !consumer.equals(sale.consumer) : sale.consumer != null) return false;
         if (saleDetails != null ? !saleDetails.equals(sale.saleDetails) : sale.saleDetails != null) return false;
@@ -278,8 +293,10 @@ public class Sale {
     public int hashCode() {
         int result;
         long temp;
-        result = (int)id;
+        result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (trackingId != null ? trackingId.hashCode() : 0);
         result = 31 * result + (soldBy != null ? soldBy.hashCode() : 0);
+        result = 31 * result + (entry != null ? entry.hashCode() : 0);
         result = 31 * result + (wholesaler != null ? wholesaler.hashCode() : 0);
         result = 31 * result + (consumer != null ? consumer.hashCode() : 0);
         result = 31 * result + (saleDetails != null ? saleDetails.hashCode() : 0);

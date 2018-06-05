@@ -70,5 +70,8 @@ public class SaleEndPoint {
     public ResponseEntity<?> getAll(){
         return ResponseEntity.ok(ServiceResponse.getListResult(0,saleService.getAll()));
     }
-
+    @RequestMapping(value = "/get/{id}")
+    public ResponseEntity<?> getAll(@PathVariable("id") Long id){
+        return ResponseEntity.ok(saleService.getById(id));
+    }
 }

@@ -5,10 +5,7 @@ import com.workspaceit.dccpos.constant.accounting.ENTRY_TYPES;
 import com.workspaceit.dccpos.constant.accounting.GROUP_CODE;
 import com.workspaceit.dccpos.constant.accounting.LEDGER_CODE;
 import com.workspaceit.dccpos.dao.accounting.EntryDao;
-import com.workspaceit.dccpos.entity.Employee;
-import com.workspaceit.dccpos.entity.Sale;
-import com.workspaceit.dccpos.entity.Shipment;
-import com.workspaceit.dccpos.entity.Supplier;
+import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.entity.accounting.Entry;
 import com.workspaceit.dccpos.entity.accounting.EntryItem;
 import com.workspaceit.dccpos.entity.accounting.EntryType;
@@ -16,10 +13,9 @@ import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.AccountPaymentFormHelper;
 import com.workspaceit.dccpos.util.SaleDetailsUtil;
-import com.workspaceit.dccpos.util.validation.PaymentLedgerUtil;
+import com.workspaceit.dccpos.util.validation.PaymentLedgerFormUtil;
 import com.workspaceit.dccpos.util.validation.SaleFormUtil;
 import com.workspaceit.dccpos.validation.form.accounting.InvestmentForm;
-import com.workspaceit.dccpos.validation.form.accounting.LedgerForm;
 import com.workspaceit.dccpos.validation.form.accounting.PaymentLedgerForm;
 import com.workspaceit.dccpos.validation.form.accounting.TransactionForm;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;;
@@ -38,9 +34,8 @@ public class EntryService {
     private EntryTypeService entryTypeService;
     private EntryItemService entryItemService;
     private SaleDetailsUtil saleDetailsUtil;
-    private PaymentLedgerUtil ledgerEntryFormUtil;
     private SaleFormUtil saleFormUtil;
-    private PaymentLedgerUtil paymentLedgerUtil;
+    private PaymentLedgerFormUtil paymentLedgerFormUtil;
 
     @Autowired
     public void setEntryDao(EntryDao entryDao) {
@@ -63,16 +58,12 @@ public class EntryService {
         this.saleDetailsUtil = saleDetailsUtil;
     }
     @Autowired
-    public void setLedgerEntryFormUtil(PaymentLedgerUtil ledgerEntryFormUtil) {
-        this.ledgerEntryFormUtil = ledgerEntryFormUtil;
-    }
-    @Autowired
     public void setSaleFormUtil(SaleFormUtil saleFormUtil) {
         this.saleFormUtil = saleFormUtil;
     }
     @Autowired
-    public void setPaymentLedgerUtil(PaymentLedgerUtil paymentLedgerUtil) {
-        this.paymentLedgerUtil = paymentLedgerUtil;
+    public void setPaymentLedgerFormUtil(PaymentLedgerFormUtil paymentLedgerFormUtil) {
+        this.paymentLedgerFormUtil = paymentLedgerFormUtil;
     }
 
     @Transactional
@@ -85,8 +76,14 @@ public class EntryService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Entry decreaseInventory(double amount,Date date,String narration,Employee createdBy){
+    public Entry decreaseInventory(Sale sale){
+        Set<SaleDetails> saleDetails= sale.getSaleDetails();
+        Date date = sale.getDate();
+        String narration = "Inventory Sold";
+        Employee createdBy = sale.getSoldBy();
         List<EntryItem> entryItems = new ArrayList<>();
+        double amount = this.saleDetailsUtil.getTotalPurchasePrice(saleDetails);
+
         EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
         EntryItem entryItemCogs = this.getEntryItem(amount,LEDGER_CODE.COGS,ACCOUNTING_ENTRY.DR);
         EntryItem entryItemInventory = this.getEntryItem(amount,LEDGER_CODE.INVENTORY,ACCOUNTING_ENTRY.CR);
@@ -122,11 +119,10 @@ public class EntryService {
         List<EntryItem> entryItems = new ArrayList<>();
 
         EntryType entryType = this.entryTypeService.getByLabel(ENTRY_TYPES.JOURNAL);
-        double cogs = this.saleDetailsUtil.getTotalPurchasePrice(sale.getSaleDetails());
         EntryItem entryItemSale = this.getEntryItem(totalAmount,LEDGER_CODE.SALE,ACCOUNTING_ENTRY.CR);
         entryItems.add(entryItemSale);
 
-        double totalReceive = this.paymentLedgerUtil.sumAmount(saleForm.getPaymentAccount());
+        double totalReceive = this.paymentLedgerFormUtil.sumAmount(saleForm.getPaymentAccount());
 
         /**
          * Payment entry items
@@ -151,12 +147,13 @@ public class EntryService {
                     entryItems.add(entryItemDueSale);
                     break;
                 case WHOLESALE:
-                    Ledger wholeSellerLedger = this.ledgerService.getById(saleForm.getWholesalerId());
+                    Ledger wholeSellerLedger = this.ledgerService.getByCompanyId(saleForm.getWholesalerId());
                     EntryItem entryItemWholeSeller = this.getEntryItem(dueAmount,wholeSellerLedger,ACCOUNTING_ENTRY.DR);
                     entryItems.add(entryItemWholeSeller);
                     break;
             }
         }
+
         entry.setDrTotal(totalAmount);
         entry.setCrTotal(totalAmount);
         entry.setEntryType(entryType);
@@ -169,7 +166,7 @@ public class EntryService {
         this.entryItemService.saveAll(entry,entryItems);
         entry.setEntryItems(entryItems);
 
-        this.decreaseInventory(cogs,sale.getDate(), "Inventory sold",sale.getSoldBy());
+        this.decreaseInventory(sale);
 
         return entry;
     }
@@ -190,7 +187,7 @@ public class EntryService {
 
         Supplier supplier = shipment.getSupplier();
 
-        Ledger  supplierLedger = this.ledgerService.getByCompanyIdAndCode(supplier.getCompany().getId(), GROUP_CODE.SUPPLIER);
+        Ledger  supplierLedger = this.ledgerService.getByCompanyId(supplier.getCompany().getId());
 
         Entry entry = new Entry();
         entry.setDrTotal(totalEntryDcAmount);

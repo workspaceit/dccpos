@@ -1,12 +1,12 @@
 {
-  "front-version": "2.17.2",
+  "front-version": "2.18.0",
   "version": 3,
   "nodes": [
     {
       "type": "Project",
       "description": "",
       "id": "c4226841-a12e-441a-b046-9b49f4080e2d",
-      "lastModified": "2018-05-29T11:26:35.841+06:00",
+      "lastModified": "2018-06-05T11:37:11.798+06:00",
       "name": "POS"
     },
     {
@@ -21,11 +21,10 @@
       "type": "Scenario",
       "description": "",
       "id": "28508267-c995-4a6a-9e04-19a0c55423ca",
-      "lastModified": "2018-05-25T11:59:11.235+06:00",
+      "lastModified": "2018-06-05T11:37:11.798+06:00",
       "name": "Endpoints",
       "requestOrder": [
         "AUTHENTICATION",
-        "Shop Information Create",
         "Employee-Create-No-Param (1)",
         "Employee-Create-All-EMPTY_VALUE",
         "Employee-Create-No-Param",
@@ -69,26 +68,35 @@
         "Ledger Employee",
         "Make Receipt",
         "Make Payment",
+        "Shipment Create C:3 [Total Due]",
         "Make Investment ",
-        "Shipment Create",
+        "Shipment Create C:2 [ Full Paid ]",
+        "Shipment Create C:2 [ Insufficient Balance]",
+        "Shipment Create C:3 [ Paid Amount greater ] ",
         "Shipment Get All",
         "Shipment Get By Id",
         "Shipment Get By Tracking ID",
         "Make Investment Duplicate",
         "Make Payment Duplicate",
+        "Category By Id",
         "Make Receipt Duplicate",
         "Category Get All",
-        "Category By Id",
         "Ledger Asset",
         "Ledger Liability",
         "Ledger Income",
         "Ledger Expense",
         "Wholesaler-Update 1",
-        "Shipment Create C:3 [Total Due]",
-        "Shipment Create C:2 [ Full Paid ]",
-        "Shipment Create C:2 [ Insufficient Balance]",
-        "Shipment Create C:3 [ Paid Amount greater ] ",
-        "Sale"
+        "Sale [ All NULL ]",
+        "Request 72",
+        "Sale [ Inventory Id Null]",
+        "Sale [ Selling Price Higher ]",
+        "Sale[ WHOLESALE : Successful transaction ]",
+        "Sale[ CONSUMNER:Successful transaction ] ",
+        "Shop Information Create / Update [ Image Token check ]",
+        "Shop Information Create / Update",
+        "Shop Information Get",
+        "Sale[ Get All ]",
+        "Inventory [ Get By Product Id ]"
       ],
       "parentId": "bd8b3e61-d30e-4350-8631-704fabab67dc"
     },
@@ -158,7 +166,7 @@
         "path": "/oauth/token"
       },
       "id": "315d1b54-899e-440c-9604-4895e5e649c3",
-      "lastModified": "2018-05-03T18:07:04.884+06:00",
+      "lastModified": "2018-06-05T10:41:25.991+06:00",
       "name": "AUTHENTICATION",
       "headers": [
         {
@@ -184,63 +192,6 @@
       "metaInfo": {
         "IS_FROM_HISTORY": "06575797-9aa7-4485-bef0-644e1d370e35"
       },
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
-      "type": "Request",
-      "method": {
-        "requestBody": true,
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
-        "name": "POST"
-      },
-      "body": {
-        "formBody": {
-          "overrideContentType": true,
-          "encoding": "application/x-www-form-urlencoded",
-          "items": []
-        },
-        "bodyType": "Text",
-        "autoSetLength": true,
-        "textBody": "{\n\t\"name\":\"ssssdf\",\n\t\"address\":\"sdf\",\n\t\"imageToken\":1000777818,\n\t\"email\":\"sdf\",\n\t\"phone\":\"sdf\"\n}"
-      },
-      "headersType": "Raw",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "http",
-          "version": "V11"
-        },
-        "host": "{url}",
-        "path": "/api/shop/create"
-      },
-      "id": "9998b0d9-4c93-4499-8d48-3601bd023504",
-      "lastModified": "2018-05-21T15:22:52.030+06:00",
-      "name": "Shop Information Create",
-      "headers": [
-        {
-          "enabled": true,
-          "name": "Authorization",
-          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
-        },
-        {
-          "enabled": true,
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "assertions": [
-        {
-          "comparison": "Equals",
-          "subject": "ResponseStatus",
-          "enabled": true,
-          "path": "code",
-          "value": "422"
-        }
-      ],
-      "metaInfo": {},
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
     {
@@ -3266,6 +3217,55 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
+        "textBodyEditorHeight": 530,
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":58,\"purchaseQuantity\":30},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":296,\"purchaseQuantity\":40},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":98,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":305,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":150,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":400,\"purchaseQuantity\":3}\n  ]\n    \n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/shipment/create"
+      },
+      "id": "267aea3b-d1ea-4144-8388-2365b441e1f8",
+      "lastModified": "2018-06-05T11:25:58.948+06:00",
+      "name": "Shipment Create C:3 [Total Due]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
         "textBody": "{\n \"cashOrBank\":[{\"ledgerId\":3,\"amount\":5000},{\"ledgerId\":5,\"amount\":5000}],\n  \"narration\":\"Cash Invest ment\",\n  \"date\": 1525090664062\n}"
       },
       "headersType": "Form",
@@ -3328,8 +3328,7 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBodyEditorHeight": 526,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n  \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":40.7}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":9}\n}"
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":37.0}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":9}\n    \n}"
       },
       "headersType": "Raw",
       "uri": {
@@ -3344,9 +3343,57 @@
         "host": "{url}",
         "path": "/auth/api/shipment/create"
       },
-      "id": "81c07e69-6012-4ab6-8385-7d9e3c44a682",
-      "lastModified": "2018-05-21T13:48:14.791+06:00",
-      "name": "Shipment Create",
+      "id": "ea663b09-e51a-41f2-b9c3-98a316b7ecd0",
+      "lastModified": "2018-05-21T13:50:48.210+06:00",
+      "name": "Shipment Create C:2 [ Full Paid ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":20000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1000000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":10000000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":10000000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":10000000000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20000000},\n                                 {\"ledgerId\":5,\"amount\":400000000}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":4799999}\n    \n}"
+      },
+      "headersType": "Raw",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/shipment/create"
+      },
+      "id": "d2c1e873-4a11-4105-9d64-df6967ed0266",
+      "lastModified": "2018-05-21T13:49:45.949+06:00",
+      "name": "Shipment Create C:2 [ Insufficient Balance]",
       "headers": [
         {
           "enabled": true,
@@ -3364,13 +3411,94 @@
           "comparison": "Equals",
           "subject": "ResponseStatus",
           "path": "code",
-          "value": "200"
+          "value": "422"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n  \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":400.7}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":47}\n}"
+      },
+      "headersType": "Raw",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/shipment/create"
+      },
+      "id": "0a786595-49ef-4194-bda0-bcd4b5fb52c7",
+      "lastModified": "2018-05-25T12:02:39.934+06:00",
+      "name": "Shipment Create C:3 [ Paid Amount greater ] ",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         },
         {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
           "comparison": "Equals",
-          "subject": "ResponseHeader",
-          "path": "Access-Control-Allow-Origin",
-          "value": "*"
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "422"
+        },
+        {
+          "comparison": "Matches",
+          "subject": "ResponseJsonBody",
+          "path": "$[0].params",
+          "value": "/productPricePaymentAccount\\[0\\]|shippingCostPaymentAccount/g"
+        },
+        {
+          "comparison": "Matches",
+          "subject": "ResponseJsonBody",
+          "enabled": true,
+          "path": "$[1].params",
+          "value": "/productPricePaymentAccount\\[0\\]|shippingCostPaymentAccount/g"
+        },
+        {
+          "comparison": "Matches",
+          "subject": "ResponseJsonBody",
+          "path": "$[0].msg",
+          "value": "/.*greater.*/g"
+        },
+        {
+          "comparison": "Matches",
+          "subject": "ResponseJsonBody",
+          "path": "$[1].msg",
+          "value": "/.*greater.*/g"
+        },
+        {
+          "comparison": "LengthEqual",
+          "subject": "ResponseJsonBody",
+          "path": "$",
+          "value": "2"
         }
       ],
       "metaInfo": {},
@@ -3678,6 +3806,61 @@
     {
       "type": "Request",
       "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/api/category/get-by-id/1"
+      },
+      "id": "c6c4fda4-bcc5-4675-ab0e-7e10012689b9",
+      "lastModified": "2018-05-03T11:54:11.053+06:00",
+      "name": "Category By Id",
+      "headers": [],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "200"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.id",
+          "value": "1"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseHeader",
+          "path": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
         "requestBody": true,
         "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
         "name": "POST"
@@ -3786,61 +3969,6 @@
           "subject": "ResponseStatus",
           "path": "code",
           "value": "200"
-        },
-        {
-          "comparison": "Equals",
-          "subject": "ResponseHeader",
-          "path": "Access-Control-Allow-Origin",
-          "value": "*"
-        }
-      ],
-      "metaInfo": {},
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
-      "type": "Request",
-      "method": {
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
-        "name": "GET"
-      },
-      "body": {
-        "formBody": {
-          "overrideContentType": true,
-          "encoding": "application/x-www-form-urlencoded",
-          "items": []
-        },
-        "bodyType": "Text",
-        "autoSetLength": true
-      },
-      "headersType": "Form",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "http",
-          "version": "V11"
-        },
-        "host": "{url}",
-        "path": "/api/category/get-by-id/1"
-      },
-      "id": "c6c4fda4-bcc5-4675-ab0e-7e10012689b9",
-      "lastModified": "2018-05-03T11:54:11.053+06:00",
-      "name": "Category By Id",
-      "headers": [],
-      "assertions": [
-        {
-          "comparison": "Equals",
-          "subject": "ResponseStatus",
-          "path": "code",
-          "value": "200"
-        },
-        {
-          "comparison": "Equals",
-          "subject": "ResponseJsonBody",
-          "path": "$.id",
-          "value": "1"
         },
         {
           "comparison": "Equals",
@@ -4176,247 +4304,7 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBodyEditorHeight": 530,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ]\n    \n}"
-      },
-      "headersType": "Form",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "http",
-          "version": "V11"
-        },
-        "host": "{url}",
-        "path": "/auth/api/shipment/create"
-      },
-      "id": "267aea3b-d1ea-4144-8388-2365b441e1f8",
-      "lastModified": "2018-05-18T17:08:48.121+06:00",
-      "name": "Shipment Create C:3 [Total Due]",
-      "headers": [
-        {
-          "enabled": true,
-          "name": "Authorization",
-          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
-        },
-        {
-          "enabled": true,
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "metaInfo": {},
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
-      "type": "Request",
-      "method": {
-        "requestBody": true,
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
-        "name": "POST"
-      },
-      "body": {
-        "formBody": {
-          "overrideContentType": true,
-          "encoding": "application/x-www-form-urlencoded",
-          "items": []
-        },
-        "bodyType": "Text",
-        "autoSetLength": true,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":37.0}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":9}\n    \n}"
-      },
-      "headersType": "Raw",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "http",
-          "version": "V11"
-        },
-        "host": "{url}",
-        "path": "/auth/api/shipment/create"
-      },
-      "id": "ea663b09-e51a-41f2-b9c3-98a316b7ecd0",
-      "lastModified": "2018-05-21T13:50:48.210+06:00",
-      "name": "Shipment Create C:2 [ Full Paid ]",
-      "headers": [
-        {
-          "enabled": true,
-          "name": "Authorization",
-          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
-        },
-        {
-          "enabled": true,
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "metaInfo": {},
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
-      "type": "Request",
-      "method": {
-        "requestBody": true,
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
-        "name": "POST"
-      },
-      "body": {
-        "formBody": {
-          "overrideContentType": true,
-          "encoding": "application/x-www-form-urlencoded",
-          "items": []
-        },
-        "bodyType": "Text",
-        "autoSetLength": true,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":20000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1000000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":10000000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":10000000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":10000000000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20000000},\n                                 {\"ledgerId\":5,\"amount\":400000000}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":4799999}\n    \n}"
-      },
-      "headersType": "Raw",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "http",
-          "version": "V11"
-        },
-        "host": "{url}",
-        "path": "/auth/api/shipment/create"
-      },
-      "id": "d2c1e873-4a11-4105-9d64-df6967ed0266",
-      "lastModified": "2018-05-21T13:49:45.949+06:00",
-      "name": "Shipment Create C:2 [ Insufficient Balance]",
-      "headers": [
-        {
-          "enabled": true,
-          "name": "Authorization",
-          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
-        },
-        {
-          "enabled": true,
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "assertions": [
-        {
-          "comparison": "Equals",
-          "subject": "ResponseStatus",
-          "path": "code",
-          "value": "422"
-        }
-      ],
-      "metaInfo": {},
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
-      "type": "Request",
-      "method": {
-        "requestBody": true,
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
-        "name": "POST"
-      },
-      "body": {
-        "formBody": {
-          "overrideContentType": true,
-          "encoding": "application/x-www-form-urlencoded",
-          "items": []
-        },
-        "bodyType": "Text",
-        "autoSetLength": true,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n  \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":400.7}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":47}\n}"
-      },
-      "headersType": "Raw",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "http",
-          "version": "V11"
-        },
-        "host": "{url}",
-        "path": "/auth/api/shipment/create"
-      },
-      "id": "0a786595-49ef-4194-bda0-bcd4b5fb52c7",
-      "lastModified": "2018-05-25T12:02:39.934+06:00",
-      "name": "Shipment Create C:3 [ Paid Amount greater ] ",
-      "headers": [
-        {
-          "enabled": true,
-          "name": "Authorization",
-          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
-        },
-        {
-          "enabled": true,
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "assertions": [
-        {
-          "comparison": "Equals",
-          "subject": "ResponseStatus",
-          "path": "code",
-          "value": "422"
-        },
-        {
-          "comparison": "Matches",
-          "subject": "ResponseJsonBody",
-          "path": "$[0].params",
-          "value": "/productPricePaymentAccount\\[0\\]|shippingCostPaymentAccount/g"
-        },
-        {
-          "comparison": "Matches",
-          "subject": "ResponseJsonBody",
-          "enabled": true,
-          "path": "$[1].params",
-          "value": "/productPricePaymentAccount\\[0\\]|shippingCostPaymentAccount/g"
-        },
-        {
-          "comparison": "Matches",
-          "subject": "ResponseJsonBody",
-          "path": "$[0].msg",
-          "value": "/.*greater.*/g"
-        },
-        {
-          "comparison": "Matches",
-          "subject": "ResponseJsonBody",
-          "path": "$[1].msg",
-          "value": "/.*greater.*/g"
-        },
-        {
-          "comparison": "LengthEqual",
-          "subject": "ResponseJsonBody",
-          "path": "$",
-          "value": "2"
-        }
-      ],
-      "metaInfo": {},
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
-      "type": "Request",
-      "method": {
-        "requestBody": true,
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
-        "name": "POST"
-      },
-      "body": {
-        "formBody": {
-          "overrideContentType": true,
-          "encoding": "application/x-www-form-urlencoded",
-          "items": []
-        },
-        "bodyType": "Text",
-        "autoSetLength": true,
-        "textBody": "{ \n  \"vat\":0,\n  \"paidAmount\":0,\n  \"type\":\"WHOLESALE\",\n  \"inventories\":[],\n  \"wholesalerId\":6,\n   \"consumerInfo\":{\n   \t\t\t\t\"fullName\":\"s\",\n   \t\t\t\t\"dob\":\"2012-01-12\",\n   \t\t\t\t\"email\":\"54@rfg.bom\",\n   \t\t\t\t\"phone\":\"\",\n   \t\t\t\t\"address\":\"\"\n                },\n \"consumerInfoId\":145\n}"
+        "textBody": "{ \n  \n}"
       },
       "headersType": "Form",
       "uri": {
@@ -4432,8 +4320,8 @@
         "path": "/auth/api/sale/create"
       },
       "id": "3ac41231-6e91-4032-84eb-810e1a698b60",
-      "lastModified": "2018-05-29T11:26:35.842+06:00",
-      "name": "Sale",
+      "lastModified": "2018-05-29T16:45:38.700+06:00",
+      "name": "Sale [ All NULL ]",
       "headers": [
         {
           "enabled": true,
@@ -4444,6 +4332,573 @@
           "enabled": true,
           "name": "Content-Type",
           "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "422"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "scheme": {
+          "secure": true,
+          "name": "https",
+          "version": "V11"
+        }
+      },
+      "id": "6df464d3-29a6-4306-bbe1-252b8711d1e4",
+      "lastModified": "2018-06-05T11:34:08.779+06:00",
+      "name": "Request 72",
+      "headers": [],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{ \n  \"vat\":410,\n  \"paidAmount\":90,\n  \"type\":\"WHOLESALE\",\n  \"date\":\"2015-15-02\",\n  \"inventories\":[\n    {\"sellingPrice\":12,\"quantity\":4},\n    {\"inventoryId\":2,\"sellingPrice\":5,\"quantity\":2}\n  ],\n  \"wholesalerId\":1,\n   \"consumerInfo\":{\n   \t\t\t\t\"fullName\":\"s\",\n   \t\t\t\t\"dob\":\"2012-01-12\",\n   \t\t\t\t\"email\":\"54@rfg.bom\",\n   \t\t\t\t\"phone\":\"\",\n   \t\t\t\t\"address\":\"\"\n                },\n \"consumerInfoId\":145\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/sale/create"
+      },
+      "id": "848a9a5b-45f7-4f69-af44-6d27020029da",
+      "lastModified": "2018-05-30T13:24:00.952+06:00",
+      "name": "Sale [ Inventory Id Null]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "422"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.params[0]",
+          "value": "inventories[0].inventoryId"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{ \n  \"vat\":410,\n  \"paidAmount\":90,\n  \"type\":\"WHOLESALE\",\n  \"inventories\":[\n    {\"inventoryId\":1,\"sellingPrice\":120000,\"quantity\":4},\n    {\"inventoryId\":2,\"sellingPrice\":5,\"quantity\":2}\n  ],\n  \"wholesalerId\":1,\n   \"consumerInfo\":{\n   \t\t\t\t\"fullName\":\"s\",\n   \t\t\t\t\"dob\":\"2012-01-12\",\n   \t\t\t\t\"email\":\"54@rfg.bom\",\n   \t\t\t\t\"phone\":\"\",\n   \t\t\t\t\"address\":\"\"\n                },\n \"consumerInfoId\":145\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/sale/create"
+      },
+      "id": "caf27d56-6dfd-4708-ad0b-69e52c2eeead",
+      "lastModified": "2018-05-29T16:50:31.508+06:00",
+      "name": "Sale [ Selling Price Higher ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "422"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.params[0]",
+          "value": "inventories[0].sellingPrice"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{ \n  \"vat\":1,\n  \"type\":\"WHOLESALE\",\n  \"date\":\"2012-01-12\",\n  \"inventories\":[\n    {\"inventoryId\":1,\"sellingPrice\":12,\"quantity\":2}\n  ],\n  \"wholesalerId\":1,\n   \"consumerInfo\":{\n   \t\t\t\t\"fullName\":\"s\",\n   \t\t\t\t\"dob\":\"2012-01-12\",\n   \t\t\t\t\"email\":\"54@rfg.bom\",\n   \t\t\t\t\"phone\":\"\",\n   \t\t\t\t\"address\":\"\"\n                },\n \"consumerInfoId\":1,\n  \"description\":\"Illegal drug sold\",\n   \"paymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":3.0}\n                              ]\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/sale/create"
+      },
+      "id": "f99929c9-d8ef-4954-aafb-fd250d671bbd",
+      "lastModified": "2018-06-04T13:42:14.774+06:00",
+      "name": "Sale[ WHOLESALE : Successful transaction ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "200"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{ \n  \"vat\":410,\n  \"paidAmount\":90,\n  \"type\":\"CONSUMER_SALE\",\n  \"date\":\"2012-01-12\",\n  \"inventories\":[\n    {\"inventoryId\":1,\"sellingPrice\":12,\"quantity\":2},\n    {\"inventoryId\":2,\"sellingPrice\":5,\"quantity\":1}\n  ],\n  \"wholesalerId\":1,\n   \"consumerInfo\":{\n   \t\t\t\t\"fullName\":\"s\",\n   \t\t\t\t\"dob\":\"2012-01-12\",\n   \t\t\t\t\"email\":\"54@rfg.bom\",\n   \t\t\t\t\"phone\":\"\",\n   \t\t\t\t\"address\":\"\"\n                },\n  \n \"consumerInfoId\":1,\n  \"descriptio4545n\":\"Illegal drug sold\",\n   \"paymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":37.0}\n                              ]\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/sale/create"
+      },
+      "id": "89801d06-535f-4844-9e1d-eebd36b3910c",
+      "lastModified": "2018-06-04T12:48:55.593+06:00",
+      "name": "Sale[ CONSUMNER:Successful transaction ] ",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "200"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n\t\"name\":\"DCC WHOLE SALE\",\n\t\"address\":\"Nukinja,dhaka\",\n\t\"imageToken\":1234,\n\t\"email\":\"dcc@gmail.com\",\n\t\"phone\":\"+89875464\"\n}"
+      },
+      "headersType": "Raw",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/shop/create-or-update"
+      },
+      "id": "9998b0d9-4c93-4499-8d48-3601bd023504",
+      "lastModified": "2018-06-05T11:36:20.248+06:00",
+      "name": "Shop Information Create / Update [ Image Token check ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "enabled": true,
+          "path": "code",
+          "value": "422"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.params[0]",
+          "value": "imageToken"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n\t\"name\":\"DCC WHOLE SALE\",\n\t\"address\":\"Nukinja,dhaka\",\n\t\"imageToken\":1000777818,\n\t\"email\":\"dcc@gmail.com\",\n\t\"phone\":\"+89875464\"\n}"
+      },
+      "headersType": "Raw",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/shop/create-or-update"
+      },
+      "id": "ff28d412-a4aa-4081-953d-e4d16b99d98e",
+      "lastModified": "2018-06-05T11:36:58.708+06:00",
+      "name": "Shop Information Create / Update",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "enabled": true,
+          "path": "code",
+          "value": "200"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/shop/get"
+      },
+      "id": "75948e27-51c2-4388-91cc-55930836ba37",
+      "lastModified": "2018-06-04T13:12:11.800+06:00",
+      "name": "Shop Information Get",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "200"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.name",
+          "value": "DCC WHOLE SALE"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.address",
+          "value": "Nukinja,dhaka"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.email",
+          "value": "dcc@gmail.com"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.phone",
+          "value": "\"+89875464\""
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/sale/get-all"
+      },
+      "id": "f1247e44-73f1-485b-8f6e-d960f25c533d",
+      "lastModified": "2018-06-04T13:56:11.003+06:00",
+      "name": "Sale[ Get All ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/inventory/get-by-product-id/1"
+      },
+      "id": "f7d45550-48ff-4c62-98dc-0cbc43001cd6",
+      "lastModified": "2018-06-05T11:24:43.255+06:00",
+      "name": "Inventory [ Get By Product Id ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "200"
         }
       ],
       "metaInfo": {},
@@ -5607,6 +6062,12 @@
         "IS_FROM_HISTORY": null
       },
       "parentId": "c4226841-a12e-441a-b046-9b49f4080e2d"
+    },
+    {
+      "type": "Project",
+      "id": "5c3cad06-bf9f-4f0b-81d9-5c4bbaf06db1",
+      "lastModified": "2018-06-04T12:41:00.024+06:00",
+      "name": "xzc"
     },
     {
       "uriEditor": true,

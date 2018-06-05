@@ -7,10 +7,12 @@ import com.workspaceit.dccpos.entity.Sale;
 import com.workspaceit.dccpos.entity.Shipment;
 import com.workspaceit.dccpos.entity.accounting.Entry;
 import com.workspaceit.dccpos.entity.accounting.EntryItem;
+import com.workspaceit.dccpos.service.SaleService;
 import com.workspaceit.dccpos.service.ShipmentService;
 import com.workspaceit.dccpos.service.accounting.EntryService;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
 import com.workspaceit.dccpos.util.SaleDetailsUtil;
+import com.workspaceit.dccpos.util.accounting.EntryItemUtil;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
 import com.workspaceit.dccpos.validation.form.sale.SaleForm;
 import org.aspectj.lang.JoinPoint;
@@ -27,8 +29,10 @@ import java.util.List;
 public class EntryServiceAop {
     private EntryService entryService;
     private ShipmentService shipmentService;
+    private SaleService saleService;
     private LedgerService ledgerService;
     private SaleDetailsUtil saleDetailsUtil;
+    private EntryItemUtil entryItemUtil;
 
     @Autowired
     public void setEntryService(EntryService entryService) {
@@ -37,6 +41,10 @@ public class EntryServiceAop {
     @Autowired
     public void setShipmentService(ShipmentService shipmentService) {
         this.shipmentService = shipmentService;
+    }
+    @Autowired
+    public void setSaleService(SaleService saleService) {
+        this.saleService = saleService;
     }
 
     @Autowired
@@ -47,6 +55,11 @@ public class EntryServiceAop {
     @Autowired
     public void setSaleDetailsUtil(SaleDetailsUtil saleDetailsUtil) {
         this.saleDetailsUtil = saleDetailsUtil;
+    }
+
+    @Autowired
+    public void setEntryItemUtil(EntryItemUtil entryItemUtil) {
+        this.entryItemUtil = entryItemUtil;
     }
 
     @AfterReturning(pointcut = "execution(* com.workspaceit.dccpos.service.ShipmentService.create(..))",returning="shipmentReturnObj")
@@ -103,8 +116,17 @@ public class EntryServiceAop {
 
         if(sale==null || saleForm==null )throw  new Exception("Sale or Sale Form is null");
         Entry entry = this.entryService.createSaleEntry(sale,saleForm);
-        this.ledgerService.resolveCurrentBalance(entry.getEntryItems());
+        double receiveAmount = this.entryItemUtil.getTotalAmount(entry.getEntryItems(),GROUP_CODE.ASSET);
+        double due = sale.getTotalPrice() - receiveAmount;
 
+        sale.setEntry(entry);
+        sale.setTotalReceive(receiveAmount);
+        sale.setTotalDue(due);
+
+        this.saleService.update(sale);
+
+
+        this.ledgerService.resolveCurrentBalance(entry.getEntryItems());
 
     }
 }

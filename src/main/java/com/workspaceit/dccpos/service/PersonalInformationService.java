@@ -44,12 +44,12 @@ public class PersonalInformationService {
         this.addressService = addressService;
     }
 
-    public PersonalInformation create(PersonalInfoCreateForm personalInfoForm){
+    public PersonalInformation create(PersonalInfoCreateForm personalInfoForm,COMPANY_ROLE role){
         Address address = new Address();
         address.setFormattedAddress(personalInfoForm.getAddress());
 
         CompanyRole companyRole = new CompanyRole();
-        companyRole.setCompanyRole(COMPANY_ROLE.EMPLOYEE);
+        companyRole.setCompanyRole(role);
 
         Set<CompanyRole> companyRoles = new HashSet<>();
         companyRoles.add(companyRole);

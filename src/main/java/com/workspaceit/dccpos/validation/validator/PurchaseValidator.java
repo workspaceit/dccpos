@@ -1,7 +1,7 @@
 package com.workspaceit.dccpos.validation.validator;
 
 import com.workspaceit.dccpos.util.purchase.InventoryFormUtil;
-import com.workspaceit.dccpos.util.validation.PaymentLedgerUtil;
+import com.workspaceit.dccpos.util.validation.PaymentLedgerFormUtil;
 import com.workspaceit.dccpos.util.purchase.ShipmentFormUtil;
 import com.workspaceit.dccpos.validation.form.accounting.PaymentLedgerForm;
 import com.workspaceit.dccpos.validation.form.inventory.InventoryCreateFrom;
@@ -19,7 +19,7 @@ public class PurchaseValidator {
 
     private ShipmentFormUtil shipmentFormUtil;
     private InventoryFormUtil inventoryFormUtil;
-    private PaymentLedgerUtil ledgerEntryFormUtil;
+    private PaymentLedgerFormUtil ledgerEntryFormUtil;
 
     @Autowired
     public void setInventoryValidator(InventoryValidator inventoryValidator) {
@@ -48,7 +48,7 @@ public class PurchaseValidator {
 
 
     @Autowired
-    public void setLedgerEntryFormUtil(PaymentLedgerUtil ledgerEntryFormUtil) {
+    public void setLedgerEntryFormUtil(PaymentLedgerFormUtil ledgerEntryFormUtil) {
         this.ledgerEntryFormUtil = ledgerEntryFormUtil;
     }
 

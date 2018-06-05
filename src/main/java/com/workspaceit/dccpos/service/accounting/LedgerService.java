@@ -87,8 +87,8 @@ public class LedgerService {
     }
 
     @Transactional
-    public Ledger getByCompanyIdAndCode(int id, GROUP_CODE groupCode){
-        return this.ledgerDao.findByCompanyAndGroupCode(id,groupCode);
+    public Ledger getByCompanyId(int id){
+        return this.ledgerDao.findByCompanyId(id);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -170,7 +170,7 @@ public class LedgerService {
     @Transactional(rollbackFor = Exception.class)
     public Ledger editSupplierLedger(Company company){
 
-        Ledger ledger = this.getByCompanyIdAndCode(company.getId(),GROUP_CODE.SUPPLIER);
+        Ledger ledger = this.getByCompanyId(company.getId());
         this.updateLedgeName(ledger,company.getTitle());
 
         return ledger;
@@ -178,7 +178,7 @@ public class LedgerService {
     @Transactional(rollbackFor = Exception.class)
     public Ledger editWholesalerLedger(Company company){
 
-        Ledger ledger = this.getByCompanyIdAndCode(company.getId(),GROUP_CODE.WHOLESALER);
+        Ledger ledger = this.getByCompanyId(company.getId());
         this.updateLedgeName(ledger,company.getTitle());
 
         return ledger;

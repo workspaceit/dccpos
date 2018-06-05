@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.service;
 
+import com.workspaceit.dccpos.constant.COMPANY_ROLE;
 import com.workspaceit.dccpos.dao.SaleDao;
 import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.exception.EntityNotFound;
@@ -50,6 +51,12 @@ public class SaleService {
         return this.saleDao.getAll();
     }
     @Transactional
+    public Sale getSale(long id)throws EntityNotFound{
+        Sale sale = this.getById(id);
+        if(sale==null)throw  new EntityNotFound("Sale information not found by id :"+id);
+        return sale;
+    }
+    @Transactional
     public Sale getById(long id){
         return this.saleDao.getById(id);
     }
@@ -73,7 +80,7 @@ public class SaleService {
                 if(saleForm.getConsumerInfoId()!=null && saleForm.getConsumerInfoId()>0)
                     consumer = this.personalInformationService.getById(saleForm.getConsumerInfoId());
                 else
-                    consumer = this.personalInformationService.create(saleForm.getConsumerInfo());
+                    consumer = this.personalInformationService.create(saleForm.getConsumerInfo(), COMPANY_ROLE.CONSUMER);
                 break;
         }
 
@@ -105,9 +112,12 @@ public class SaleService {
 
         return sale;
     }
-    public Sale save(Sale sale){
+    private Sale save(Sale sale){
         this.saleDao.save(sale);
         return sale;
     }
-
+    public Sale update(Sale sale){
+        this.saleDao.update(sale);
+        return sale;
+    }
 }

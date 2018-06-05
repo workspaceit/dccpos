@@ -4,7 +4,7 @@ import com.workspaceit.dccpos.validation.form.accounting.PaymentLedgerForm;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PaymentLedgerUtil {
+public class PaymentLedgerFormUtil {
     public double sumAmount(PaymentLedgerForm[] ledgerEntryForms){
         double totalAmount = 0d;
 

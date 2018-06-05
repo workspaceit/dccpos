@@ -6,7 +6,7 @@ import com.workspaceit.dccpos.entity.Wholesaler;
 import com.workspaceit.dccpos.service.PersonalInformationService;
 import com.workspaceit.dccpos.service.WholesalerService;
 import com.workspaceit.dccpos.util.validation.InventorySaleUtil;
-import com.workspaceit.dccpos.util.validation.PaymentLedgerUtil;
+import com.workspaceit.dccpos.util.validation.PaymentLedgerFormUtil;
 import com.workspaceit.dccpos.util.validation.SaleFormUtil;
 import com.workspaceit.dccpos.validation.form.personalIformation.PersonalInfoCreateForm;
 import com.workspaceit.dccpos.validation.form.sale.SaleForm;
@@ -22,7 +22,7 @@ public class SaleValidator {
     private PersonalInfoValidator personalInfoValidator;
     private InventoryValidator inventoryValidator;
     private PaymentLedgerValidator ledgerEntryValidator;
-    private PaymentLedgerUtil paymentLedgerValidatorUtil;
+    private PaymentLedgerFormUtil paymentLedgerValidatorUtil;
     private InventorySaleUtil inventorySaleValidatorUtil;
     private SaleFormUtil saleValidatorUtil;
 
@@ -52,7 +52,7 @@ public class SaleValidator {
     }
 
     @Autowired
-    public void setPaymentLedgerValidatorUtil(PaymentLedgerUtil paymentLedgerValidatorUtil) {
+    public void setPaymentLedgerValidatorUtil(PaymentLedgerFormUtil paymentLedgerValidatorUtil) {
         this.paymentLedgerValidatorUtil = paymentLedgerValidatorUtil;
     }
 
