@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Matin on 4/25/2018.
  */
 @Repository
-public class ShopDao extends BaseDao{
+public class ShopInformationDao extends BaseDao{
 
     public List<ShopInformation> getAll(){
         Session session = this.getCurrentSession();

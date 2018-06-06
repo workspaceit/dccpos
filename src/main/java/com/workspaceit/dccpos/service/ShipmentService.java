@@ -112,8 +112,21 @@ public class ShipmentService {
         return this.shipmentDao.findById(id);
     }
     @Transactional
-    public Shipment getByTrackingId(String trackingId){
-        return this.shipmentDao.findByTrackingId(trackingId);
+    public Shipment getShipment(long id) throws EntityNotFound{
+        Shipment shipment = this.getById(id);
+        if(shipment==null){
+            throw new EntityNotFound("Shipment not found by id :"+id);
+        }
+        return shipment;
+    }
+    @Transactional
+    public Shipment getByTrackingId(String trackingId,boolean fetchLazy){
+        Shipment shipment;
+        if(fetchLazy)
+            shipment = this.shipmentDao.findByTrackingIdFetchLazy(trackingId);
+        else
+            shipment = this.shipmentDao.findByTrackingId(trackingId);
+        return shipment;
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -24,7 +24,6 @@ public class ShopForm {
     @NotNull(message = "Phone Required")
     private String phone;
 
-    @NotNull(message = "Image Token Required")
     private Integer imageToken;
 
 

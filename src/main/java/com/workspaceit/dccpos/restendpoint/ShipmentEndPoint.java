@@ -88,7 +88,7 @@ public class ShipmentEndPoint {
     }
     @GetMapping(value = "/get-by-tracking-id/{trackingId}")
     public ResponseEntity<?> getById(@PathVariable("trackingId") String trackingId){
-        Shipment shipment  =  this.shipmentService.getByTrackingId(trackingId);
+        Shipment shipment  =  this.shipmentService.getByTrackingId(trackingId,true);
         return ResponseEntity.ok(shipment);
     }
     /**

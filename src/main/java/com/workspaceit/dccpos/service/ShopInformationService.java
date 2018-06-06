@@ -1,6 +1,6 @@
 package com.workspaceit.dccpos.service;
 
-import com.workspaceit.dccpos.dao.ShopDao;
+import com.workspaceit.dccpos.dao.ShopInformationDao;
 import com.workspaceit.dccpos.entity.ShopInformation;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.FormFilterHelper;
@@ -16,31 +16,23 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class ShopService {
-    private ShopDao shopDao;
+public class ShopInformationService {
+    private ShopInformationDao shopDao;
     private TempFileService tempFileService;
 
     @Autowired
-    public void setShopDao(ShopDao shopDao){this.shopDao=shopDao;}
+    public void setShopDao(ShopInformationDao shopDao){this.shopDao=shopDao;}
 
     @Autowired
     public void setTempFileService(TempFileService tempFileService) {
         this.tempFileService = tempFileService;
     }
 
-    @Transactional
-    public List<ShopInformation> getAll(){
-        return this.shopDao.getAll();
-    }
 
-    @Transactional
-    public ShopInformation getById(int id){
-        return this.shopDao.getById(id);
-    }
 
 
     @Transactional
-    public ShopInformation getShop(){
+    public ShopInformation getShopInformation(){
         ShopInformation shop =  this.shopDao.getOne();
         /**
          * For Avoiding null pointer exception
@@ -59,7 +51,7 @@ public class ShopService {
             imagePath = this.tempFileService.copyFileToCommonFolder(shopForm.getImageToken());
         }
 
-        ShopInformation shop = this.getShop();
+        ShopInformation shop = this.getShopInformation();
 
         shop.setName(shopForm.getName());
         shop.setAddress(shopForm.getAddress());

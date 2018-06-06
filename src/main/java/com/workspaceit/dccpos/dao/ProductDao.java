@@ -85,6 +85,15 @@ public class ProductDao extends BaseDao{
                 .setMaxResults(1)
                 .uniqueResult();
     }
+    public Product findByInventoryId(long id){
+        Session session = this.getCurrentSession();
+        return (Product)session.createQuery("select distinct p FROM Product p " +
+                " left join fetch p.inventories  inventory" +
+                " where inventory.id =:id")
+                .setParameter("id",id)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
     public  List<Product> findByCategoryId(int categoryId,int limit,int offset){
         Session session = this.getCurrentSession();
         return session.createQuery(" FROM Product p where p.category.id =:categoryId")

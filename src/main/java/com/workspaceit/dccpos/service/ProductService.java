@@ -71,6 +71,7 @@ public class ProductService {
     public long getCountOfAll(ProductSearchForm searchForm){
         return this.productDao.findCountOfAll(searchForm);
     }
+
     @Transactional
     public List<Product> getByCategoryId(int categoryId,int limit, int offset){
         offset = (offset-1)*limit;
@@ -87,9 +88,15 @@ public class ProductService {
     }
 
     @Transactional
+    public Product getByInventoryId(long id){
+        return this.productDao.findByInventoryId(id);
+    }
+
+    @Transactional
     public Product getById(int id){
         return this.productDao.findById(id);
     }
+
     @Transactional
     public Product getProduct(int id) throws EntityNotFound {
         Product product =  this.productDao.findById(id);

@@ -14,7 +14,7 @@ public class InventoryDao extends BaseDao{
         return session.createQuery(" FROM Inventory inv")
                 .list();
     }
-    public Inventory findById(int id){
+    public Inventory findById(long id){
         Session session = this.getCurrentSession();
         return (Inventory)session.createQuery(" FROM Inventory inv where inv.id =:id ")
                 .setParameter("id",id)

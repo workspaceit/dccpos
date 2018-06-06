@@ -50,7 +50,7 @@ public class InventoryService {
         return this.inventoryDao.findAll();
     }
     @Transactional
-    public Inventory getById(int id){
+    public Inventory getById(long id){
         return this.inventoryDao.findById(id);
     }
 

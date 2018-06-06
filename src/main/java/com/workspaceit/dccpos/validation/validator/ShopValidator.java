@@ -1,10 +1,7 @@
 package com.workspaceit.dccpos.validation.validator;
 
 import com.workspaceit.dccpos.entity.TempFile;
-import com.workspaceit.dccpos.service.ShopService;
-import com.workspaceit.dccpos.service.SupplierService;
 import com.workspaceit.dccpos.service.TempFileService;
-import com.workspaceit.dccpos.validation.form.shipment.ShipmentCreateForm;
 import com.workspaceit.dccpos.validation.form.shop.ShopForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

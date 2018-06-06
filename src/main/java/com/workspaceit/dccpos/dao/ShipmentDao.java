@@ -25,6 +25,14 @@ public class ShipmentDao extends BaseDao {
     public Shipment findByTrackingId(String trackingId){
         Session session = this.getCurrentSession();
         return (Shipment)session.createQuery("select distinct sp FROM Shipment sp " +
+                " where sp.trackingId =:trackingId")
+                .setParameter("trackingId",trackingId)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+    public Shipment findByTrackingIdFetchLazy(String trackingId){
+        Session session = this.getCurrentSession();
+        return (Shipment)session.createQuery("select distinct sp FROM Shipment sp " +
                 " left join fetch sp.entry " +
                 " left join fetch sp.inventories " +
                 " where sp.trackingId =:trackingId")

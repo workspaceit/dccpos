@@ -4,13 +4,10 @@ package com.workspaceit.dccpos.restendpoint;
  * Created by Matin on 4/25/2018.
  */
 import com.workspaceit.dccpos.constant.EndpointRequestUriPrefix;
-import com.workspaceit.dccpos.entity.Shipment;
 import com.workspaceit.dccpos.entity.ShopInformation;
 import com.workspaceit.dccpos.exception.EntityNotFound;
-import com.workspaceit.dccpos.service.ShopService;
-import com.workspaceit.dccpos.service.TempFileService;
+import com.workspaceit.dccpos.service.ShopInformationService;
 import com.workspaceit.dccpos.util.ServiceResponse;
-import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
 import com.workspaceit.dccpos.validation.form.shop.ShopForm;
 import com.workspaceit.dccpos.validation.validator.ShopValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +26,11 @@ import javax.validation.Valid;
 @CrossOrigin
 public class ShopEndPoint {
 
-    private ShopService shopService;
+    private ShopInformationService shopService;
     private ShopValidator shopValidator;
 
     @Autowired
-    public void setShopService(ShopService shopService) {
+    public void setShopService(ShopInformationService shopService) {
         this.shopService = shopService;
     }
 
@@ -46,7 +43,7 @@ public class ShopEndPoint {
 
     @RequestMapping(value = "/get",method = RequestMethod.GET)
     public ResponseEntity<?> get(){
-        ShopInformation shop  =  this.shopService.getShop();
+        ShopInformation shop  =  this.shopService.getShopInformation();
         return ResponseEntity.ok(shop);
     }
 

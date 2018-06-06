@@ -19,7 +19,7 @@ public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(InventoryView.Basic.class)
-    private int id;
+    private long id;
 
     /*@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "inventory_id",referencedColumnName = "id",nullable = false)
@@ -78,11 +78,11 @@ public class Inventory {
     private Date createdAt;
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -184,6 +184,7 @@ public class Inventory {
         this.createdAt = createdAt;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -197,8 +198,6 @@ public class Inventory {
         if (soldQuantity != inventory.soldQuantity) return false;
         if (availableQuantity != inventory.availableQuantity) return false;
         if (condition != inventory.condition) return false;
-        if (product != null ? !product.equals(inventory.product) : inventory.product != null) return false;
-        if (shipment != null ? !shipment.equals(inventory.shipment) : inventory.shipment != null) return false;
         if (purchasePrice != null ? !purchasePrice.equals(inventory.purchasePrice) : inventory.purchasePrice != null)
             return false;
         if (status != inventory.status) return false;
@@ -210,12 +209,10 @@ public class Inventory {
     public int hashCode() {
         int result;
         long temp;
-        result = id;
+        result = (int) (id ^ (id >>> 32));
         temp = Double.doubleToLongBits(sellingPrice);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (condition != null ? condition.hashCode() : 0);
-        result = 31 * result + (product != null ? product.hashCode() : 0);
-        result = 31 * result + (shipment != null ? shipment.hashCode() : 0);
         result = 31 * result + (purchasePrice != null ? purchasePrice.hashCode() : 0);
         result = 31 * result + purchaseQuantity;
         result = 31 * result + soldQuantity;

@@ -60,6 +60,13 @@ public class SaleService {
     public Sale getById(long id){
         return this.saleDao.getById(id);
     }
+    @Transactional
+    public Sale getByTrackingId(String trackingId,boolean fetchLazy){
+        if(fetchLazy)
+            return this.saleDao.getByTrackingIdFetchLazy(trackingId);
+        else
+            return this.saleDao.getByTrackingId(trackingId);
+    }
     @Transactional(rollbackFor = Exception.class)
     public Sale create(SaleForm saleForm, Employee employee) throws EntityNotFound {
         Sale sale = new Sale();

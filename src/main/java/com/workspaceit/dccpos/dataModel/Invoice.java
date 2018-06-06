@@ -1,9 +1,15 @@
 package com.workspaceit.dccpos.dataModel;
 
+import com.workspaceit.dccpos.constant.SHIPMENT_COST;
+import com.workspaceit.dccpos.entity.ShopInformation;
+
+import javax.persistence.ManyToOne;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Invoice {
+    private ShopInformation shopInformation;
     private String invoiceTackingId;
     private InvoiceBilling billTo;
     private List<InvoiceDetails> details;
@@ -13,6 +19,15 @@ public class Invoice {
     private double vat;
     private double paidOrReceive;
     private double due;
+    private Map<SHIPMENT_COST,Double> shipmentCost;
+
+    public ShopInformation getShopInformation() {
+        return shopInformation;
+    }
+
+    public void setShopInformation(ShopInformation shopInformation) {
+        this.shopInformation = shopInformation;
+    }
 
     public String getInvoiceTackingId() {
         return invoiceTackingId;
@@ -84,5 +99,13 @@ public class Invoice {
 
     public void setDue(double due) {
         this.due = due;
+    }
+
+    public Map<SHIPMENT_COST, Double> getShipmentCost() {
+        return shipmentCost;
+    }
+
+    public void setShipmentCost(Map<SHIPMENT_COST, Double> shipmentCost) {
+        this.shipmentCost = shipmentCost;
     }
 }

@@ -20,6 +20,26 @@ public class SaleDao extends BaseDao{
                 .setMaxResults(1)
                 .uniqueResult();
     }
+    public Sale getByTrackingId(String trackingId){
+        Session session = this.getCurrentSession();
+        return (Sale)session.createQuery("FROM Sale s " +
+                "  WHERE s.trackingId=:trackingId")
+                .setParameter("trackingId",trackingId)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+    public Sale getByTrackingIdFetchLazy(String trackingId){
+        Session session = this.getCurrentSession();
+        return (Sale)session.createQuery("select distinct s FROM Sale s " +
+                " left join fetch s.soldBy " +
+                " left join fetch s.wholesaler " +
+                " left join fetch s.consumer " +
+                " left join fetch s.saleDetails " +
+                "  WHERE s.trackingId=:trackingId")
+                .setParameter("trackingId",trackingId)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
     public List<Sale> getAll(){
         Session session = this.getCurrentSession();
         return session.createQuery("FROM Sale s ")
