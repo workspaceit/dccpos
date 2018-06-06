@@ -1,10 +1,10 @@
 package com.workspaceit.dccpos.service;
 
 import com.workspaceit.dccpos.constant.SHIPMENT_COST;
-import com.workspaceit.dccpos.dataModel.Invoice;
-import com.workspaceit.dccpos.dataModel.InvoiceBilling;
-import com.workspaceit.dccpos.dataModel.InvoiceBillingAddress;
-import com.workspaceit.dccpos.dataModel.InvoiceDetails;
+import com.workspaceit.dccpos.dataModel.invoice.Invoice;
+import com.workspaceit.dccpos.dataModel.invoice.InvoiceBilling;
+import com.workspaceit.dccpos.dataModel.invoice.InvoiceBillingAddress;
+import com.workspaceit.dccpos.dataModel.invoice.InvoiceDetails;
 import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import org.hibernate.Hibernate;

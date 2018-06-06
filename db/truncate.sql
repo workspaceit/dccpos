@@ -20,13 +20,13 @@ UPDATE `acc_ledgers` SET `current_balance`=0 WHERE 1;
 DELETE from  `personal_information` where id>1;
 ALTER TABLE `personal_information` AUTO_INCREMENT = 2;
 
-DELETE from  `address` where id>1;
-ALTER TABLE `address` AUTO_INCREMENT = 2;
 
 TRUNCATE TABLE `wholesaler`;
 TRUNCATE TABLE `supplier`;
 TRUNCATE TABLE `company`;
 
+DELETE from  `address` where id>1;
+ALTER TABLE `address` AUTO_INCREMENT = 2;
 SET FOREIGN_KEY_CHECKS =1;
 
 /*Remove Personal Information*/

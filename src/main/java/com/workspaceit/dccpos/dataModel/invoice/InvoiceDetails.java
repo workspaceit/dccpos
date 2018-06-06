@@ -1,4 +1,4 @@
-package com.workspaceit.dccpos.dataModel;
+package com.workspaceit.dccpos.dataModel.invoice;
 
 public class InvoiceDetails {
     private String productName;

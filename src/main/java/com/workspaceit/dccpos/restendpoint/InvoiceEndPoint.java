@@ -1,7 +1,7 @@
 package com.workspaceit.dccpos.restendpoint;
 
 import com.workspaceit.dccpos.constant.EndpointRequestUriPrefix;
-import com.workspaceit.dccpos.dataModel.Invoice;
+import com.workspaceit.dccpos.dataModel.invoice.Invoice;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.service.InvoiceGenerateService;
 import com.workspaceit.dccpos.util.ServiceResponse;

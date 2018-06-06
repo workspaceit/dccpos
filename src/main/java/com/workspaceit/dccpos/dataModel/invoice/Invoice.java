@@ -1,9 +1,8 @@
-package com.workspaceit.dccpos.dataModel;
+package com.workspaceit.dccpos.dataModel.invoice;
 
 import com.workspaceit.dccpos.constant.SHIPMENT_COST;
 import com.workspaceit.dccpos.entity.ShopInformation;
 
-import javax.persistence.ManyToOne;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
