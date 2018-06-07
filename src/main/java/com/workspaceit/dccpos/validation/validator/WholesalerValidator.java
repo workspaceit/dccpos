@@ -46,13 +46,13 @@ public class WholesalerValidator {
     public void validateUniqueWholesalerId(String employeeId, Errors error){
         Wholesaler Wholesaler =  this.wholesalerService.getByWholesalerId(employeeId);
         if(Wholesaler!=null){
-            error.rejectValue("WholesalerId","Wholesaler Id already been used by : "+Wholesaler.getCompany().getTitle());
+            error.rejectValue("wholesalerId","Wholesaler Id already been used by : "+Wholesaler.getCompany().getTitle());
         }
     }
     public void validateWholesalerIdUsedByOthers(String employeeId, int id, Errors error){
         Wholesaler employee =  this.wholesalerService.getByWholesalerIdAndNotById(employeeId,id);
         if(employee!=null){
-            error.rejectValue("WholesalerId","Wholesaler Id already been used by : "+employee.getCompany().getTitle());
+            error.rejectValue("wholesalerId","Wholesaler Id already been used by : "+employee.getCompany().getTitle());
         }
     }
 }
