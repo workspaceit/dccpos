@@ -72,7 +72,7 @@ public class EmployeeEndPoint {
             employee = this.employeeService.edit(id,employeeForm);
         } catch (EntityNotFound entityNotFound) {
             entityNotFound.printStackTrace();
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ServiceResponse.getMsgInMap(entityNotFound.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ServiceResponse.getMsgInMap(entityNotFound.getMessage()));
         }
 
         return ResponseEntity.ok(employee);

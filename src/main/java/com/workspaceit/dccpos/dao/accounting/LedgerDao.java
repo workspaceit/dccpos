@@ -53,6 +53,13 @@ public class LedgerDao extends BaseDao {
                 .setParameter("groupCode",groupCode)
                 .list();
     }
+    public Ledger findByPersonalInfoId(int personalInformationId){
+        Session session = this.getCurrentSession();
+        return (Ledger)session.createQuery(" FROM Ledger lg where lg.personalInformation.id =:personalInformationId ")
+                .setParameter("personalInformationId",personalInformationId)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
     public Ledger findByPersonalInfoIdAndGroupCode(int personalInformationId, GROUP_CODE groupCode){
         Session session = this.getCurrentSession();
         return (Ledger)session.createQuery(" FROM Ledger lg where lg.personalInformation.id =:personalInformationId " +

@@ -44,7 +44,9 @@ public class EntryItemService {
     }
     @Transactional(rollbackFor = Exception.class)
     public void saveAll(Entry entry,List<EntryItem>  entryItems){
-        entryItems.stream().forEach(entryItem -> entryItem.setEntry(entry));
+        entryItems.stream().forEach(entryItem -> {
+            entryItem.setEntry(entry);
+        });
 
         this.entryItemDao.saveAll(entryItems);
     }

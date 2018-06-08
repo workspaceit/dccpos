@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 14, 2018 at 12:15 PM
--- Server version: 5.6.39
--- PHP Version: 5.5.9-1ubuntu4.24
+-- Generation Time: Jun 08, 2018 at 06:01 AM
+-- Server version: 5.6.40
+-- PHP Version: 5.5.9-1ubuntu4.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `acc_entries` (
   `date` date NOT NULL,
   `dr_total` decimal(15,2) NOT NULL DEFAULT '0.00',
   `cr_total` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `narration` text COLLATE utf8_unicode_ci NOT NULL,
+  `narration` text COLLATE utf8_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `created_by` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -55,9 +55,7 @@ CREATE TABLE IF NOT EXISTS `acc_entry_items` (
   `dc` enum('DR','CR') COLLATE utf8_unicode_ci NOT NULL,
   `reconciliation_date` datetime DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `created_by` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKsktxpw9rj3098v6icvo480t87` (`created_by`),
   KEY `FKt6w8e3lqgl6v1gvmuxalw34jw` (`entry_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
@@ -102,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `acc_groups` (
   `id` bigint(18) NOT NULL AUTO_INCREMENT,
   `parent_id` bigint(18) DEFAULT '0',
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `code` enum('ASSET','LIABILITY','EXPENSE','INCOME','SALE','WHOLE_SALE','SALARY','EMPLOYEE_SALARY','SUPPLIER','WHOLESALER','RECEIVABLE','PAYABLE') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `code` enum('ASSET','LIABILITY','EXPENSE','INCOME','SALE','WHOLE_SALE','SALARY','SUPPLIER','WHOLESALER','RECEIVABLE','PAYABLE') COLLATE utf8_unicode_ci DEFAULT NULL,
   `affects_gross` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_id` (`id`),
@@ -140,12 +138,11 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   `group_id` bigint(18) NOT NULL,
   `personal_info_id` int(11) DEFAULT NULL,
   `company_id` int(11) DEFAULT NULL,
-  `code` enum('INVENTORY','COGS','CASH','SHIPMENT_COST','DUE_SHIPMENT_COST','INVESTMENT') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `code` enum('INVENTORY','COGS','CASH','SHIPMENT_COST','DUE_SHIPMENT_COST','INVESTMENT','SALE','DUE_SALE') COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `op_balance` decimal(25,2) NOT NULL DEFAULT '0.00',
-  `op_balance_dc` enum('DR','CR') COLLATE utf8_unicode_ci NOT NULL,
   `current_balance` decimal(25,2) NOT NULL,
-  `current_balance_dc` enum('DR','CR') COLLATE utf8_unicode_ci NOT NULL,
+  `op_balance_dc` enum('DR','CR') COLLATE utf8_unicode_ci NOT NULL,
   `type` enum('CASH_ACCOUNT','OTHER') COLLATE utf8_unicode_ci NOT NULL,
   `reconciliation` int(1) NOT NULL DEFAULT '0',
   `notes` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
@@ -158,21 +155,23 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   KEY `personal_info_id` (`personal_info_id`),
   KEY `company_id` (`company_id`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=202 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=111 ;
 
 --
 -- Dumping data for table `acc_ledgers`
 --
 
-INSERT INTO `acc_ledgers` (`id`, `group_id`, `personal_info_id`, `company_id`, `code`, `name`, `op_balance`, `op_balance_dc`, `current_balance`, `current_balance_dc`, `type`, `reconciliation`, `notes`, `created_at`) VALUES
-  (1, 1, NULL, NULL, 'INVENTORY', 'Inventory', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:27:16'),
-  (2, 4, NULL, NULL, 'COGS', 'Cost Of Good Sold', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:35:20'),
-  (3, 1, NULL, NULL, 'CASH', 'Cash', 0.00, 'DR', 0.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-20 10:36:24'),
-  (4, 4, NULL, NULL, 'SHIPMENT_COST', 'Shipment Cost', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 10:41:28'),
-  (5, 1, NULL, NULL, NULL, 'Bank', 0.00, 'DR', 0.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-24 06:36:45'),
-  (6, 2, NULL, NULL, 'DUE_SHIPMENT_COST', 'Due shipment cost', 0.00, 'CR', 0.00, 'CR', 'OTHER', 0, '', '2018-04-23 10:09:29'),
-  (7, 2, NULL, NULL, 'INVESTMENT', 'Owner''s Investment', 0.00, 'CR', 0.00, 'CR', 'OTHER', 0, '', '2018-05-01 07:46:29'),
-  (101, 8, 1, NULL, NULL, 'Person 1', 0.00, 'DR', 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 12:26:10');
+INSERT INTO `acc_ledgers` (`id`, `group_id`, `personal_info_id`, `company_id`, `code`, `name`, `op_balance`, `current_balance`, `op_balance_dc`, `type`, `reconciliation`, `notes`, `created_at`) VALUES
+  (1, 1, NULL, NULL, 'INVENTORY', 'Inventory', 0.00, 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 04:27:16'),
+  (2, 4, NULL, NULL, 'COGS', 'Cost Of Good Sold', 0.00, 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 04:35:20'),
+  (3, 1, NULL, NULL, 'CASH', 'Cash', 0.00, 0.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-20 04:36:24'),
+  (4, 4, NULL, NULL, 'SHIPMENT_COST', 'Shipment Cost', 0.00, 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 04:41:28'),
+  (5, 1, NULL, NULL, NULL, 'Bank', 0.00, 0.00, 'DR', 'CASH_ACCOUNT', 0, '', '2018-04-24 00:36:45'),
+  (6, 2, NULL, NULL, 'DUE_SHIPMENT_COST', 'Due shipment cost', 0.00, 0.00, 'CR', 'OTHER', 0, '', '2018-04-23 04:09:29'),
+  (7, 2, NULL, NULL, 'INVESTMENT', 'Owner''s Investment', 0.00, 0.00, 'CR', 'OTHER', 0, '', '2018-05-01 01:46:29'),
+  (8, 3, NULL, NULL, 'SALE', 'Sale', 0.00, 0.00, 'CR', 'OTHER', 0, '', '2018-06-08 05:30:43'),
+  (9, 2, NULL, NULL, 'DUE_SALE', 'Due sale', 0.00, 0.00, 'CR', 'OTHER', 0, '', '2018-06-08 05:47:36'),
+  (101, 8, 1, NULL, NULL, 'Person 1', 0.00, 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 06:26:10');
 
 -- --------------------------------------------------------
 
@@ -238,7 +237,7 @@ CREATE TABLE IF NOT EXISTS `auth_credential` (
 --
 
 INSERT INTO `auth_credential` (`id`, `personal_info_id`, `email`, `password`, `status`, `created_at`) VALUES
-  (1, 1, 'admin@admin.com', '$2a$10$5aTN9klJNhO3DERcg/j11.VQC2skPV2zz37SG3kraKRms.v5.XYyC', 'ACTIVE', '2018-04-24 04:47:04');
+  (1, 1, 'admin@admin.com', '$2a$10$qO3.kMs4SWDPZZImP34XROaeASKxYLDNWIa9WXjAHluCw9UFJV8M2', 'ACTIVE', '2018-06-08 05:17:06');
 
 -- --------------------------------------------------------
 
@@ -340,30 +339,13 @@ CREATE TABLE IF NOT EXISTS `inventory` (
   `purchase_quantity` int(11) NOT NULL,
   `sold_quantity` int(11) NOT NULL,
   `available_quantity` int(11) NOT NULL,
-  `status` enum('IN_STOCK','SOLD_OUT') NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `product_id` (`product_id`,`shipment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `inventory_details`
---
-
-CREATE TABLE IF NOT EXISTS `inventory_details` (
-  `id` bigint(22) unsigned NOT NULL AUTO_INCREMENT,
-  `inventory_id` int(11) DEFAULT NULL COMMENT 'Keep it for Hibernate sake',
   `selling_price` decimal(25,2) NOT NULL,
-  `purchased_quantity` int(11) NOT NULL,
-  `sold_quantity` int(11) NOT NULL,
-  `available_quantity` int(11) NOT NULL,
+  `status` enum('IN_STOCK','SOLD_OUT') NOT NULL,
   `condition` enum('GOOD','DAMAGED') NOT NULL,
   `cycle` enum('FROM_SUPPLIER','RETURN_FROM_SALE') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `inventory_id` (`inventory_id`)
+  KEY `product_id` (`product_id`,`shipment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -389,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `personal_information` (
 --
 
 INSERT INTO `personal_information` (`id`, `address_id`, `full_name`, `dob`, `email`, `phone`, `created_at`) VALUES
-  (1, 1, 'Person 1', '2018-04-04', NULL, NULL, '2018-04-20 13:19:58');
+  (1, 1, 'Person 1', '2018-04-04', '', '', '2018-04-20 13:19:58');
 
 -- --------------------------------------------------------
 
@@ -442,9 +424,11 @@ CREATE TABLE IF NOT EXISTS `reset_password_tokens` (
 
 CREATE TABLE IF NOT EXISTS `sale` (
   `id` bigint(22) unsigned NOT NULL AUTO_INCREMENT,
-  `employee_id` int(11) NOT NULL,
+  `tracking_id` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `sold_by` int(11) NOT NULL,
   `wholesaler_id` int(11) DEFAULT NULL,
   `personal_info_id` int(11) DEFAULT NULL,
+  `entry_id` bigint(20) DEFAULT NULL,
   `type` enum('WHOLESALE','CONSUMER_SALE') COLLATE utf8_unicode_ci NOT NULL,
   `discount` decimal(10,2) NOT NULL,
   `vat` decimal(10,2) NOT NULL,
@@ -456,21 +440,15 @@ CREATE TABLE IF NOT EXISTS `sale` (
   `total_refund_amount` decimal(15,2) NOT NULL,
   `total_refund_amount_paid` decimal(15,2) NOT NULL,
   `total_refund_amount_due` decimal(15,2) NOT NULL,
-  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci,
   `date` date NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `employee_id` (`employee_id`,`wholesaler_id`,`personal_info_id`),
+  KEY `employee_id` (`sold_by`,`wholesaler_id`,`personal_info_id`),
   KEY `FK6nqj154o9mxav10de4u7ev503` (`personal_info_id`),
-  KEY `FKdj452u4gk4l32ps4ykvyhmwuu` (`wholesaler_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
-
---
--- Dumping data for table `sale`
---
-
-INSERT INTO `sale` (`id`, `employee_id`, `wholesaler_id`, `personal_info_id`, `type`, `discount`, `vat`, `total_quantity`, `total_returned_quantity`, `total_price`, `total_due`, `total_receive`, `total_refund_amount`, `total_refund_amount_paid`, `total_refund_amount_due`, `description`, `date`, `created_at`) VALUES
-  (7, 1, NULL, NULL, 'WHOLESALE', 12.00, 4.00, 4, 0, 13, 41, 1, 4.00, 12.00, 1.00, 'Illegal Weapon sold ', '2018-05-04', '2018-05-04 10:52:34');
+  KEY `FKdj452u4gk4l32ps4ykvyhmwuu` (`wholesaler_id`),
+  KEY `tracking_id` (`tracking_id`(255))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -480,17 +458,15 @@ INSERT INTO `sale` (`id`, `employee_id`, `wholesaler_id`, `personal_info_id`, `t
 
 CREATE TABLE IF NOT EXISTS `sale_details` (
   `id` bigint(22) unsigned NOT NULL AUTO_INCREMENT,
-  `sale_id` bigint(22) unsigned NOT NULL,
+  `sale_id` bigint(22) unsigned DEFAULT NULL,
   `inventory_id` bigint(11) unsigned NOT NULL,
-  `inventory_details_id` bigint(11) unsigned NOT NULL,
   `quantity` int(11) NOT NULL,
   `per_quantity_price` int(11) NOT NULL,
   `total_price` int(11) NOT NULL,
   `product_condition` enum('GOOD','DAMAGED') COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `inventory_id` (`inventory_id`,`inventory_details_id`),
-  KEY `FKe11gnna4yk9o8ihe8wnnevnv` (`inventory_details_id`),
+  KEY `inventory_id` (`inventory_id`),
   KEY `FKpr45fadb9iki1w3rtbtj3q1tu` (`sale_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
@@ -504,7 +480,7 @@ CREATE TABLE IF NOT EXISTS `shipment` (
   `id` bigint(22) unsigned NOT NULL AUTO_INCREMENT,
   `tracking_id` varchar(100) DEFAULT NULL,
   `supplier_id` int(11) NOT NULL,
-  `entry_id` int(11) DEFAULT NULL,
+  `entry_id` bigint(20) DEFAULT NULL,
   `total_quantity` int(11) NOT NULL,
   `total_product_price` decimal(25,2) NOT NULL,
   `total_cost` decimal(25,2) NOT NULL,
@@ -525,27 +501,13 @@ CREATE TABLE IF NOT EXISTS `shipment` (
 
 CREATE TABLE IF NOT EXISTS `shipment_cost` (
   `id` bigint(30) unsigned NOT NULL AUTO_INCREMENT,
-  `shipment_id` bigint(22) unsigned NOT NULL,
+  `shipment_id` bigint(22) unsigned DEFAULT NULL,
   `name` enum('CF','LABOR','CARRYING','OTHERS') COLLATE utf8_unicode_ci NOT NULL,
   `amount` decimal(8,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `shipment_id` (`shipment_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
-
---
--- Dumping data for table `shipment_cost`
---
-
-INSERT INTO `shipment_cost` (`id`, `shipment_id`, `name`, `amount`, `created_at`) VALUES
-  (1, 1, 'CARRYING', 25.00, '2018-05-14 12:09:32'),
-  (2, 1, 'CF', 0.30, '2018-05-14 12:09:32'),
-  (3, 1, 'LABOR', 20.00, '2018-05-14 12:09:32'),
-  (4, 1, 'OTHERS', 2.00, '2018-05-14 12:09:32'),
-  (5, 1, 'CARRYING', 25.00, '2018-05-14 12:11:28'),
-  (6, 1, 'CF', 0.30, '2018-05-14 12:11:28'),
-  (7, 1, 'LABOR', 20.00, '2018-05-14 12:11:28'),
-  (8, 1, 'OTHERS', 2.00, '2018-05-14 12:11:28');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -609,32 +571,14 @@ CREATE TABLE IF NOT EXISTS `temp_file` (
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `token` (`token`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `temp_file`
 --
 
 INSERT INTO `temp_file` (`id`, `token`, `path`, `file_name`, `created_date`) VALUES
-  (1, 1000777818, '/home/mi/project-file/pmc/tmp/22041597251246.jpeg', '22041597251246.jpeg', '2018-04-16 10:33:51'),
-  (2, 1000178532, '/home/mi/project-file/pmc/tmp/22193915543084.jpeg', '22193915543084.jpeg', '2018-04-16 10:36:23'),
-  (3, 1000190006, '/home/mi/project-file/pos/tmp/22256818623673.jpeg', '22256818623673.jpeg', '2018-04-16 10:37:26'),
-  (4, 1000435901, '/home/mi/project-file/pos/tmp/22282936970489.jpg', '22282936970489.jpg', '2018-04-16 10:37:52'),
-  (5, 1000121185, '/home/mi/project-file/pos/tmp/22585543613975.jpg', '22585543613975.jpg', '2018-04-16 10:42:54'),
-  (6, 1000849460, '/home/mi/project-file/pos/tmp/14256678808523.JPG', '14256678808523.JPG', '2018-04-20 09:54:00'),
-  (7, 1000802082, '/home/mi/project-file/pos/tmp/14287007458519.JPG', '14287007458519.JPG', '2018-04-20 09:54:30'),
-  (8, 1000592484, '/home/mi/project-file/pos/tmp/14538367016252.JPG', '14538367016252.JPG', '2018-04-20 09:58:42'),
-  (9, 1000709215, '/home/mi/project-file/pos/tmp/17868672631188.JPG', '17868672631188.JPG', '2018-04-20 10:54:12'),
-  (10, 1000664691, '/home/mi/project-file/pos/tmp/21954480378058.JPG', '21954480378058.JPG', '2018-04-20 12:02:18'),
-  (11, 1000809138, '/home/mi/project-file/pos/tmp/22226852309307.JPG', '22226852309307.JPG', '2018-04-20 12:06:50'),
-  (12, 1000884278, '/home/mi/project-file/pos/tmp/22549630972247.JPG', '22549630972247.JPG', '2018-04-20 12:12:13'),
-  (13, 1000040114, '/home/mi/project-file/pos/tmp/22611032070774.JPG', '22611032070774.JPG', '2018-04-20 12:13:14'),
-  (14, 1000091472, '/home/mi/project-file/pos/tmp/23393150465367.JPG', '23393150465367.JPG', '2018-04-20 12:26:16'),
-  (15, 1000289192, '/home/mi/project-file/pos/tmp/27234275626165.JPG', '27234275626165.JPG', '2018-04-20 13:30:18'),
-  (16, 1000547343, '/home/mi/project-file/pos/tmp/27602303432731.JPG', '27602303432731.JPG', '2018-04-20 13:36:26'),
-  (17, 1000454183, '/home/mi/project-file/pos/tmp/25136638767649.png', '25136638767649.png', '2018-04-23 11:01:20'),
-  (18, 1000800958, '/home/mi/project-file/pos/tmp/8395239381726.png', '8395239381726.png', '2018-04-24 06:15:23'),
-  (19, 1000388290, '/home/mi/project-file/pos/tmp/3976418198347.png', '3976418198347.png', '2018-04-24 11:35:08');
+  (1, 1000777818, '/home/mi/project-file/pmc/tmp/22041597251246.jpeg', '22041597251246.jpeg', '2018-04-16 10:33:51');
 
 -- --------------------------------------------------------
 
@@ -666,7 +610,6 @@ ALTER TABLE `acc_entries`
 -- Constraints for table `acc_entry_items`
 --
 ALTER TABLE `acc_entry_items`
-  ADD CONSTRAINT `FKsktxpw9rj3098v6icvo480t87` FOREIGN KEY (`created_by`) REFERENCES `employee` (`id`),
   ADD CONSTRAINT `FKt6w8e3lqgl6v1gvmuxalw34jw` FOREIGN KEY (`entry_id`) REFERENCES `acc_entries` (`id`);
 
 --
@@ -750,7 +693,6 @@ ALTER TABLE `sale`
 --
 ALTER TABLE `sale_details`
   ADD CONSTRAINT `FK3jvsrkpijom28pctq6req8rg` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`id`),
-  ADD CONSTRAINT `FKe11gnna4yk9o8ihe8wnnevnv` FOREIGN KEY (`inventory_details_id`) REFERENCES `inventory_details` (`id`),
   ADD CONSTRAINT `FKpr45fadb9iki1w3rtbtj3q1tu` FOREIGN KEY (`sale_id`) REFERENCES `sale` (`id`);
 
 --

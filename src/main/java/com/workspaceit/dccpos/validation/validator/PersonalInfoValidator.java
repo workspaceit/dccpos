@@ -50,7 +50,7 @@ public class PersonalInfoValidator {
     public void validateEmail(String email ,Errors errors,String prefix){
         boolean flag = ValidationHelper.isValidEmailAddress(email);
         if(!flag){
-            errors.rejectValue(prefix+"email","Email is not valid");
+            errors.rejectValue(prefix+"email","Email is not valid "+email);
 
         }
     }

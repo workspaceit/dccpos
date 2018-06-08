@@ -60,9 +60,14 @@ public class LedgerService {
         return this.ledgerDao.findAll();
     }
     @Transactional
-    public Ledger getPersonalInfoIdAndCode(int id, GROUP_CODE groupCode){
+    public Ledger getByPersonalInfoIdAndCode(int id, GROUP_CODE groupCode){
         return this.ledgerDao.findByPersonalInfoIdAndGroupCode(id,groupCode);
     }
+    @Transactional
+    public Ledger getByPersonalInfoId(int personalInformationId){
+        return this.ledgerDao.findByPersonalInfoId(personalInformationId);
+    }
+
     @Transactional
     public Ledger getByCode(LEDGER_CODE ledgerCode){
         return this.ledgerDao.findByCode(ledgerCode);
@@ -184,9 +189,10 @@ public class LedgerService {
         return ledger;
     }
     @Transactional(rollbackFor = Exception.class)
-    public Ledger editEmployeeSalaryLedger(PersonalInformation personalInformation){
+    public Ledger editEmployeeSalaryLedger(PersonalInformation personalInformation)throws EntityNotFound{
 
-        Ledger ledger = this.getPersonalInfoIdAndCode(personalInformation.getId(),GROUP_CODE.SALARY);
+        Ledger ledger = this.getByPersonalInfoIdAndCode(personalInformation.getId(),GROUP_CODE.SALARY);
+        if(ledger==null)throw new EntityNotFound("Salary Ledger not found ");
         this.updateLedgeName(ledger,personalInformation.getFullName());
 
         return ledger;

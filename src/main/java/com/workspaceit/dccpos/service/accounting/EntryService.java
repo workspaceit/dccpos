@@ -76,7 +76,7 @@ public class EntryService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Entry decreaseInventory(Sale sale){
+    public Entry decreaseInventory(Sale sale)throws EntityNotFound{
         Set<SaleDetails> saleDetails= sale.getSaleDetails();
         Date date = sale.getDate();
         String narration = "Inventory Sold";
@@ -398,8 +398,9 @@ public class EntryService {
         return entry;
 
     }
-    private EntryItem getEntryItem(double amount , LEDGER_CODE ledgerCode, ACCOUNTING_ENTRY accountingEntry){
+    private EntryItem getEntryItem(double amount , LEDGER_CODE ledgerCode, ACCOUNTING_ENTRY accountingEntry)throws EntityNotFound{
         Ledger ledger = this.ledgerService.getByCode(ledgerCode);
+        if(ledger==null)throw new EntityNotFound("Ledger not found by code : "+ledgerCode);
         return this.getEntryItem(amount,ledger,accountingEntry);
     }
     private EntryItem getEntryItem(double amount , Ledger ledger, ACCOUNTING_ENTRY accountingEntry){
