@@ -12,6 +12,7 @@ import com.workspaceit.dccpos.entity.SaleDetails;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.validation.form.inventory.InventoryCreateFrom;
 import com.workspaceit.dccpos.validation.form.inventory.InventoryFrom;
+import com.workspaceit.dccpos.validation.form.inventory.InventorySearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,15 @@ public class InventoryService {
     @Transactional
     public List<Inventory> getInStockByProductId(int productId) {
         return this.inventoryDao.findByProductIdAndStockStatus(productId,STOCK_STATUS.IN_STOCK);
+    }
+    @Transactional
+    public List<Inventory> getInStockByProductId(int productId, InventorySearchForm inventorySearchForm) {
+        if(inventorySearchForm.getCondition()==null){
+            return this.inventoryDao.findByProductIdAndStockStatus(productId,STOCK_STATUS.IN_STOCK);
+        }else{
+            return this.inventoryDao.findByProductIdAndStockStatus(productId,STOCK_STATUS.IN_STOCK,inventorySearchForm.getCondition());
+
+        }
     }
     @Transactional
     public List<Inventory> getAll() {

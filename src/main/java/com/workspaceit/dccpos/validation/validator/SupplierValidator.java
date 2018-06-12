@@ -25,8 +25,10 @@ public class SupplierValidator {
     }
 
     public void validate(SupplierCreateForm supplierCreateForm, Errors error){
-
-        this.validateUniqueSupplierId(supplierCreateForm.getSupplierId(),error);
+        if(!error.hasFieldErrors("supplierId") &&
+                supplierCreateForm.getSupplierId()!=null && !supplierCreateForm.getSupplierId().trim().equals("")){
+            this.validateUniqueSupplierId(supplierCreateForm.getSupplierId(),error);
+        }
 
         if(supplierCreateForm.getCompany()!=null){
             this.companyValidator.validate("company",supplierCreateForm.getCompany(),error);
@@ -34,7 +36,11 @@ public class SupplierValidator {
 
     }
     public void validateUpdate(int id, SupplierUpdateForm supplierUpdateForm, Errors error){
-        this.validateSupplierIdUsedByOthers(supplierUpdateForm.getSupplierId(),id,error);
+        if(!error.hasFieldErrors("supplierId") &&
+                supplierUpdateForm.getSupplierId()!=null && !supplierUpdateForm.getSupplierId().trim().equals("")){
+            this.validateSupplierIdUsedByOthers(supplierUpdateForm.getSupplierId(),id,error);
+        }
+
         if(supplierUpdateForm.getCompany()!=null){
             this.companyValidator.validateUpdate("company",supplierUpdateForm.getCompany(),error);
         }

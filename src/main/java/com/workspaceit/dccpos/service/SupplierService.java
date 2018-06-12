@@ -64,7 +64,10 @@ public class SupplierService {
     @Transactional(rollbackFor = Exception.class)
     public Supplier create(SupplierCreateForm supplierCreateForm){
         Company company =  this.companyService.create(supplierCreateForm.getCompany());
-
+        String supplierId = null;
+        if(supplierCreateForm.getSupplierId()!=null && !supplierCreateForm.getSupplierId().trim().equals("")){
+            supplierId = supplierCreateForm.getSupplierId();
+        }
         /**
          * Creating Supplier Ledger
          * */
@@ -72,7 +75,7 @@ public class SupplierService {
 
         Supplier supplier = new Supplier();
         supplier.setCompany(company);
-        supplier.setSupplierId(supplierCreateForm.getSupplierId());
+        supplier.setSupplierId(supplierId);
         this.save(supplier);
 
 
@@ -81,11 +84,14 @@ public class SupplierService {
     @Transactional(rollbackFor = Exception.class)
     public Supplier edit(int id, SupplierUpdateForm supplierUpdateForm) throws EntityNotFound {
         Supplier supplier = this.getSupplier(id);
+        String supplierId = null;
+        if(supplierUpdateForm.getSupplierId()!=null && !supplierUpdateForm.getSupplierId().trim().equals("")){
+            supplierId = supplierUpdateForm.getSupplierId();
+        }
 
         Company company =  this.companyService.edit(supplier.getCompany().getId(),supplierUpdateForm.getCompany());
-
         supplier.setCompany(company);
-        supplier.setSupplierId(supplierUpdateForm.getSupplierId());
+        supplier.setSupplierId(supplierId);
 
         this.update(supplier);
 

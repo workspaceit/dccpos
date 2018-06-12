@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SaleForm {
+    public class SaleForm {
 
     @NotNull(message = "Product required")
     @Valid
