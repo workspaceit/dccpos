@@ -6,7 +6,7 @@
       "type": "Project",
       "description": "",
       "id": "c4226841-a12e-441a-b046-9b49f4080e2d",
-      "lastModified": "2018-06-08T12:50:08.950+06:00",
+      "lastModified": "2018-06-13T17:01:11.202+06:00",
       "name": "POS"
     },
     {
@@ -21,7 +21,7 @@
       "type": "Scenario",
       "description": "",
       "id": "28508267-c995-4a6a-9e04-19a0c55423ca",
-      "lastModified": "2018-06-07T11:26:09.721+06:00",
+      "lastModified": "2018-06-13T16:57:39.860+06:00",
       "name": "Endpoints",
       "requestOrder": [
         "AUTHENTICATION",
@@ -35,7 +35,12 @@
         "Employee-Update",
         "Employee-Get-All",
         "Supplier-Create",
+        "Supplier Create 2",
         "Supplier-Update",
+        "Supplier-Update 2",
+        "Supplier Create 3 [ After others suppliers Id Null ]",
+        "Supplier-Update [ Add supplier id ] ",
+        "Supplier-Update [ Add duplicate supplier id ] ",
         "Supplier-Get-All",
         "Wholesaler-Create",
         "Wholesaler-Create 1",
@@ -99,7 +104,8 @@
         "Inventory [ Get By Product Id ]",
         "Invoice [ Sale ]",
         "Invoice [ Shipment ] ",
-        "Invoice [ Tracking Id ] "
+        "Invoice [ Tracking Id ] ",
+        "Consumer"
       ],
       "parentId": "bd8b3e61-d30e-4350-8631-704fabab67dc"
     },
@@ -1144,7 +1150,7 @@
         "bodyType": "Form",
         "autoSetLength": true
       },
-      "headersType": "Form",
+      "headersType": "Raw",
       "uri": {
         "query": {
           "delimiter": "&",
@@ -1157,7 +1163,7 @@
         "path": "/auth/api/supplier/create"
       },
       "id": "71c17161-e7c3-4fe3-a012-ae16ecd213f0",
-      "lastModified": "2018-05-03T11:38:03.658+06:00",
+      "lastModified": "2018-06-11T14:17:26.969+06:00",
       "name": "Supplier-Create",
       "headers": [
         {
@@ -1189,6 +1195,85 @@
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
     {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "supplierId",
+              "value": "1234"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.title",
+              "value": "Shopno"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.address",
+              "value": "Road 8, House 16. Nikunja 2,Dhaka"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.phone",
+              "value": "4654987"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.email",
+              "value": "sp@supplier.com"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBody": "username=p@pmc.com&password=123456&client_id=pmc-app-client&client_secret=f6c3d96bc05036e738f0899ba149f447924b3a09&grant_type=password"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "{scheme}"
+        },
+        "host": "{url}",
+        "path": "/auth/api/supplier/create"
+      },
+      "description": "",
+      "id": "3c298c18-31d7-4045-9736-7b036e1163e1",
+      "lastModified": "2018-06-13T14:24:52.518+06:00",
+      "name": "Supplier Create 2",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
       "uriEditor": true,
       "type": "Request",
       "method": {
@@ -1204,13 +1289,13 @@
               "enabled": true,
               "type": "Text",
               "name": "supplierId",
-              "value": "1231"
+              "value": ""
             },
             {
               "enabled": true,
               "type": "Text",
               "name": "company.title",
-              "value": "Agora "
+              "value": "Shopno "
             },
             {
               "enabled": true,
@@ -1243,13 +1328,14 @@
           "items": []
         },
         "scheme": {
-          "name": "{scheme}"
+          "name": "http",
+          "version": "V11"
         },
         "host": "{url}",
         "path": "/auth/api/supplier/update/1"
       },
       "id": "8cd29387-db47-46ac-9eff-20132388c49a",
-      "lastModified": "2018-05-03T11:38:12.322+06:00",
+      "lastModified": "2018-06-11T14:23:58.580+06:00",
       "name": "Supplier-Update",
       "headers": [
         {
@@ -1280,6 +1366,333 @@
       "metaInfo": {
         "IS_FROM_HISTORY": null
       },
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "supplierId",
+              "value": ""
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.title",
+              "value": "Agora"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.address",
+              "value": "asd"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.phone",
+              "value": "asd"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.email",
+              "value": "eee@w.com"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/supplier/update/2"
+      },
+      "id": "8bd7cb5d-6a5c-4e94-8cfa-b4722546dd53",
+      "lastModified": "2018-06-11T14:24:05.190+06:00",
+      "name": "Supplier-Update 2",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "supplierId",
+              "value": ""
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.title",
+              "value": "Uni Mert"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.address",
+              "value": "Gulshan 1,Dhaka"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.phone",
+              "value": "+898754465"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.email",
+              "value": "info@unimert.com"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/supplier/create"
+      },
+      "id": "e45d2848-639a-4650-93cd-884ffde926bb",
+      "lastModified": "2018-06-11T14:36:34.616+06:00",
+      "name": "Supplier Create 3 [ After others suppliers Id Null ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "supplierId",
+              "value": "1231"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.title",
+              "value": "Agora"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.address",
+              "value": "Gulshan 1"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.phone",
+              "value": "1234567"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.email",
+              "value": "eee@w.com"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/supplier/update/1"
+      },
+      "id": "424b2910-f2c4-49d5-986d-517e070f580c",
+      "lastModified": "2018-06-11T14:30:29.879+06:00",
+      "name": "Supplier-Update [ Add supplier id ] ",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "supplierId",
+              "value": "1231"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.title",
+              "value": "Shopno "
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.address",
+              "value": "Road 8, House 16. Nikunja 2,Dhaka"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.phone",
+              "value": "012345678"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.email",
+              "value": "info@shopno.com"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBody": "Authorization: Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}\nContent-Type: application/x-www-form-urlencoded"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/supplier/update/2"
+      },
+      "id": "c10bd753-0616-44e1-b248-99055a32ef43",
+      "lastModified": "2018-06-11T14:33:54.700+06:00",
+      "name": "Supplier-Update [ Add duplicate supplier id ] ",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "422"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.params[0]",
+          "value": "supplierId"
+        }
+      ],
+      "metaInfo": {},
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
     {
@@ -3278,7 +3691,7 @@
         "bodyType": "Text",
         "autoSetLength": true,
         "textBodyEditorHeight": 530,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":58,\"purchaseQuantity\":30},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":296,\"purchaseQuantity\":40},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":98,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":305,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":150,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":400,\"purchaseQuantity\":3}\n  ]\n    \n}"
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":296,\"purchaseQuantity\":40},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":305,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":400,\"purchaseQuantity\":3}\n  ]\n    \n}"
       },
       "headersType": "Form",
       "uri": {
@@ -3294,7 +3707,7 @@
         "path": "/auth/api/shipment/create"
       },
       "id": "267aea3b-d1ea-4144-8388-2365b441e1f8",
-      "lastModified": "2018-06-05T11:25:58.948+06:00",
+      "lastModified": "2018-06-13T15:56:10.974+06:00",
       "name": "Shipment Create C:3 [Total Due]",
       "headers": [
         {
@@ -3388,7 +3801,7 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":37.0}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":9}\n    \n}"
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":74,\"purchaseQuantity\":10},\n    {\"productId\":2,\"purchasePrice\":1,\"status\":\"GOOD\",\"sellingPrice\":85,\"purchaseQuantity\":20},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"GOOD\",\"sellingPrice\":32,\"purchaseQuantity\":10}\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":30.0},\n                                 {\"ledgerId\":5,\"amount\":20.0}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":9}\n    \n}"
       },
       "headersType": "Raw",
       "uri": {
@@ -3404,7 +3817,7 @@
         "path": "/auth/api/shipment/create"
       },
       "id": "ea663b09-e51a-41f2-b9c3-98a316b7ecd0",
-      "lastModified": "2018-05-21T13:50:48.210+06:00",
+      "lastModified": "2018-06-13T14:32:15.746+06:00",
       "name": "Shipment Create C:2 [ Full Paid ]",
       "headers": [
         {
@@ -3492,7 +3905,7 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":2,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1.3,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n  \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":400.7}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":47}\n}"
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n  \"productPricePaymentAccount\":[\n                               {\"ledgerId\":5,\"amount\":400.7}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":47}\n}"
       },
       "headersType": "Raw",
       "uri": {
@@ -3508,7 +3921,7 @@
         "path": "/auth/api/shipment/create"
       },
       "id": "0a786595-49ef-4194-bda0-bcd4b5fb52c7",
-      "lastModified": "2018-05-25T12:02:39.934+06:00",
+      "lastModified": "2018-06-13T14:27:45.733+06:00",
       "name": "Shipment Create C:3 [ Paid Amount greater ] ",
       "headers": [
         {
@@ -3658,7 +4071,7 @@
         "path": "/auth/api/shipment/get-by-id/1"
       },
       "id": "ee009215-13d8-4551-b1d3-9f40e0b20e4b",
-      "lastModified": "2018-05-03T15:08:42.593+06:00",
+      "lastModified": "2018-06-08T18:15:35.149+06:00",
       "name": "Shipment Get By Id",
       "headers": [
         {
@@ -4739,7 +5152,7 @@
         "path": "/auth/api/sale/get-all"
       },
       "id": "f1247e44-73f1-485b-8f6e-d960f25c533d",
-      "lastModified": "2018-06-04T13:56:11.003+06:00",
+      "lastModified": "2018-06-12T11:36:43.441+06:00",
       "name": "Sale[ Get All ]",
       "headers": [
         {
@@ -4962,7 +5375,13 @@
       "uri": {
         "query": {
           "delimiter": "&",
-          "items": []
+          "items": [
+            {
+              "enabled": true,
+              "name": "condition",
+              "value": "GOOD"
+            }
+          ]
         },
         "scheme": {
           "name": "http",
@@ -4972,7 +5391,7 @@
         "path": "/auth/api/inventory/get-by-product-id/1"
       },
       "id": "f7d45550-48ff-4c62-98dc-0cbc43001cd6",
-      "lastModified": "2018-06-05T11:24:43.255+06:00",
+      "lastModified": "2018-06-12T16:56:17.923+06:00",
       "name": "Inventory [ Get By Product Id ]",
       "headers": [
         {
@@ -5018,10 +5437,10 @@
           "version": "V11"
         },
         "host": "{url}",
-        "path": "/auth/api/invoice/sale/2"
+        "path": "/auth/api/invoice/sale/1"
       },
       "id": "3436755b-46f8-4f07-bd23-98d484698484",
-      "lastModified": "2018-06-05T14:43:37.158+06:00",
+      "lastModified": "2018-06-13T13:05:19.777+06:00",
       "name": "Invoice [ Sale ]",
       "headers": [
         {
@@ -5105,7 +5524,7 @@
         "bodyType": "Text",
         "autoSetLength": true
       },
-      "headersType": "Form",
+      "headersType": "Raw",
       "uri": {
         "query": {
           "delimiter": "&",
@@ -5119,7 +5538,7 @@
         "path": "/auth/api/invoice/get-by-tracking-id/SP2"
       },
       "id": "9f873195-901f-4ef3-afe9-3cc09bbdeea2",
-      "lastModified": "2018-06-06T13:53:17.022+06:00",
+      "lastModified": "2018-06-13T17:01:06.395+06:00",
       "name": "Invoice [ Tracking Id ] ",
       "headers": [
         {
@@ -5134,6 +5553,47 @@
           "subject": "ResponseStatus",
           "path": "code",
           "value": "200"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/consumer/get-by-consumer-id/con1012"
+      },
+      "id": "9a2309c0-0127-4659-a7b9-553700653eab",
+      "lastModified": "2018-06-13T17:01:11.203+06:00",
+      "name": "Consumer",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
         }
       ],
       "metaInfo": {},

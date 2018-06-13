@@ -104,6 +104,7 @@ public class InvoiceGenerateService {
         invoice.setPaidOrReceive(sale.getTotalReceive());
         invoice.setDue(sale.getTotalDue());
         invoice.setTotal(sale.getTotalPrice());
+
         return invoice;
     }
     public Invoice generateShipmentInvoice(long id) throws EntityNotFound {

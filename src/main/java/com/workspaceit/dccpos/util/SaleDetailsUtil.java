@@ -1,15 +1,9 @@
 package com.workspaceit.dccpos.util;
 
-import com.workspaceit.dccpos.constant.PRODUCT_CONDITION;
-import com.workspaceit.dccpos.entity.Inventory;
 import com.workspaceit.dccpos.entity.SaleDetails;
-import com.workspaceit.dccpos.exception.EntityNotFound;
-import com.workspaceit.dccpos.validation.form.sale.InventorySaleForm;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class SaleDetailsUtil {
@@ -21,5 +15,12 @@ public class SaleDetailsUtil {
 
             return price * quantity;
         }).sum();
+    }
+    public double getTotalSellingPrice(Collection<SaleDetails> saleDetails){
+        return saleDetails.stream().mapToDouble(value -> value.getTotalPrice()).sum();
+    }
+
+    public int getTotalQuantity(Collection<SaleDetails> saleDetails){
+        return saleDetails.stream().mapToInt(value -> value.getQuantity()).sum();
     }
 }

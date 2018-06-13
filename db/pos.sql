@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 08, 2018 at 06:01 AM
+-- Generation Time: Jun 13, 2018 at 08:23 AM
 -- Server version: 5.6.40
 -- PHP Version: 5.5.9-1ubuntu4.25
 
@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   KEY `personal_info_id` (`personal_info_id`),
   KEY `company_id` (`company_id`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=111 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=120 ;
 
 --
 -- Dumping data for table `acc_ledgers`
@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `personal_information` (
 --
 
 INSERT INTO `personal_information` (`id`, `address_id`, `full_name`, `dob`, `email`, `phone`, `created_at`) VALUES
-  (1, 1, 'Person 1', '2018-04-04', '', '', '2018-04-20 13:19:58');
+  (1, 1, 'Person 1', '2018-04-04', '', NULL, '2018-04-20 13:19:58');
 
 -- --------------------------------------------------------
 

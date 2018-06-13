@@ -20,7 +20,7 @@ public class SaleService {
     private SaleDetailsService saleDetailsService;
     private WholesalerService wholesalerService;
     private InventoryService inventoryService;
-
+    private ConsumerService consumerService;
 
     @Autowired
     public void setSaleDao(SaleDao saleDao) {
@@ -40,6 +40,11 @@ public class SaleService {
     @Autowired
     public void setWholesalerService(WholesalerService wholesalerService) {
         this.wholesalerService = wholesalerService;
+    }
+
+    @Autowired
+    public void setConsumerService(ConsumerService consumerService) {
+        this.consumerService = consumerService;
     }
 
     @Autowired

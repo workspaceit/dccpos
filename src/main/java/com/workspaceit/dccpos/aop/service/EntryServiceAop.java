@@ -12,6 +12,7 @@ import com.workspaceit.dccpos.service.ShipmentService;
 import com.workspaceit.dccpos.service.accounting.EntryService;
 import com.workspaceit.dccpos.service.accounting.LedgerService;
 import com.workspaceit.dccpos.util.SaleDetailsUtil;
+import com.workspaceit.dccpos.util.SaleUtil;
 import com.workspaceit.dccpos.util.accounting.EntryItemUtil;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
 import com.workspaceit.dccpos.validation.form.sale.SaleForm;
@@ -31,6 +32,7 @@ public class EntryServiceAop {
     private ShipmentService shipmentService;
     private SaleService saleService;
     private LedgerService ledgerService;
+    private SaleUtil saleUtil;
     private SaleDetailsUtil saleDetailsUtil;
     private EntryItemUtil entryItemUtil;
 
@@ -50,6 +52,11 @@ public class EntryServiceAop {
     @Autowired
     public void setLedgerService(LedgerService ledgerService) {
         this.ledgerService = ledgerService;
+    }
+
+    @Autowired
+    public void setSaleUtil(SaleUtil saleUtil) {
+        this.saleUtil = saleUtil;
     }
 
     @Autowired
@@ -116,13 +123,16 @@ public class EntryServiceAop {
 
         if(sale==null || saleForm==null )throw  new Exception("Sale or Sale Form is null");
         Entry entry = this.entryService.createSaleEntry(sale,saleForm);
+        int totalQuantity = this.saleDetailsUtil.getTotalQuantity(sale.getSaleDetails());
+        double totalPrice = this.saleUtil.getTotalPrice(sale);
         double receiveAmount = this.entryItemUtil.getTotalAmount(entry.getEntryItems(),GROUP_CODE.ASSET);
-        double due = sale.getTotalPrice() - receiveAmount;
+        double due = totalPrice - receiveAmount;
 
         sale.setEntry(entry);
         sale.setTotalReceive(receiveAmount);
         sale.setTotalDue(due);
-
+        sale.setTotalQuantity(totalQuantity);
+        sale.setTotalPrice(totalPrice);
         this.saleService.update(sale);
 
 
