@@ -1,14 +1,16 @@
 package com.workspaceit.dccpos.validation.validator;
 
 import com.workspaceit.dccpos.constant.SALE_TYPE;
+import com.workspaceit.dccpos.entity.Consumer;
 import com.workspaceit.dccpos.entity.PersonalInformation;
 import com.workspaceit.dccpos.entity.Wholesaler;
+import com.workspaceit.dccpos.service.ConsumerService;
 import com.workspaceit.dccpos.service.PersonalInformationService;
 import com.workspaceit.dccpos.service.WholesalerService;
 import com.workspaceit.dccpos.util.validation.InventorySaleUtil;
 import com.workspaceit.dccpos.util.validation.PaymentLedgerFormUtil;
 import com.workspaceit.dccpos.util.validation.SaleFormUtil;
-import com.workspaceit.dccpos.validation.form.personalIformation.PersonalInfoCreateForm;
+import com.workspaceit.dccpos.validation.form.consumer.ConsumerForm;
 import com.workspaceit.dccpos.validation.form.sale.SaleForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,9 +19,9 @@ import org.springframework.validation.Errors;
 @Component
 public class SaleValidator {
     private WholesalerService wholesalerService;
-    private PersonalInformationService personalInformationService;
+    private ConsumerService consumerService;
 
-    private PersonalInfoValidator personalInfoValidator;
+    private ConsumerValidator consumerValidator;
     private InventoryValidator inventoryValidator;
     private PaymentLedgerValidator ledgerEntryValidator;
     private PaymentLedgerFormUtil paymentLedgerValidatorUtil;
@@ -32,13 +34,13 @@ public class SaleValidator {
     }
 
     @Autowired
-    public void setPersonalInformationService(PersonalInformationService personalInformationService) {
-        this.personalInformationService = personalInformationService;
+    public void setConsumerService(ConsumerService consumerService) {
+        this.consumerService = consumerService;
     }
 
     @Autowired
-    public void setPersonalInfoValidator(PersonalInfoValidator personalInfoValidator) {
-        this.personalInfoValidator = personalInfoValidator;
+    public void setConsumerValidator(ConsumerValidator consumerValidator) {
+        this.consumerValidator = consumerValidator;
     }
 
     @Autowired
@@ -110,25 +112,31 @@ public class SaleValidator {
             error.rejectValue("wholesalerId","Wholesaler not found by id : "+wholesalerId);
         }
     }
-    private void validateConsumer(Integer consumerInfoId, PersonalInfoCreateForm consumerInfo, Errors error){
+    private void validateConsumer(Integer consumerInfoId, ConsumerForm consumerInfo, Errors error){
 
-        if(consumerInfoId!=null){
-            PersonalInformation personalInformation =  this.personalInformationService.getById(consumerInfoId);
-            if(personalInformation==null){
-                error.rejectValue("consumerInfoId","Consumer not found by id : "+consumerInfoId);
-            }
-        }
-
-
-        if(consumerInfo==null && (consumerInfoId==null || consumerInfoId>0)) {
-            error.rejectValue("consumerInfoId", "Consumer required");
-        }
+        /**
+         * Ether consumerIfo for new consumer
+         * Or
+         * Existing consumerInfoId Required
+        * */
         if(consumerInfo!=null){
             this.validateConsumer(consumerInfo,error);
+            return;
         }
+
+        if(consumerInfoId==null || consumerInfoId<=0){
+            error.rejectValue("consumerInfoId", "Consumer required");
+            return;
+        }
+
+        Consumer consumer =  this.consumerService.getById(consumerInfoId);
+        if(consumer==null){
+            error.rejectValue("consumerInfoId","Consumer not found by id : "+consumerInfoId);
+        }
+
     }
-    private void validateConsumer(PersonalInfoCreateForm consumerInfo, Errors error){
-        this.personalInfoValidator.validate("consumerInfo",consumerInfo,error);
+    private void validateConsumer(ConsumerForm consumerInfo, Errors error){
+        this.consumerValidator.validate("consumerInfo",consumerInfo,error);
 
     }
 }

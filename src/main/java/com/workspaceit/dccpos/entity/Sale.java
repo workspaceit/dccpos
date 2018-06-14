@@ -35,8 +35,8 @@ public class Sale {
     private Wholesaler wholesaler;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "personal_info_id")
-    private PersonalInformation consumer;
+    @JoinColumn(name = "consumer_id")
+    private Consumer consumer;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "sale")
     private Set<SaleDetails> saleDetails;
@@ -130,11 +130,11 @@ public class Sale {
         this.entry = entry;
     }
 
-    public PersonalInformation getConsumer() {
+    public Consumer getConsumer() {
         return consumer;
     }
 
-    public void setConsumer(PersonalInformation consumer) {
+    public void setConsumer(Consumer consumer) {
         this.consumer = consumer;
     }
 

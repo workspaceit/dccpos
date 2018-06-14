@@ -3,8 +3,10 @@ package com.workspaceit.dccpos.service;
 import com.workspaceit.dccpos.constant.COMPANY_ROLE;
 import com.workspaceit.dccpos.dao.ConsumerDao;
 import com.workspaceit.dccpos.entity.Consumer;
+import com.workspaceit.dccpos.entity.Employee;
 import com.workspaceit.dccpos.entity.PersonalInformation;
 import com.workspaceit.dccpos.exception.EntityNotFound;
+import com.workspaceit.dccpos.helper.FormFilterHelper;
 import com.workspaceit.dccpos.validation.form.consumer.ConsumerForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,10 +34,12 @@ public class ConsumerService {
         if(consumer==null)throw new EntityNotFound("Consumer not found by Id: "+id);
         return consumer;
     }
+
     @Transactional
     public Consumer getById(int id){
         return this.consumerDao.findById(id);
     }
+
     @Transactional
     public Consumer getByConsumerId(String consumerId){
         return this.consumerDao.findByConsumerId(consumerId);
@@ -43,12 +47,15 @@ public class ConsumerService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public Consumer create(ConsumerForm consumerForm){
+    public Consumer create(ConsumerForm consumerForm, Employee employee){
+        FormFilterHelper.doBasicFiler(consumerForm);
+
         Consumer consumer = new Consumer();
 
         PersonalInformation personalInformation = this.personalInformationService.create(consumerForm.getPersonalInfo(), COMPANY_ROLE.CONSUMER);
         consumer.setPersonalInformation(personalInformation);
         consumer.setConsumerId(consumerForm.getConsumerId());
+        consumer.setCreatedBy(employee);
         this.save(consumer);
 
 

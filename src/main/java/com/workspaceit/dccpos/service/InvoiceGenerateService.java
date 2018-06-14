@@ -59,10 +59,11 @@ public class InvoiceGenerateService {
                billingAddress.setFormattedAddress(wholesalerAddress.getFormattedAddress());
                break;
             case CONSUMER_SALE:
-                PersonalInformation consumer = sale.getConsumer();
-                Address consumerAddress =  consumer.getAddress();
+                Consumer consumer = sale.getConsumer();
+                PersonalInformation personalInformation = consumer.getPersonalInformation();
+                Address consumerAddress =  personalInformation.getAddress();
 
-                billTo.setName(consumer.getFullName());
+                billTo.setName(personalInformation.getFullName());
                 billingAddress.setFormattedAddress(consumerAddress.getFormattedAddress());
                 break;
 

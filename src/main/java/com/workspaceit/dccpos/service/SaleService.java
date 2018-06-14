@@ -1,6 +1,5 @@
 package com.workspaceit.dccpos.service;
 
-import com.workspaceit.dccpos.constant.COMPANY_ROLE;
 import com.workspaceit.dccpos.dao.SaleDao;
 import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.exception.EntityNotFound;
@@ -77,7 +76,7 @@ public class SaleService {
         Sale sale = new Sale();
         Set<SaleDetails> saleDetailsList = this.saleDetailsService.getSaleDetails(sale,saleForm.getInventories());
         Wholesaler wholesaler = null;
-        PersonalInformation consumer = null;
+        Consumer consumerInfo = null;
         double totalDue = 0;
         double totalPrice = 0;
         int totalQuantity = 0;
@@ -89,16 +88,18 @@ public class SaleService {
                 wholesaler = this.wholesalerService.getWholesaler(saleForm.getWholesalerId());
                 break;
             case CONSUMER_SALE:
-                if(saleForm.getConsumerInfoId()!=null && saleForm.getConsumerInfoId()>0)
-                    consumer = this.personalInformationService.getById(saleForm.getConsumerInfoId());
-                else
-                    consumer = this.personalInformationService.create(saleForm.getConsumerInfo(), COMPANY_ROLE.CONSUMER);
+                if(saleForm.getConsumerInfoId()!=null && saleForm.getConsumerInfoId()>0) {
+                    consumerInfo = this.consumerService.getConsumer(saleForm.getConsumerInfoId());
+                }else{
+                    consumerInfo = this.consumerService.create(saleForm.getConsumerInfo(),employee);
+
+                }
                 break;
         }
 
         sale.setTrackingId(TrackingIdGenerator.getSaleTrackingId(this.saleDao.findMaxId(Sale.class)+1));
         sale.setWholesaler(wholesaler);
-        sale.setConsumer(consumer);
+        sale.setConsumer(consumerInfo);
         sale.setDate(saleForm.getDate());
         sale.setDiscount(discount);
         sale.setVat(vat);

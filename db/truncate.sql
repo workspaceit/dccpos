@@ -20,7 +20,7 @@ UPDATE `acc_ledgers` SET `current_balance`=0 WHERE 1;
 DELETE from  `personal_information` where id>1;
 ALTER TABLE `personal_information` AUTO_INCREMENT = 2;
 
-
+TRUNCATE TABLE  `consumer`;
 TRUNCATE TABLE `wholesaler`;
 TRUNCATE TABLE `supplier`;
 TRUNCATE TABLE `company`;

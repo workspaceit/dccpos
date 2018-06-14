@@ -15,11 +15,10 @@ import java.util.*;
  */
 public class FormFilterHelper {
 
-    public static List<BasicNameValuePair> doBasicFiler(Object obj){
+    public static void doBasicFiler(Object obj){
 
         Method[] methods = obj.getClass().getMethods();
         Map<String,Object> methodValueMap = new HashMap<>();
-        List<BasicNameValuePair> listOfPair = new ArrayList<>();
 
         /**
          * Getter
@@ -65,7 +64,6 @@ public class FormFilterHelper {
                 }
             }
         }
-        return listOfPair;
     }
     private static String processString(String val){
         val = val.trim();

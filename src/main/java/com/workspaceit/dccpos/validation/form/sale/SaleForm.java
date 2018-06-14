@@ -3,7 +3,7 @@ package com.workspaceit.dccpos.validation.form.sale;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.workspaceit.dccpos.constant.SALE_TYPE;
 import com.workspaceit.dccpos.validation.form.accounting.PaymentLedgerForm;
-import com.workspaceit.dccpos.validation.form.personalIformation.PersonalInfoCreateForm;
+import com.workspaceit.dccpos.validation.form.consumer.ConsumerForm;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -36,16 +36,19 @@ import java.util.Date;
     /**
      * Sale to
      * wholesaler or
-     * new consumer or
-     * existing consumer
+     * new consumerInfo or
+     * existing consumerInfo
      * */
     private Integer wholesalerId;
 
     @Valid
     private PaymentLedgerForm[] paymentAccount;
 
+
     @Valid
-    private PersonalInfoCreateForm consumerInfo;
+    private ConsumerForm consumerInfo;
+
+
     private Integer consumerInfoId;
 
     public InventorySaleForm[] getInventories() {
@@ -105,13 +108,6 @@ import java.util.Date;
         this.wholesalerId = wholesalerId;
     }
 
-    public PersonalInfoCreateForm getConsumerInfo() {
-        return consumerInfo;
-    }
-
-    public void setConsumerInfo(PersonalInfoCreateForm consumerInfo) {
-        this.consumerInfo = consumerInfo;
-    }
 
     public Integer getConsumerInfoId() {
         return consumerInfoId;
@@ -127,5 +123,13 @@ import java.util.Date;
 
     public void setPaymentAccount(PaymentLedgerForm[] paymentAccount) {
         this.paymentAccount = paymentAccount;
+    }
+
+    public ConsumerForm getConsumerInfo() {
+        return consumerInfo;
+    }
+
+    public void setConsumerInfo(ConsumerForm consumerInfo) {
+        this.consumerInfo = consumerInfo;
     }
 }

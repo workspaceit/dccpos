@@ -27,6 +27,7 @@ public class Consumer {
     @JoinColumn(name = "created_by",referencedColumnName = "id")
     private Employee createdBy;
 
+    @JsonIgnore
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
