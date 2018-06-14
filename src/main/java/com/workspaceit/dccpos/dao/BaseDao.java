@@ -1,6 +1,7 @@
 package com.workspaceit.dccpos.dao;
 
 
+import com.workspaceit.dccpos.helper.NumberHelper;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.type.StandardBasicTypes;
@@ -92,21 +93,11 @@ public class BaseDao {
     public long findMaxId(Class<?> cls){
         String entityName = cls.getSimpleName();
         Object maxId = this.getCurrentSession().createQuery("select max(id) as maxId from "+entityName).uniqueResult();
-        long count = 0;
-        if(maxId!=null){
-            count=(Long)maxId;
-        }
-
-        return count;
+        return NumberHelper.getLong(maxId);
     }
     public long findMinId(Class<?> cls){
         String entityName = cls.getSimpleName();
         Object minId =this.getCurrentSession().createQuery("select min(id) from "+entityName).uniqueResult();
-        long count = 0;
-        if(minId!=null){
-            count=(Long)minId;
-        }
-
-        return count;
+        return NumberHelper.getLong(minId);
     }
 }

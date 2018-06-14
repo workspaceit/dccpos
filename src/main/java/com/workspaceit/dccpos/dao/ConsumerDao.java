@@ -4,8 +4,15 @@ import com.workspaceit.dccpos.entity.Consumer;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class ConsumerDao extends BaseDao{
+    public List<Consumer> findAll(){
+        Session session = this.getCurrentSession();
+        return session.createQuery(" FROM Consumer c ")
+                .list();
+    }
     public Consumer findById(int id){
         Session session = this.getCurrentSession();
         return (Consumer)session.createQuery(" FROM Consumer c where c.id =:id")

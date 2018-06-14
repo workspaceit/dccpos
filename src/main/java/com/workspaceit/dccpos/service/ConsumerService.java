@@ -7,10 +7,14 @@ import com.workspaceit.dccpos.entity.Employee;
 import com.workspaceit.dccpos.entity.PersonalInformation;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.FormFilterHelper;
+import com.workspaceit.dccpos.helper.IdGenerator;
 import com.workspaceit.dccpos.validation.form.consumer.ConsumerForm;
+import com.workspaceit.dccpos.validation.form.personalIformation.PersonalInfoCreateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -33,6 +37,10 @@ public class ConsumerService {
         Consumer consumer =  this.consumerDao.findById(id);
         if(consumer==null)throw new EntityNotFound("Consumer not found by Id: "+id);
         return consumer;
+    }
+    @Transactional
+    public List<Consumer> getAll(){
+        return this.consumerDao.findAll();
     }
 
     @Transactional
@@ -60,6 +68,17 @@ public class ConsumerService {
 
 
         return consumer;
+    }
+
+
+    public ConsumerForm requestNewConsumerForm(){
+        long maxId = this.consumerDao.findMaxId(Consumer.class);
+        ConsumerForm consumerForm = new ConsumerForm();
+        PersonalInfoCreateForm personalInfoCreateForm =  new PersonalInfoCreateForm();
+        personalInfoCreateForm.setFullName("GUEST");
+        consumerForm.setPersonalInfo(personalInfoCreateForm);
+        consumerForm.setConsumerId(IdGenerator.getConsumerId(maxId+1));
+        return consumerForm;
     }
     @Transactional(rollbackFor = Exception.class)
     public Consumer save(Consumer consumer){

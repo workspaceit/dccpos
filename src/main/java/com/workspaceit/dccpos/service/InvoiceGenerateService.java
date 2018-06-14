@@ -55,6 +55,7 @@ public class InvoiceGenerateService {
                Company company =  wholesaler.getCompany();
                Address wholesalerAddress =  company.getAddress();
 
+               billTo.setId(wholesaler.getWholesalerId());
                billTo.setName(company.getTitle());
                billingAddress.setFormattedAddress(wholesalerAddress.getFormattedAddress());
                break;
@@ -63,6 +64,7 @@ public class InvoiceGenerateService {
                 PersonalInformation personalInformation = consumer.getPersonalInformation();
                 Address consumerAddress =  personalInformation.getAddress();
 
+                billTo.setId(consumer.getConsumerId());
                 billTo.setName(personalInformation.getFullName());
                 billingAddress.setFormattedAddress(consumerAddress.getFormattedAddress());
                 break;

@@ -28,7 +28,7 @@ import java.util.Date;
     @NotNull(message = "Sale type required")
     private SALE_TYPE type;
 
-    @NotNull
+    @NotNull(message = "Date required")
     private Date date;
 
     private String description;

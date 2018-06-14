@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 13, 2018 at 08:23 AM
+-- Generation Time: Jun 14, 2018 at 07:22 AM
 -- Server version: 5.6.40
 -- PHP Version: 5.5.9-1ubuntu4.25
 
@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   KEY `personal_info_id` (`personal_info_id`),
   KEY `company_id` (`company_id`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=120 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=126 ;
 
 --
 -- Dumping data for table `acc_ledgers`
@@ -303,6 +303,23 @@ INSERT INTO `company_role` (`id`, `personal_info_id`, `role`, `created_at`) VALU
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `consumer`
+--
+
+CREATE TABLE IF NOT EXISTS `consumer` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `personal_info_id` int(11) unsigned NOT NULL,
+  `consumer_id` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `customer_id` (`consumer_id`),
+  KEY `personal_info_id` (`personal_info_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `employee`
 --
 
@@ -427,7 +444,7 @@ CREATE TABLE IF NOT EXISTS `sale` (
   `tracking_id` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
   `sold_by` int(11) NOT NULL,
   `wholesaler_id` int(11) DEFAULT NULL,
-  `personal_info_id` int(11) DEFAULT NULL,
+  `consumer_id` int(11) DEFAULT NULL,
   `entry_id` bigint(20) DEFAULT NULL,
   `type` enum('WHOLESALE','CONSUMER_SALE') COLLATE utf8_unicode_ci NOT NULL,
   `discount` decimal(10,2) NOT NULL,
@@ -444,10 +461,10 @@ CREATE TABLE IF NOT EXISTS `sale` (
   `date` date NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `employee_id` (`sold_by`,`wholesaler_id`,`personal_info_id`),
-  KEY `FK6nqj154o9mxav10de4u7ev503` (`personal_info_id`),
+  KEY `employee_id` (`sold_by`,`wholesaler_id`,`consumer_id`),
   KEY `FKdj452u4gk4l32ps4ykvyhmwuu` (`wholesaler_id`),
-  KEY `tracking_id` (`tracking_id`(255))
+  KEY `tracking_id` (`tracking_id`(255)),
+  KEY `FK6nqj154o9mxav10de4u7ev503` (`consumer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -685,7 +702,6 @@ ALTER TABLE `reset_password_tokens`
 -- Constraints for table `sale`
 --
 ALTER TABLE `sale`
-  ADD CONSTRAINT `FK6nqj154o9mxav10de4u7ev503` FOREIGN KEY (`personal_info_id`) REFERENCES `personal_information` (`id`),
   ADD CONSTRAINT `FKdj452u4gk4l32ps4ykvyhmwuu` FOREIGN KEY (`wholesaler_id`) REFERENCES `wholesaler` (`id`);
 
 --

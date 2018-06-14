@@ -59,16 +59,21 @@ public class InventoryValidator {
         if(inventorySaleFrom.getInventoryId()==null)return;
 
         Inventory inventory = this.inventoryService.getById(inventorySaleFrom.getInventoryId());
+        Product product =  this.productService.getByInventoryId(inventory.getId());
+        if(product==null){
+            errors.rejectValue(prefix+"inventoryId","Product not found by Inventory id :"+inventorySaleFrom.getInventoryId());
+            return;
+        }
         if(inventory==null){
             errors.rejectValue(prefix+"inventoryId","Inventory not found by id :"+inventorySaleFrom.getInventoryId());
             return;
         }
         if(inventory.getStatus().equals(STOCK_STATUS.SOLD_OUT)){
-            errors.rejectValue(prefix+"inventoryId","Inventory sold out");
+            errors.rejectValue(prefix+"inventoryId",product.getName()+" sold out");
             return;
         }
         if(!errors.hasFieldErrors(prefix+"quantity") && inventory.getAvailableQuantity() < inventorySaleFrom.getQuantity()){
-            errors.rejectValue(prefix+"quantity"," Quantity not available");
+            errors.rejectValue(prefix+"quantity","Quantity of "+product.getName()+"  not available");
         }
         if(!errors.hasFieldErrors(prefix+"sellingPrice") && inventory.getSellingPrice() < inventorySaleFrom.getSellingPrice()){
             errors.rejectValue(prefix+"sellingPrice","Selling price is higher then actual selling price");

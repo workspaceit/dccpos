@@ -3,7 +3,7 @@ package com.workspaceit.dccpos.service;
 import com.workspaceit.dccpos.dao.SaleDao;
 import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.exception.EntityNotFound;
-import com.workspaceit.dccpos.helper.TrackingIdGenerator;
+import com.workspaceit.dccpos.helper.IdGenerator;
 import com.workspaceit.dccpos.validation.form.sale.SaleForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -97,7 +97,7 @@ public class SaleService {
                 break;
         }
 
-        sale.setTrackingId(TrackingIdGenerator.getSaleTrackingId(this.saleDao.findMaxId(Sale.class)+1));
+        sale.setTrackingId(IdGenerator.getSaleTrackingId(this.saleDao.findMaxId(Sale.class)+1));
         sale.setWholesaler(wholesaler);
         sale.setConsumer(consumerInfo);
         sale.setDate(saleForm.getDate());

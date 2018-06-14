@@ -5,7 +5,7 @@ import com.workspaceit.dccpos.constant.SHIPMENT_COST;
 import com.workspaceit.dccpos.dao.ShipmentDao;
 import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.exception.EntityNotFound;
-import com.workspaceit.dccpos.helper.TrackingIdGenerator;
+import com.workspaceit.dccpos.helper.IdGenerator;
 import com.workspaceit.dccpos.util.purchase.ShipmentFormUtil;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;
 import com.workspaceit.dccpos.validation.form.shipment.ShipmentCreateForm;
@@ -177,7 +177,7 @@ public class ShipmentService {
 
         shipment.setCosts(shipmentCosts);
 
-        String trackingId = TrackingIdGenerator.getShipmentTrackingId(shipment.getId());
+        String trackingId = IdGenerator.getShipmentTrackingId(shipment.getId());
 
         shipment.setTrackingId(trackingId);
 
