@@ -11,6 +11,7 @@ public class AccountPaymentFormHelper {
             PaymentLedgerForm accountPaymentForm =  accountPaymentForms[i];
             totalPaidAmount+=accountPaymentForm.getAmount();
         }
+
         return totalPaidAmount;
     }
 }

@@ -11,15 +11,14 @@ import com.workspaceit.dccpos.entity.accounting.EntryItem;
 import com.workspaceit.dccpos.entity.accounting.GroupAccount;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
+import com.workspaceit.dccpos.helper.LedgerHelper;
 import com.workspaceit.dccpos.helper.NumberHelper;
 import com.workspaceit.dccpos.validation.form.accounting.LedgerForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -235,10 +234,17 @@ public class LedgerService {
         this.update(ledger);
     }
 
-
+    @Transactional
+    public List<Ledger> getByGroupCode(GROUP_CODE... groupCode){
+        return this.ledgerDao.findByGroupCode(Arrays.asList(groupCode));
+    }
     @Transactional
     public List<Ledger> getByGroupCode(GROUP_CODE groupCode){
         return this.ledgerDao.findByGroupCode(groupCode);
+    }
+    @Transactional
+    public List<Ledger> getByGroupId(int groupId){
+        return this.ledgerDao.findByGroupId(groupId);
     }
     @Transactional
     public List<Ledger> getAllWholesaler(){
@@ -276,21 +282,23 @@ public class LedgerService {
     @Transactional
     public double getCurrentBalance(int ledgerId) throws EntityNotFound {
         Ledger ledger = this.getLedger(ledgerId);
-        double drAmount = this.entryItemService.getBalance(ledger.getId(), ACCOUNTING_ENTRY.DR);
-        double crAmount = this.entryItemService.getBalance(ledger.getId(), ACCOUNTING_ENTRY.CR);
-        double balance = 0;
-
-        switch (ledger.getOpeningBalanceEntryType()){
-            case DR:
-                balance = drAmount-crAmount;
-                break;
-            case CR:
-                balance = crAmount-drAmount;
-                break;
-        }
+        double drAmount = this.entryItemService.getSum(ledger.getId(), ACCOUNTING_ENTRY.DR);
+        double crAmount = this.entryItemService.getSum(ledger.getId(), ACCOUNTING_ENTRY.CR);
+        double balance = LedgerHelper.getBalance(ledger,drAmount,crAmount);
 
         return  NumberHelper.round(balance,2);
     }
+
+    @Transactional
+    public double getBalance(int ledgerId, Date startDate, Date finishDate) throws EntityNotFound {
+        Ledger ledger = this.getLedger(ledgerId);
+        double drAmount = this.entryItemService.getSum(ledger.getId(), ACCOUNTING_ENTRY.DR,startDate,finishDate);
+        double crAmount = this.entryItemService.getSum(ledger.getId(), ACCOUNTING_ENTRY.CR,startDate,finishDate);
+        double balance = LedgerHelper.getBalance(ledger,drAmount,crAmount);
+
+        return  NumberHelper.round(balance,2);
+    }
+
     @Transactional
     public void resolveCurrentBalance(Collection<EntryItem> entryItems){
 

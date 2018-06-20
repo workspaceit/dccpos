@@ -10,6 +10,27 @@ import java.util.List;
 
 @Repository
 public class GroupAccountDao extends BaseDao {
+    public GroupAccount findParentById(int id){
+        Session session = this.getCurrentSession();
+        return (GroupAccount)session.createQuery("select distinct ga FROM GroupAccount ga where ga.id=:id ")
+                .setParameter("id",id)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+    public GroupAccount findByIdLazy(int id){
+        Session session = this.getCurrentSession();
+        return (GroupAccount)session.createQuery("select distinct ga FROM GroupAccount ga where ga.id=:id ")
+                .setParameter("id",id)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+    public GroupAccount findById(int id){
+        Session session = this.getCurrentSession();
+        return (GroupAccount)session.createQuery("select distinct ga FROM GroupAccount ga left join fetch ga.child where ga.id=:id ")
+                .setParameter("id",id)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
     public List<GroupAccount> findAll(){
         Session session = this.getCurrentSession();
         return session.createQuery("select distinct ga FROM GroupAccount ga left join fetch ga.child ")
@@ -22,4 +43,6 @@ public class GroupAccountDao extends BaseDao {
                 .setMaxResults(1)
                 .uniqueResult();
     }
+
+
 }

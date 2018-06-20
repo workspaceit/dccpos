@@ -1,5 +1,6 @@
 package com.workspaceit.dccpos.restendpoint.accounting;
 
+import com.workspaceit.dccpos.constant.EndpointRequestUriPrefix;
 import com.workspaceit.dccpos.entity.accounting.GroupAccount;
 import com.workspaceit.dccpos.service.accounting.GroupAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/oauth/api/group-account")
+@RequestMapping(EndpointRequestUriPrefix.endPointAuth+"/group-account")
 @CrossOrigin
 public class GroupAccountEndpoint {
     private GroupAccountService groupAccountService;

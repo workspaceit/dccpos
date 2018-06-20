@@ -46,10 +46,24 @@ public class LedgerDao extends BaseDao {
                 .setParameter("ledgerType", LEDGER_TYPE.CASH_ACCOUNT)
                 .list();
     }
+    public List<Ledger> findByGroupId(int groupId){
+        Session session = this.getCurrentSession();
+        return session.createQuery(" FROM Ledger lg where " +
+                " lg.groupAccount.id=:groupId ")
+                .setParameter("groupId",groupId)
+                .list();
+    }
     public List<Ledger> findByGroupCode(GROUP_CODE groupCode){
         Session session = this.getCurrentSession();
         return session.createQuery(" FROM Ledger lg where " +
                 " lg.groupAccount.code=:groupCode ")
+                .setParameter("groupCode",groupCode)
+                .list();
+    }
+    public List<Ledger> findByGroupCode(List<GROUP_CODE> groupCode){
+        Session session = this.getCurrentSession();
+        return session.createQuery(" FROM Ledger lg where " +
+                " lg.groupAccount.code in :groupCode ")
                 .setParameter("groupCode",groupCode)
                 .list();
     }

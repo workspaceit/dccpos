@@ -21,9 +21,19 @@ public class GroupAccountService {
     }
 
     @Transactional
+    public GroupAccount getById(int id){
+        return this.groupAccountDao.findById(id);
+    }
+    @Transactional
+    public GroupAccount getByIdLazy(int id){
+        return this.groupAccountDao.findByIdLazy(id);
+    }
+    @Transactional
     public List<GroupAccount> getAll(){
         return this.groupAccountDao.findAll();
     }
+
+
 
     @Transactional
     public GroupAccount getByCode(GROUP_CODE groupCode){

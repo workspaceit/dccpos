@@ -4,17 +4,24 @@ import com.workspaceit.dccpos.constant.accounting.ACCOUNTING_ENTRY;
 import com.workspaceit.dccpos.dao.EntryItemDao;
 import com.workspaceit.dccpos.entity.accounting.Entry;
 import com.workspaceit.dccpos.entity.accounting.EntryItem;
+import com.workspaceit.dccpos.entity.accounting.Ledger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
 @Transactional
 public class EntryItemService {
+    private LedgerService ledgerService;
     private EntryItemDao entryItemDao;
 
+    @Autowired
+    public void setLedgerService(LedgerService ledgerService) {
+        this.ledgerService = ledgerService;
+    }
 
     @Autowired
     public void setEntryItemDao(EntryItemDao entryItemDao) {
@@ -30,9 +37,14 @@ public class EntryItemService {
     }
 
     @Transactional
-    public double getBalance(int ledgerId, ACCOUNTING_ENTRY accountingEntry){
-        return entryItemDao.findBalance(ledgerId, accountingEntry);
+    public double getSum(int ledgerId, ACCOUNTING_ENTRY accountingEntry){
+        return entryItemDao.findSum(ledgerId, accountingEntry);
     }
+    @Transactional
+    public double getSum(int ledgerId,ACCOUNTING_ENTRY accountingEntry, Date start, Date finish ){
+        return entryItemDao.findSum(ledgerId, accountingEntry,start,finish);
+    }
+
     @Transactional
     public List<EntryItem> getByEntryId(int entryId){
         return entryItemDao.findByEntryId(entryId);
