@@ -22,10 +22,12 @@ public class ReportEndPoint {
         this.reportService = reportService;
     }
 
-    @RequestMapping(value = "/get-profit-and-loss/{startDate}/{finishDate}",method = RequestMethod.GET)
-    public ResponseEntity<?> getAll(  @PathVariable("startDate") @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) Date startDate,
-                                      @PathVariable("finishDate") @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) Date finishDate
+    @RequestMapping(value = "/get-profit-and-loss",method = RequestMethod.GET)
+    public ResponseEntity<?> getAll(  @RequestParam(value = "startDate",required = false) @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) Date startDate,
+                                      @RequestParam(value = "finishDate",required = false) @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) Date finishDate
     ){
+       System.out.println(startDate);
+        System.out.println(finishDate);
        return ResponseEntity.ok(this.reportService.getProfitAndLossReport(startDate,finishDate ));
     }
 }
