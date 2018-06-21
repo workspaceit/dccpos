@@ -26,8 +26,6 @@ public class ReportEndPoint {
     public ResponseEntity<?> getAll(  @PathVariable("startDate") @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) Date startDate,
                                       @PathVariable("finishDate") @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) Date finishDate
     ){
-        System.out.println(startDate);
-        System.out.println(finishDate);
        return ResponseEntity.ok(this.reportService.getProfitAndLossReport(startDate,finishDate ));
     }
 }

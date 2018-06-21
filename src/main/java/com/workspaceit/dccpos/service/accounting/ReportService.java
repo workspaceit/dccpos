@@ -6,6 +6,7 @@ import com.workspaceit.dccpos.dataModel.profitAndLoss.ReportAccount;
 import com.workspaceit.dccpos.entity.accounting.GroupAccount;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
+import com.workspaceit.dccpos.util.ReportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +18,13 @@ import java.util.List;
 @Service
 @Transactional
 public class ReportService {
-    private EntryItemService entryItemService;
+    private ReportUtil reportUtil;
     private LedgerService ledgerService;
     private GroupAccountService groupAccountService;
 
     @Autowired
-    public void setEntryItemService(EntryItemService entryItemService) {
-        this.entryItemService = entryItemService;
+    public void setReportUtil(ReportUtil reportUtil) {
+        this.reportUtil = reportUtil;
     }
 
     @Autowired
@@ -44,14 +45,20 @@ public class ReportService {
         ReportAccount expenseReportAccount = this.getReportAccounts(startDate,finishDate,GROUP_CODE.EXPENSE);
         ReportAccount incomeReportAccount = this.getReportAccounts(startDate,finishDate,GROUP_CODE.INCOME);
 
+
         if(expenseReportAccount.getChild()!=null)
             expenses.addAll(expenseReportAccount.getChild() );
 
         if(incomeReportAccount.getChild()!=null)
             income.addAll( incomeReportAccount.getChild() );
 
+        double totalRevenue = this.reportUtil.calculateTotalRevenue(income);
+        double grossProfit = this.reportUtil.calculateGrossProfit(income,expenses);
+
         profitAndLossReport.setIncomeAccounts(income);
         profitAndLossReport.setExpenseAccounts(expenses);
+        profitAndLossReport.setTotalRevenue(totalRevenue);
+        profitAndLossReport.setGrossProfit(grossProfit);
 
         return profitAndLossReport;
     }
