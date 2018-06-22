@@ -1,13 +1,12 @@
 package com.workspaceit.dccpos.util;
 
-import com.workspaceit.dccpos.dataModel.profitAndLoss.ReportAccount;
+import com.workspaceit.dccpos.dataModel.report.ReportAccount;
 import com.workspaceit.dccpos.entity.accounting.GroupAccount;
 import com.workspaceit.dccpos.service.accounting.GroupAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 @Component

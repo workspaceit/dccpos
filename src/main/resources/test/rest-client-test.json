@@ -6,7 +6,7 @@
       "type": "Project",
       "description": "",
       "id": "c4226841-a12e-441a-b046-9b49f4080e2d",
-      "lastModified": "2018-06-13T17:01:11.202+06:00",
+      "lastModified": "2018-06-22T18:36:22.167+06:00",
       "name": "POS"
     },
     {
@@ -21,10 +21,11 @@
       "type": "Scenario",
       "description": "",
       "id": "28508267-c995-4a6a-9e04-19a0c55423ca",
-      "lastModified": "2018-06-13T16:57:39.860+06:00",
+      "lastModified": "2018-06-22T18:35:00.261+06:00",
       "name": "Endpoints",
       "requestOrder": [
         "AUTHENTICATION",
+        "Accounting Group",
         "Employee-Create-No-Param (1)",
         "Employee-Create-All-EMPTY_VALUE",
         "Employee-Create-No-Param",
@@ -71,8 +72,6 @@
         "Ledger Wholesaler",
         "Ledger Supplier",
         "Ledger Employee",
-        "Make Receipt",
-        "Make Payment",
         "Shipment Create C:3 [Total Due]",
         "Make Investment ",
         "Shipment Create C:2 [ Full Paid ]",
@@ -90,12 +89,12 @@
         "Ledger Liability",
         "Ledger Income",
         "Ledger Expense",
-        "Wholesaler-Update 1",
         "Sale [ All NULL ]",
         "Sale [ Inventory Id Null]",
         "Sale [ Selling Price Higher ]",
         "Sale[ WHOLESALE : Successful transaction ]",
         "Sale[ CONSUMNER:Successful transaction ] ",
+        "Sale[ CONSUMNER(2) : Successful transaction ] ",
         "Shop Information Create / Update [ Image Token check ]",
         "Sale[ Get All ]",
         "Sale[ By ID ]",
@@ -105,7 +104,11 @@
         "Invoice [ Sale ]",
         "Invoice [ Shipment ] ",
         "Invoice [ Tracking Id ] ",
-        "Consumer"
+        "Consumer",
+        "Consumer [ Get All ]",
+        "Consumer [ Request Form ]",
+        "Report [ Profit & Loss ]",
+        "Report [ Balance Sheet ] "
       ],
       "parentId": "bd8b3e61-d30e-4350-8631-704fabab67dc"
     },
@@ -199,6 +202,52 @@
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
     {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/group-account/all"
+      },
+      "id": "ff343f1b-1fe2-4498-ac4a-a2a2772005e8",
+      "lastModified": "2018-06-20T12:54:48.246+06:00",
+      "name": "Accounting Group",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
       "uriEditor": true,
       "type": "Request",
       "method": {
@@ -236,7 +285,7 @@
         "path": "/auth/api/employee/create"
       },
       "id": "1c387a6f-b4bc-40af-8b89-802bac393ab5",
-      "lastModified": "2018-05-21T13:59:20.501+06:00",
+      "lastModified": "2018-06-20T12:54:09.184+06:00",
       "name": "Employee-Create-No-Param (1)",
       "headers": [
         {
@@ -1295,13 +1344,13 @@
               "enabled": true,
               "type": "Text",
               "name": "company.title",
-              "value": "Shopno "
+              "value": "Dubai Super Shop"
             },
             {
               "enabled": true,
               "type": "Text",
               "name": "company.address",
-              "value": "Road 8, House 16. Nikunja 2,Dhaka"
+              "value": "Dubai"
             },
             {
               "enabled": true,
@@ -1335,7 +1384,7 @@
         "path": "/auth/api/supplier/update/1"
       },
       "id": "8cd29387-db47-46ac-9eff-20132388c49a",
-      "lastModified": "2018-06-11T14:23:58.580+06:00",
+      "lastModified": "2018-06-22T15:45:58.503+06:00",
       "name": "Supplier-Update",
       "headers": [
         {
@@ -1390,7 +1439,7 @@
               "enabled": true,
               "type": "Text",
               "name": "company.title",
-              "value": "Agora"
+              "value": "Mexico Wooden shop "
             },
             {
               "enabled": true,
@@ -1429,7 +1478,7 @@
         "path": "/auth/api/supplier/update/2"
       },
       "id": "8bd7cb5d-6a5c-4e94-8cfa-b4722546dd53",
-      "lastModified": "2018-06-11T14:24:05.190+06:00",
+      "lastModified": "2018-06-22T15:45:10.979+06:00",
       "name": "Supplier-Update 2",
       "headers": [
         {
@@ -1468,13 +1517,13 @@
               "enabled": true,
               "type": "Text",
               "name": "company.title",
-              "value": "Uni Mert"
+              "value": "Dubai Super Shop"
             },
             {
               "enabled": true,
               "type": "Text",
               "name": "company.address",
-              "value": "Gulshan 1,Dhaka"
+              "value": "Dubai"
             },
             {
               "enabled": true,
@@ -1507,7 +1556,7 @@
         "path": "/auth/api/supplier/create"
       },
       "id": "e45d2848-639a-4650-93cd-884ffde926bb",
-      "lastModified": "2018-06-11T14:36:34.616+06:00",
+      "lastModified": "2018-06-22T15:45:45.820+06:00",
       "name": "Supplier Create 3 [ After others suppliers Id Null ]",
       "headers": [
         {
@@ -1546,13 +1595,13 @@
               "enabled": true,
               "type": "Text",
               "name": "company.title",
-              "value": "Agora"
+              "value": "USA Mert"
             },
             {
               "enabled": true,
               "type": "Text",
               "name": "company.address",
-              "value": "Gulshan 1"
+              "value": "NY"
             },
             {
               "enabled": true,
@@ -1585,7 +1634,7 @@
         "path": "/auth/api/supplier/update/1"
       },
       "id": "424b2910-f2c4-49d5-986d-517e070f580c",
-      "lastModified": "2018-06-11T14:30:29.879+06:00",
+      "lastModified": "2018-06-22T18:36:22.167+06:00",
       "name": "Supplier-Update [ Add supplier id ] ",
       "headers": [
         {
@@ -1624,13 +1673,13 @@
               "enabled": true,
               "type": "Text",
               "name": "company.title",
-              "value": "Shopno "
+              "value": "Dubai Super Shop"
             },
             {
               "enabled": true,
               "type": "Text",
               "name": "company.address",
-              "value": "Road 8, House 16. Nikunja 2,Dhaka"
+              "value": "Dubai"
             },
             {
               "enabled": true,
@@ -1664,7 +1713,7 @@
         "path": "/auth/api/supplier/update/2"
       },
       "id": "c10bd753-0616-44e1-b248-99055a32ef43",
-      "lastModified": "2018-06-11T14:33:54.700+06:00",
+      "lastModified": "2018-06-22T15:45:36.182+06:00",
       "name": "Supplier-Update [ Add duplicate supplier id ] ",
       "headers": [
         {
@@ -1774,7 +1823,7 @@
               "enabled": true,
               "type": "Text",
               "name": "company.title",
-              "value": "CP"
+              "value": "Uni Mart "
             },
             {
               "enabled": true,
@@ -1813,7 +1862,7 @@
         "path": "/auth/api/wholesaler/create"
       },
       "id": "59e7f921-08b8-4361-988b-167283a86d34",
-      "lastModified": "2018-05-04T17:37:02.228+06:00",
+      "lastModified": "2018-06-22T18:26:11.592+06:00",
       "name": "Wholesaler-Create",
       "headers": [
         {
@@ -1862,7 +1911,7 @@
               "enabled": true,
               "type": "Text",
               "name": "company.title",
-              "value": "sss"
+              "value": "WS"
             }
           ]
         },
@@ -1883,7 +1932,7 @@
         "path": "/auth/api/wholesaler/create"
       },
       "id": "4312a50a-844c-4664-b321-a9777cc414f7",
-      "lastModified": "2018-05-04T17:37:07.088+06:00",
+      "lastModified": "2018-06-22T18:28:44.098+06:00",
       "name": "Wholesaler-Create 1",
       "headers": [
         {
@@ -1916,7 +1965,7 @@
               "enabled": true,
               "type": "Text",
               "name": "company.title",
-              "value": "ddd"
+              "value": "Shopno"
             }
           ]
         },
@@ -1936,7 +1985,7 @@
         "path": "/auth/api/wholesaler/update/2"
       },
       "id": "01d74074-4178-404f-866f-9b466561659d",
-      "lastModified": "2018-05-04T17:09:20.180+06:00",
+      "lastModified": "2018-06-22T18:25:49.517+06:00",
       "name": "Wholesaler-Update",
       "headers": [
         {
@@ -3573,125 +3622,8 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{\n  \"beneficial\":{\"ledgerId\":7,\"amount\":300},\n \"cashOrBank\":[{\"ledgerId\":3,\"amount\":300}],\n  \"narration\":\"Investment receipt\",\n  \"date\": 1525090664062\n}"
-      },
-      "headersType": "Form",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "http",
-          "version": "V11"
-        },
-        "host": "{url}",
-        "path": "/auth/api/entry/make/receipt"
-      },
-      "id": "1b9ff8d4-1d9b-4452-8c85-10df3ff2d3cd",
-      "lastModified": "2018-05-03T13:45:29.819+06:00",
-      "name": "Make Receipt",
-      "headers": [
-        {
-          "enabled": true,
-          "name": "Authorization",
-          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
-        },
-        {
-          "enabled": true,
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "assertions": [
-        {
-          "comparison": "Equals",
-          "subject": "ResponseStatus",
-          "path": "code",
-          "value": "200"
-        }
-      ],
-      "metaInfo": {},
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
-      "type": "Request",
-      "method": {
-        "requestBody": true,
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
-        "name": "POST"
-      },
-      "body": {
-        "formBody": {
-          "overrideContentType": true,
-          "encoding": "application/x-www-form-urlencoded",
-          "items": []
-        },
-        "bodyType": "Text",
-        "autoSetLength": true,
-        "textBody": "{\n  \"beneficial\":{\"ledgerId\":6,\"amount\":100},\n \"cashOrBank\":[{\"ledgerId\":3,\"amount\":100}],\n  \"narration\":\"Payment done\",\n  \"date\": 1525090664062\n}"
-      },
-      "headersType": "Raw",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "{scheme}"
-        },
-        "host": "{url}",
-        "path": "/auth/api/entry/make/payment"
-      },
-      "id": "aa488e13-a270-4773-b2b8-3e2a983fcd4c",
-      "lastModified": "2018-05-03T11:58:41.546+06:00",
-      "name": "Make Payment",
-      "headers": [
-        {
-          "enabled": true,
-          "name": "Authorization",
-          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
-        },
-        {
-          "enabled": true,
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "assertions": [
-        {
-          "comparison": "Equals",
-          "subject": "ResponseStatus",
-          "path": "code",
-          "value": "200"
-        },
-        {
-          "comparison": "Equals",
-          "subject": "ResponseHeader",
-          "path": "Access-Control-Allow-Origin",
-          "value": "*"
-        }
-      ],
-      "metaInfo": {},
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
-      "type": "Request",
-      "method": {
-        "requestBody": true,
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
-        "name": "POST"
-      },
-      "body": {
-        "formBody": {
-          "overrideContentType": true,
-          "encoding": "application/x-www-form-urlencoded",
-          "items": []
-        },
-        "bodyType": "Text",
-        "autoSetLength": true,
         "textBodyEditorHeight": 530,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cfCost\":0.3,\n    \"carryingCost\":25,\n    \"laborCost\":20,\n    \"otherCost\":2,\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":296,\"purchaseQuantity\":40},\n    {\"productId\":2,\"purchasePrice\":1.5,\"status\":\"DAMAGED\",\"sellingPrice\":305,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":400,\"purchaseQuantity\":3}\n  ]\n    \n}"
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5, \"OTHERS\":2.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":296,\"purchaseQuantity\":40},\n    {\"productId\":2,\"purchasePrice\":2,\"status\":\"DAMAGED\",\"sellingPrice\":305,\"purchaseQuantity\":20},\n    {\"productId\":3,\"purchasePrice\":1,\"status\":\"DAMAGED\",\"sellingPrice\":400,\"purchaseQuantity\":30}\n  ]\n    \n}"
       },
       "headersType": "Form",
       "uri": {
@@ -3707,7 +3639,7 @@
         "path": "/auth/api/shipment/create"
       },
       "id": "267aea3b-d1ea-4144-8388-2365b441e1f8",
-      "lastModified": "2018-06-13T15:56:10.974+06:00",
+      "lastModified": "2018-06-22T14:46:42.782+06:00",
       "name": "Shipment Create C:3 [Total Due]",
       "headers": [
         {
@@ -3739,7 +3671,7 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{\n \"cashOrBank\":[{\"ledgerId\":3,\"amount\":5000},{\"ledgerId\":5,\"amount\":5000}],\n  \"narration\":\"Cash Invest ment\",\n  \"date\": 1525090664062\n}"
+        "textBody": "{\n \"cashOrBank\":[{\"ledgerId\":3,\"amount\":5245},{\"ledgerId\":5,\"amount\":3050}],\n  \"narration\":\"Investment done\",\n  \"date\": 1525090664062\n}"
       },
       "headersType": "Form",
       "uri": {
@@ -3755,7 +3687,7 @@
         "path": "/auth/api/entry/make/investment/cash"
       },
       "id": "2608986d-5135-4582-a7af-ed8b116a21f1",
-      "lastModified": "2018-05-03T11:58:34.968+06:00",
+      "lastModified": "2018-06-22T12:21:49.097+06:00",
       "name": "Make Investment ",
       "headers": [
         {
@@ -4675,94 +4607,6 @@
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
     {
-      "uriEditor": true,
-      "type": "Request",
-      "method": {
-        "requestBody": true,
-        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
-        "name": "POST"
-      },
-      "body": {
-        "formBody": {
-          "encoding": "application/x-www-form-urlencoded",
-          "items": [
-            {
-              "enabled": true,
-              "type": "Text",
-              "name": "company.title",
-              "value": "Shopno"
-            },
-            {
-              "enabled": true,
-              "type": "Text",
-              "name": "company.address",
-              "value": "Road 8, House 16. Nikunja 2,Dhaka"
-            },
-            {
-              "enabled": true,
-              "type": "Text",
-              "name": "company.phone",
-              "value": "3214"
-            },
-            {
-              "enabled": true,
-              "type": "Text",
-              "name": "company.email",
-              "value": "sdf@df.com"
-            }
-          ]
-        },
-        "bodyType": "Form",
-        "autoSetLength": true,
-        "textBody": "username=p@pmc.com&password=123456&client_id=pmc-app-client&client_secret=f6c3d96bc05036e738f0899ba149f447924b3a09&grant_type=password"
-      },
-      "headersType": "Raw",
-      "uri": {
-        "query": {
-          "delimiter": "&",
-          "items": []
-        },
-        "scheme": {
-          "name": "{scheme}"
-        },
-        "host": "{url}",
-        "path": "/auth/api/wholesaler/update/1"
-      },
-      "id": "c48e6089-3ce1-41ea-becb-1eadd7a5fcac",
-      "lastModified": "2018-05-04T17:09:17.415+06:00",
-      "name": "Wholesaler-Update 1",
-      "headers": [
-        {
-          "enabled": true,
-          "name": "Content-Type",
-          "value": "application/x-www-form-urlencoded"
-        },
-        {
-          "enabled": true,
-          "name": "Authorization",
-          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
-        }
-      ],
-      "assertions": [
-        {
-          "comparison": "Equals",
-          "subject": "ResponseStatus",
-          "path": "code",
-          "value": "200"
-        },
-        {
-          "comparison": "Equals",
-          "subject": "ResponseHeader",
-          "path": "Access-Control-Allow-Origin",
-          "value": "*"
-        }
-      ],
-      "metaInfo": {
-        "IS_FROM_HISTORY": null
-      },
-      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
-    },
-    {
       "type": "Request",
       "method": {
         "requestBody": true,
@@ -4833,7 +4677,7 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{ \n  \"vat\":410,\n  \"paidAmount\":90,\n  \"type\":\"WHOLESALE\",\n  \"date\":\"2015-15-02\",\n  \"inventories\":[\n    {\"sellingPrice\":12,\"quantity\":4},\n    {\"inventoryId\":2,\"sellingPrice\":5,\"quantity\":2}\n  ],\n  \"wholesalerId\":1,\n   \"consumerInfo\":{\n   \t\t\t\t\"fullName\":\"s\",\n   \t\t\t\t\"dob\":\"2012-01-12\",\n   \t\t\t\t\"email\":\"54@rfg.bom\",\n   \t\t\t\t\"phone\":\"\",\n   \t\t\t\t\"address\":\"\"\n                },\n \"consumerInfoId\":145\n}"
+        "textBody": "{ \n  \"vat\":410,\n  \"paidAmount\":90,\n  \"type\":\"WHOLESALE\",\n  \"date\":\"2015-15-02\",\n  \"inventories\":[\n    {\"sellingPrice\":12,\"quantity\":1}\n  ],\n  \"wholesalerId\":1\n}"
       },
       "headersType": "Form",
       "uri": {
@@ -4849,7 +4693,7 @@
         "path": "/auth/api/sale/create"
       },
       "id": "848a9a5b-45f7-4f69-af44-6d27020029da",
-      "lastModified": "2018-05-30T13:24:00.952+06:00",
+      "lastModified": "2018-06-14T12:08:44.830+06:00",
       "name": "Sale [ Inventory Id Null]",
       "headers": [
         {
@@ -4895,7 +4739,7 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{ \n  \"vat\":410,\n  \"paidAmount\":90,\n  \"type\":\"WHOLESALE\",\n  \"inventories\":[\n    {\"inventoryId\":1,\"sellingPrice\":120000,\"quantity\":4},\n    {\"inventoryId\":2,\"sellingPrice\":5,\"quantity\":2}\n  ],\n  \"wholesalerId\":1,\n   \"consumerInfo\":{\n   \t\t\t\t\"fullName\":\"s\",\n   \t\t\t\t\"dob\":\"2012-01-12\",\n   \t\t\t\t\"email\":\"54@rfg.bom\",\n   \t\t\t\t\"phone\":\"\",\n   \t\t\t\t\"address\":\"\"\n                },\n \"consumerInfoId\":145\n}"
+        "textBody": "{ \n  \"vat\":410,\n  \"paidAmount\":90,\n  \"type\":\"WHOLESALE\",\n   \"date\":\"2015-15-02\",\n  \"inventories\":[\n    {\"inventoryId\":1,\"sellingPrice\":120000,\"quantity\":4}\n  ],\n  \"wholesalerId\":1\n}"
       },
       "headersType": "Form",
       "uri": {
@@ -4911,7 +4755,7 @@
         "path": "/auth/api/sale/create"
       },
       "id": "caf27d56-6dfd-4708-ad0b-69e52c2eeead",
-      "lastModified": "2018-05-29T16:50:31.508+06:00",
+      "lastModified": "2018-06-14T12:08:52.091+06:00",
       "name": "Sale [ Selling Price Higher ]",
       "headers": [
         {
@@ -4957,7 +4801,7 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{ \n  \"vat\":1,\n  \"type\":\"WHOLESALE\",\n  \"date\":\"2012-01-12\",\n  \"inventories\":[\n    {\"inventoryId\":1,\"sellingPrice\":12,\"quantity\":2}\n  ],\n  \"wholesalerId\":1,\n   \"consumerInfo\":{\n   \t\t\t\t\"fullName\":\"s\",\n   \t\t\t\t\"dob\":\"2012-01-12\",\n   \t\t\t\t\"email\":\"54@rfg.bom\",\n   \t\t\t\t\"phone\":null,\n   \t\t\t\t\"address\":\"\"\n                },\n \"consumerInfoId\":1,\n  \"description\":\"Illegal drug sold\",\n   \"paymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":3.0}\n                              ]\n}"
+        "textBody": "{ \n  \"vat\":1,\n  \"type\":\"WHOLESALE\",\n  \"date\":\"2018-05-12\",\n  \"inventories\":[\n    {\"inventoryId\":1,\"sellingPrice\":12,\"quantity\":2}\n  ],\n  \"wholesalerId\":1,\n  \"description\":\"Illegal drug sold\",\n   \"paymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":3.0}\n                              ]\n}"
       },
       "headersType": "Form",
       "uri": {
@@ -4973,7 +4817,7 @@
         "path": "/auth/api/sale/create"
       },
       "id": "f99929c9-d8ef-4954-aafb-fd250d671bbd",
-      "lastModified": "2018-06-08T12:26:18.455+06:00",
+      "lastModified": "2018-06-22T12:22:34.671+06:00",
       "name": "Sale[ WHOLESALE : Successful transaction ]",
       "headers": [
         {
@@ -5013,9 +4857,9 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{ \n  \"vat\":44,\n  \"paidAmount\":90,\n  \"type\":\"CONSUMER_SALE\",\n  \"date\":\"2012-01-12\",\n  \"inventories\":[\n    {\"inventoryId\":1,\"sellingPrice\":12,\"quantity\":2},\n    {\"inventoryId\":2,\"sellingPrice\":5,\"quantity\":1}\n  ],\n  \"wholesalerId\":1,\n   \"consumerInfo\":{\n   \t\t\t\t\"fullName\":\"s\",\n   \t\t\t\t\"dob\":\"2012-01-12\",\n   \t\t\t\t\"email\":\"54@rfg.bom\",\n   \t\t\t\t\"phone\":\"\",\n   \t\t\t\t\"address\":\"\"\n                },\n  \n  \"descriptio4545n\":\"Illegal drug sold\",\n   \"paymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":37.0}\n                              ]\n}"
+        "textBody": "{ \n  \"vat\":44,\n  \"paidAmount\":90,\n  \"type\":\"CONSUMER_SALE\",\n  \"date\":\"2018-06-12\",\n  \"inventories\":[\n    {\"inventoryId\":1,\"sellingPrice\":12,\"quantity\":2},\n    {\"inventoryId\":2,\"sellingPrice\":5,\"quantity\":1}\n  ],\n  \"wholesalerId\":1,\n  \"consumerInfo\":{\n    \"consumerId\":\"CON1245\",\n  \t\t\t\t\"personalInfo\":{\n                  \"fullName\":\"dfd\",\n                              \"dob\":\"2012-01-12\",\n                              \"email\":\"54@rfg.bom\",\n                              \"phone\":\"\",\n                              \"address\":\"\"\n                }\n  },\n  \n  \"descriptio4545n\":\"Illegal drug sold\",\n   \"paymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":37.0}\n                              ]\n}"
       },
-      "headersType": "Form",
+      "headersType": "Raw",
       "uri": {
         "query": {
           "delimiter": "&",
@@ -5029,7 +4873,7 @@
         "path": "/auth/api/sale/create"
       },
       "id": "89801d06-535f-4844-9e1d-eebd36b3910c",
-      "lastModified": "2018-06-05T12:53:13.096+06:00",
+      "lastModified": "2018-06-20T16:37:17.124+06:00",
       "name": "Sale[ CONSUMNER:Successful transaction ] ",
       "headers": [
         {
@@ -5049,6 +4893,54 @@
           "subject": "ResponseStatus",
           "path": "code",
           "value": "200"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{ \n  \"vat\":44,\n  \"paidAmount\":90,\n  \"type\":\"CONSUMER_SALE\",\n  \"date\":\"2018-07-24\",\n  \"inventories\":[\n    {\"inventoryId\":1,\"sellingPrice\":12,\"quantity\":2},\n    {\"inventoryId\":3,\"sellingPrice\":5,\"quantity\":1}\n  ],\n  \"wholesalerId\":1,\n  \"consumerInfoId\":1\n  },\n  \n  \"description\":\"Illegal drug sold\",\n   \"paymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20.7},\n                                 {\"ledgerId\":5,\"amount\":37.0}\n                              ]\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/sale/create"
+      },
+      "id": "47d8bcc7-2951-42db-a01e-74762c13a6be",
+      "lastModified": "2018-06-20T16:37:32.165+06:00",
+      "name": "Sale[ CONSUMNER(2) : Successful transaction ] ",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        },
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
         }
       ],
       "metaInfo": {},
@@ -5584,12 +5476,210 @@
           "version": "V11"
         },
         "host": "{url}",
-        "path": "/auth/api/consumer/get-by-consumer-id/con1012"
+        "path": "/auth/api/consumer/get-by-consumer-id/CON1245"
       },
       "id": "9a2309c0-0127-4659-a7b9-553700653eab",
-      "lastModified": "2018-06-13T17:01:11.203+06:00",
+      "lastModified": "2018-06-14T12:40:47.860+06:00",
       "name": "Consumer",
       "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/consumer/get-all"
+      },
+      "id": "adcf23dd-5e8f-4ca7-aee3-21d0b92b2c39",
+      "lastModified": "2018-06-14T13:13:49.113+06:00",
+      "name": "Consumer [ Get All ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/consumer/get-new-consumer-form"
+      },
+      "id": "94f77e5d-99bc-499b-b34e-e40a66d4aa10",
+      "lastModified": "2018-06-14T14:57:55.637+06:00",
+      "name": "Consumer [ Request Form ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "uriEditor": true,
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": [
+            {
+              "enabled": true,
+              "name": "startDate",
+              "value": "2017-07-30"
+            },
+            {
+              "enabled": true,
+              "name": "finishDate",
+              "value": "2018-10-30"
+            }
+          ]
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/report/get-profit-and-loss"
+      },
+      "id": "54cfcea0-ea99-4e8d-a613-8a6561f74907",
+      "lastModified": "2018-06-21T18:41:11.746+06:00",
+      "name": "Report [ Profit & Loss ]",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
+      "uriEditor": true,
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": [
+            {
+              "enabled": true,
+              "name": "startDate",
+              "value": "2017-07-30"
+            },
+            {
+              "enabled": true,
+              "name": "finishDate",
+              "value": "2018-10-30"
+            }
+          ]
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "{url}",
+        "path": "/auth/api/report/get-balance-sheet"
+      },
+      "id": "0e9162f1-ee16-47f8-a44b-8c5a7fa419a9",
+      "lastModified": "2018-06-21T18:43:09.970+06:00",
+      "name": "Report [ Balance Sheet ] ",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        },
         {
           "enabled": true,
           "name": "Authorization",

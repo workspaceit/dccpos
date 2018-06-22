@@ -15,6 +15,7 @@ ALTER TABLE `employee` AUTO_INCREMENT = 2;
 DELETE from `company_role` where id>1;
 ALTER TABLE `company_role` AUTO_INCREMENT = 2;
 DELETE from `acc_ledgers` where `personal_info_id` >1 OR `company_id` IS NOT NULL;
+ALTER TABLE `acc_ledgers` AUTO_INCREMENT = 12;
 UPDATE `acc_ledgers` SET `current_balance`=0 WHERE 1;
 
 DELETE from  `personal_information` where id>1;

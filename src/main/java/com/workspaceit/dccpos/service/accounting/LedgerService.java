@@ -163,7 +163,7 @@ public class LedgerService {
         ledger.setGroupAccount(groupAccount);
         ledger.setLedgerType(LEDGER_TYPE.OTHER);
         ledger.setOpeningBalance(0d);
-        ledger.setOpeningBalanceEntryType(ACCOUNTING_ENTRY.CR);
+        ledger.setOpeningBalanceEntryType(ACCOUNTING_ENTRY.DR);
         ledger.setCurrentBalance(0d);
         ledger.setNotes("");
         ledger.setCompany(company);

@@ -1,4 +1,4 @@
-package com.workspaceit.dccpos.dataModel.profitAndLoss;
+package com.workspaceit.dccpos.dataModel.report;
 
 import java.util.List;
 

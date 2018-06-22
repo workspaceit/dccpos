@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 14, 2018 at 07:22 AM
+-- Generation Time: Jun 22, 2018 at 12:15 PM
 -- Server version: 5.6.40
 -- PHP Version: 5.5.9-1ubuntu4.25
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `pos`
+-- Database: `dcc_pos`
 --
 
 -- --------------------------------------------------------
@@ -119,7 +119,7 @@ INSERT INTO `acc_groups` (`id`, `parent_id`, `name`, `code`, `affects_gross`) VA
   (2, NULL, 'Liabilities and Owners Equity', 'LIABILITY', 0),
   (3, NULL, 'Incomes', 'INCOME', 0),
   (4, NULL, 'Expenses', 'EXPENSE', 0),
-  (5, 2, 'Wholesaler', 'WHOLESALER', 0),
+  (5, 1, 'Wholesaler', 'WHOLESALER', 0),
   (6, 3, 'Sale', 'SALE', 0),
   (7, 6, 'Whole sale', 'WHOLE_SALE', 0),
   (8, 4, 'Salary', 'SALARY', 0),
@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `acc_ledgers` (
   KEY `personal_info_id` (`personal_info_id`),
   KEY `company_id` (`company_id`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=126 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
 
 --
 -- Dumping data for table `acc_ledgers`
@@ -170,8 +170,8 @@ INSERT INTO `acc_ledgers` (`id`, `group_id`, `personal_info_id`, `company_id`, `
   (6, 2, NULL, NULL, 'DUE_SHIPMENT_COST', 'Due shipment cost', 0.00, 0.00, 'CR', 'OTHER', 0, '', '2018-04-23 04:09:29'),
   (7, 2, NULL, NULL, 'INVESTMENT', 'Owner''s Investment', 0.00, 0.00, 'CR', 'OTHER', 0, '', '2018-05-01 01:46:29'),
   (8, 3, NULL, NULL, 'SALE', 'Sale', 0.00, 0.00, 'CR', 'OTHER', 0, '', '2018-06-08 05:30:43'),
-  (9, 2, NULL, NULL, 'DUE_SALE', 'Due sale', 0.00, 0.00, 'CR', 'OTHER', 0, '', '2018-06-08 05:47:36'),
-  (101, 8, 1, NULL, NULL, 'Person 1', 0.00, 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 06:26:10');
+  (9, 1, NULL, NULL, 'DUE_SALE', 'Due sale', 0.00, 0.00, 'DR', 'OTHER', 0, '', '2018-06-08 05:47:36'),
+  (12, 8, 1, NULL, NULL, 'Person 1', 0.00, 0.00, 'DR', 'OTHER', 0, '', '2018-04-20 06:26:10');
 
 -- --------------------------------------------------------
 

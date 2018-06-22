@@ -12,6 +12,7 @@ import com.workspaceit.dccpos.entity.accounting.EntryType;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.helper.AccountPaymentFormHelper;
+import com.workspaceit.dccpos.service.WholesalerService;
 import com.workspaceit.dccpos.util.SaleDetailsUtil;
 import com.workspaceit.dccpos.util.validation.PaymentLedgerFormUtil;
 import com.workspaceit.dccpos.util.validation.SaleFormUtil;
@@ -21,6 +22,7 @@ import com.workspaceit.dccpos.validation.form.accounting.TransactionForm;
 import com.workspaceit.dccpos.validation.form.purchase.PurchaseForm;;
 import com.workspaceit.dccpos.validation.form.sale.SaleForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,7 @@ public class EntryService {
     private SaleDetailsUtil saleDetailsUtil;
     private SaleFormUtil saleFormUtil;
     private PaymentLedgerFormUtil paymentLedgerFormUtil;
+    private WholesalerService wholesalerService;
 
     @Autowired
     public void setEntryDao(EntryDao entryDao) {
@@ -64,6 +67,10 @@ public class EntryService {
     @Autowired
     public void setPaymentLedgerFormUtil(PaymentLedgerFormUtil paymentLedgerFormUtil) {
         this.paymentLedgerFormUtil = paymentLedgerFormUtil;
+    }
+    @Autowired
+    public void setWholesalerService(WholesalerService wholesalerService) {
+        this.wholesalerService = wholesalerService;
     }
 
     @Transactional
@@ -147,7 +154,10 @@ public class EntryService {
                     entryItems.add(entryItemDueSale);
                     break;
                 case WHOLESALE:
-                    Ledger wholeSellerLedger = this.ledgerService.getByCompanyId(saleForm.getWholesalerId());
+                    Wholesaler wholesaler = this.wholesalerService.getWholesaler(saleForm.getWholesalerId());
+                    Company company = wholesaler.getCompany();
+                    if(company==null)throw new EntityNotFound("Company not found for wholesaler id :"+wholesaler.getId());
+                    Ledger wholeSellerLedger = this.ledgerService.getByCompanyId(wholesaler.getCompany().getId());
                     EntryItem entryItemWholeSeller = this.getEntryItem(dueAmount,wholeSellerLedger,ACCOUNTING_ENTRY.DR);
                     entryItems.add(entryItemWholeSeller);
                     break;
@@ -186,8 +196,9 @@ public class EntryService {
         double totalEntryDcAmount = totalShippingCost+totalInventoryPrice;
 
         Supplier supplier = shipment.getSupplier();
-
-        Ledger  supplierLedger = this.ledgerService.getByCompanyId(supplier.getCompany().getId());
+        Company company = supplier.getCompany();
+        if(company==null)throw new EntityNotFound("Company not found for supplier Id :"+supplier.getId());
+        Ledger  supplierLedger = this.ledgerService.getByCompanyId(company.getId());
 
         Entry entry = new Entry();
         entry.setDrTotal(totalEntryDcAmount);

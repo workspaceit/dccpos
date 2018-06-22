@@ -1,8 +1,9 @@
 package com.workspaceit.dccpos.service.accounting;
 
 import com.workspaceit.dccpos.constant.accounting.GROUP_CODE;
-import com.workspaceit.dccpos.dataModel.profitAndLoss.ProfitAndLossReport;
-import com.workspaceit.dccpos.dataModel.profitAndLoss.ReportAccount;
+import com.workspaceit.dccpos.dataModel.report.BalanceSheetReport;
+import com.workspaceit.dccpos.dataModel.report.ProfitAndLossReport;
+import com.workspaceit.dccpos.dataModel.report.ReportAccount;
 import com.workspaceit.dccpos.entity.accounting.GroupAccount;
 import com.workspaceit.dccpos.entity.accounting.Ledger;
 import com.workspaceit.dccpos.exception.EntityNotFound;
@@ -36,7 +37,40 @@ public class ReportService {
     public void setGroupAccountService(GroupAccountService groupAccountService) {
         this.groupAccountService = groupAccountService;
     }
+    public BalanceSheetReport getBalanceSheetReport(Date startDate, Date finishDate) {
+        BalanceSheetReport balanceSheetReport = new BalanceSheetReport();
+        List<ReportAccount> assets = new ArrayList<>();
+        List<ReportAccount> liabilities = new ArrayList<>();
+        ProfitAndLossReport  profitAndLossReport = this.getProfitAndLossReport(startDate,finishDate);
+        double grossProfit = profitAndLossReport.getGrossProfit();
 
+        ReportAccount assetReportAccount = this.getReportAccounts(startDate,finishDate,GROUP_CODE.ASSET);
+        ReportAccount liabilityReportAccount = this.getReportAccounts(startDate,finishDate,GROUP_CODE.LIABILITY);
+
+
+        if(assetReportAccount.getChild()!=null)
+            assets.addAll(assetReportAccount.getChild() );
+
+        if(liabilityReportAccount.getChild()!=null)
+            liabilities.addAll( liabilityReportAccount.getChild() );
+
+        double totalAsset = this.reportUtil.calculateTotalAmount(assets);
+        double totalLiabilities = this.reportUtil.calculateTotalAmount(liabilities);
+
+
+       /**
+        * In case Loss gross profit is negative
+        * */
+        totalLiabilities +=grossProfit;
+
+        balanceSheetReport.setAssetsAccounts(assets);
+        balanceSheetReport.setLiabilityAccounts(liabilities);
+        balanceSheetReport.setTotalAsset(totalAsset);
+        balanceSheetReport.setTotalLiability(totalLiabilities);
+        balanceSheetReport.setGrossProfit(grossProfit);
+
+        return balanceSheetReport;
+    }
     public ProfitAndLossReport getProfitAndLossReport(Date startDate, Date finishDate) {
         ProfitAndLossReport profitAndLossReport = new ProfitAndLossReport();
         List<ReportAccount> expenses = new ArrayList<>();
@@ -52,7 +86,7 @@ public class ReportService {
         if(incomeReportAccount.getChild()!=null)
             income.addAll( incomeReportAccount.getChild() );
 
-        double totalRevenue = this.reportUtil.calculateTotalRevenue(income);
+        double totalRevenue = this.reportUtil.calculateTotalAmount(income);
         double grossProfit = this.reportUtil.calculateGrossProfit(income,expenses);
 
         profitAndLossReport.setIncomeAccounts(income);

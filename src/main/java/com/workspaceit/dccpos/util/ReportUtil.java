@@ -1,13 +1,16 @@
 package com.workspaceit.dccpos.util;
 
-import com.workspaceit.dccpos.dataModel.profitAndLoss.ProfitAndLossReport;
-import com.workspaceit.dccpos.dataModel.profitAndLoss.ReportAccount;
+import com.workspaceit.dccpos.dataModel.report.ProfitAndLossReport;
+import com.workspaceit.dccpos.dataModel.report.ReportAccount;
 import org.springframework.stereotype.Component;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Component
 public class ReportUtil {
+    DecimalFormat decimalFormat = new DecimalFormat("##.00");
+
     public double calculateTotalExpense(List<ReportAccount> expenseAccounts){
         double totalExpense = 0;
 
@@ -31,34 +34,35 @@ public class ReportUtil {
 
         return totalExpense;
     }
-    public double calculateTotalRevenue(ProfitAndLossReport profitAndLossReport){
+    public double calculateTotalAmount(ProfitAndLossReport profitAndLossReport){
         double totalRevenue = 0;
 
         List<ReportAccount> incomeAccounts =profitAndLossReport.getIncomeAccounts();
         if(incomeAccounts==null)return totalRevenue;
 
-        totalRevenue +=  this.calculateTotalRevenue(incomeAccounts);
+        totalRevenue +=  this.calculateTotalAmount(incomeAccounts);
 
         return totalRevenue;
     }
-    public double calculateTotalRevenue(List<ReportAccount> incomeAccounts){
-        double totalRevenue = 0;
+    public double calculateTotalAmount(List<ReportAccount> incomeAccounts){
+        double total = 0;
 
-        if(incomeAccounts==null)return totalRevenue;
+        if(incomeAccounts==null)return total;
 
         for(ReportAccount incomeAccount:incomeAccounts){
-            totalRevenue +=  incomeAccount.getAmount();
+            total +=  incomeAccount.getAmount();
             if(incomeAccount.getChild()==null)continue;
-            totalRevenue += this.calculateTotalRevenue(incomeAccount.getChild());
+            total += this.calculateTotalAmount(incomeAccount.getChild());
         }
 
-        return totalRevenue;
+
+        return Double.valueOf(this.decimalFormat.format(total));
     }
     public double calculateGrossProfit(List<ReportAccount> incomeAccounts,List<ReportAccount> expenseAccounts){
 
         double grossProfit,totalRevenue,totalExpense;
 
-        totalRevenue =  this.calculateTotalRevenue(incomeAccounts);
+        totalRevenue =  this.calculateTotalAmount(incomeAccounts);
         totalExpense = this.calculateTotalExpense(expenseAccounts);
 
         grossProfit = totalRevenue - totalExpense;

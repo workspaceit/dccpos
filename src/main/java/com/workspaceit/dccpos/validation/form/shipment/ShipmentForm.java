@@ -24,7 +24,7 @@ public class ShipmentForm {
     /**
      * Receive Timestamp in milliseconds
      * */
-    @NotNull(message = "PurchasedDate required")
+    @NotNull(message = "Purchased date required")
     private Date purchaseDate;
 
 
