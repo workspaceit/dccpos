@@ -7,6 +7,7 @@ import com.workspaceit.dccpos.dataModel.invoice.InvoiceBillingAddress;
 import com.workspaceit.dccpos.dataModel.invoice.InvoiceDetails;
 import com.workspaceit.dccpos.entity.*;
 import com.workspaceit.dccpos.exception.EntityNotFound;
+import com.workspaceit.dccpos.util.ShipmentUtil;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class InvoiceGenerateService {
     private ShipmentService shipmentService;
     private ProductService productService;
     private ShopInformationService shopInformationService;
+    private ShipmentUtil shipmentUtil;
 
     @Autowired
     public void setSaleService(SaleService saleService) {
@@ -37,7 +39,10 @@ public class InvoiceGenerateService {
         this.shopInformationService = shopInformationService;
     }
 
-
+    @Autowired
+    public void setShipmentUtil(ShipmentUtil shipmentUtil) {
+        this.shipmentUtil = shipmentUtil;
+    }
 
     public Invoice generateSaleInvoice(long id) throws EntityNotFound{
         Sale sale =  this.saleService.getSale(id);
@@ -119,6 +124,8 @@ public class InvoiceGenerateService {
         Shipment shipment = this.shipmentService.getShipment(id);
         Map<SHIPMENT_COST,ShipmentCost> shipmentCosts = shipment.getCosts();
         Set<SHIPMENT_COST> keySet = shipmentCosts.keySet();
+        double due =  this.shipmentUtil.getDue(shipment);
+        double totalPrice = this.shipmentUtil.getTotalPrice(shipment);
 
         ShopInformation shopInformation = this.shopInformationService.getShopInformation();
 
@@ -161,7 +168,8 @@ public class InvoiceGenerateService {
         invoice.setIssueDate(shipment.getPurchasedDate());
         invoice.setBillTo(billTo);
         invoice.setPaidOrReceive(shipment.getTotalPaid());
-        invoice.setTotal(shipment.getTotalProductPrice());
+        invoice.setTotal(totalPrice);
+        invoice.setDue(due);
         return invoice;
 
     }

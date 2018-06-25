@@ -30,8 +30,9 @@ public class EntryValidator {
         this.validateLedger("beneficial.ledgerId",beneficialLedgerId,errors);
 
         for(int i=0;i<ledgerEntryForms.length;i++){
-            String fieldName = "cashOrBank["+i+"].ledgerId";
+            if(ledgerEntryForms[i].getLedgerId()==null || ledgerEntryForms[i].getAmount()==null)continue;
 
+            String fieldName = "cashOrBank["+i+"].ledgerId";
             Integer cashBankLedgerId =  ledgerEntryForms[i].getLedgerId();
             Double amount  = ledgerEntryForms[i].getAmount();
 
@@ -54,6 +55,8 @@ public class EntryValidator {
         this.validateLedger("beneficial.ledgerId",beneficialLedgerId,errors);
 
         for(int i=0;i<ledgerEntryForms.length;i++){
+            if(ledgerEntryForms[i].getLedgerId()==null || ledgerEntryForms[i].getAmount()==null)continue;
+
             String fieldName = "cashOrBank["+i+"].ledgerId";
 
             Integer cashBankLedgerId =  ledgerEntryForms[i].getLedgerId();

@@ -98,7 +98,9 @@ public class SaleValidator {
             error.rejectValue("discount", "Discount amount is higher then inventory price");
             return;
         }
-
+        if(saleForm.getInventories()==null || saleForm.getInventories().length==0){
+            error.rejectValue("inventories", "No product found in cart");
+        }
     }
     private void validateWholesaler(Integer wholesalerId, Errors error){
 

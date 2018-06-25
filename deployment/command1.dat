@@ -1,0 +1,3 @@
+#sudo /etc/init.d/tomcat7 stop
+#sudo rm -R /var/lib/tomcat7/webapps/test-dccpos.war
+sudo ls

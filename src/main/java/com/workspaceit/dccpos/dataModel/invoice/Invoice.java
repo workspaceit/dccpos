@@ -107,4 +107,6 @@ public class Invoice {
     public void setShipmentCost(Map<SHIPMENT_COST, Double> shipmentCost) {
         this.shipmentCost = shipmentCost;
     }
+
+
 }

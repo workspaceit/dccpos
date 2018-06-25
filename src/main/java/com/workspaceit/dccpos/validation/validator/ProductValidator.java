@@ -56,7 +56,8 @@ public class ProductValidator {
         if(!error.hasFieldErrors("weight")){
             this.validateWeight(productCreateForm.getWeight(),productCreateForm.getWeightUnit(),error);
         }
-        if(!error.hasFieldErrors("barcode") && productCreateForm.getCategoryId()!=null){
+        if(!error.hasFieldErrors("barcode")
+                && ( productCreateForm.getBarcode()!=null &&  !productCreateForm.getBarcode().trim().equals("") ) ){
             this.validateUniqueBarcodeUsedByOthers(id,productCreateForm.getBarcode(),error);
         }
     }

@@ -48,30 +48,37 @@ public class PaymentLedgerValidator {
         }
     }
     public void validateAccountPayment(String prefix, PaymentLedgerForm accountPaymentForm, Errors errors){
-            if(accountPaymentForm==null ){
+        if(accountPaymentForm==null ){
+            return;
+        }
+        if(accountPaymentForm.getLedgerId()==null ){
+            return;
+        }
+
+        if(accountPaymentForm.getLedgerId()==null ){
+            return;
+        }
+
+        String amountFieldName = ValidationHelper.preparePrefix(prefix)+"amount";
+
+        Integer ledgerId = accountPaymentForm.getLedgerId();
+        double amount = accountPaymentForm.getLedgerId();
+
+        this.validateLedger(prefix,accountPaymentForm,errors);
+        Ledger ledger = this.ledgerService.getById(ledgerId);
+
+        if(ledger!=null && !errors.hasFieldErrors(amountFieldName)){
+            boolean isCashOrBankAccount = this.ledgerService.isCashOrBankAccount(ledger);
+            boolean overDrawnFlag = this.ledgerService.isCashOrBankAccountWillOverDrawn(ledger,amount,false);
+
+            if(!isCashOrBankAccount){
+                errors.rejectValue(amountFieldName,"Ledger Account is not bank or cash account");
                 return;
             }
-
-            String amountFieldName = ValidationHelper.preparePrefix(prefix)+"amount";
-
-            Integer ledgerId = accountPaymentForm.getLedgerId();
-            double amount = accountPaymentForm.getAmount();
-
-            this.validateLedger(prefix,accountPaymentForm,errors);
-            Ledger ledger = this.ledgerService.getById(ledgerId);
-
-            if(ledger!=null && !errors.hasFieldErrors(amountFieldName)){
-                boolean isCashOrBankAccount = this.ledgerService.isCashOrBankAccount(ledger);
-                boolean overDrawnFlag = this.ledgerService.isCashOrBankAccountWillOverDrawn(ledger,amount,false);
-
-                if(!isCashOrBankAccount){
-                    errors.rejectValue(amountFieldName,"Ledger Account is not bank or cash account");
-                    return;
-                }
-                if(overDrawnFlag){
-                    errors.rejectValue(amountFieldName,"Account don't have sufficient balance");
-                }
+            if(overDrawnFlag){
+                errors.rejectValue(amountFieldName,"Account don't have sufficient balance");
             }
+        }
 
 
     }

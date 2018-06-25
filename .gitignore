@@ -8,5 +8,3 @@ target
 src/main/resources/local-config.properties
 src/main/resources/live.config.properties
 src/main/resources/live.test.config.properties
-deployment.md
-deployment

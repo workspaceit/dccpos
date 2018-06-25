@@ -67,12 +67,11 @@ public class PurchaseValidator {
         this.purchasePaymentValidator.validateAccountPayment("shippingCostPaymentAccount",purchaseForm.getShippingCostPaymentAccount(),errors);
 
 
-
+        if(inventoryCreateFroms==null || inventoryCreateFroms.length==0){
+            errors.rejectValue("inventories","No product added to cart");
+        }
 
         if(pricePaymentAccounts==null || pricePaymentAccounts.length==0){
-            validatePaymentAmountFlag=false;
-        }
-        if(inventoryCreateFroms==null || inventoryCreateFroms.length==0){
             validatePaymentAmountFlag=false;
         }
 
@@ -103,6 +102,10 @@ public class PurchaseValidator {
     private void validateShipmentCost(ShipmentForm shipmentForm,
                                        PaymentLedgerForm ledgerEntryForm,
                                        Errors errors){
+        if(ledgerEntryForm.getAmount()==null){
+            return;
+        }
+
         double totalCost = this.shipmentFormUtil.getTotalCost(shipmentForm);
         double totalPaidAmount = ledgerEntryForm.getAmount();
         if(totalPaidAmount>totalCost){

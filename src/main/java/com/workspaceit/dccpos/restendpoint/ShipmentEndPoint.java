@@ -64,12 +64,14 @@ public class ShipmentEndPoint {
         Employee employee = this.employeeService.getByAuthCredential(currentUser);
 
         ServiceResponse serviceResponse = ServiceResponse.getInstance();
+
         this.purchaseValidator.validate(purchaseForm,bindingResult);
 
         if(bindingResult.hasErrors()){
             serviceResponse.bindValidationError(bindingResult);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
         }
+
 
         Shipment shipment  = null;
         try {
