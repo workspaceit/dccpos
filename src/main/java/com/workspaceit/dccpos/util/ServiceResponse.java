@@ -56,7 +56,7 @@ public class ServiceResponse {
                 if(object instanceof ObjectError) {
                     ObjectError objectError = (ObjectError) object;
 
-                    //requestError.setParams(objectError.get());
+                    //requestError.setParams(objectError.getByFieldName());
                     //requestError.setMsg(objectError.getCode());
                     // requestError.setParams(objectError.getCode());
                 }

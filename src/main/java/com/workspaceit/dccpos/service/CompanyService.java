@@ -33,8 +33,49 @@ public class CompanyService {
         return company;
 
     }
+    @Transactional
     public Company getById(int id){
         return this.companyDao.getById(id);
+    }
+
+    @Transactional
+    public Company getByTitle(String title){
+        return this.companyDao.getByTitle(title);
+    }
+
+    @Transactional
+    public Company getByEmail(String email){
+        return this.companyDao.getByEmail(email);
+    }
+
+    @Transactional
+    public Company getByPhone(String name){
+        return this.companyDao.getByPhone(name);
+    }
+
+
+    @Transactional
+    public Company getByTitleAndNotByID(int id, String name){
+        return this.companyDao.getByTitleAndNotById(id,name);
+    }
+
+    @Transactional
+    public Company getByEmailAndNotByID(int id,String email){
+        return this.companyDao.getByEmailAndNotById(id,email);
+    }
+
+    @Transactional
+    public Company getByPhoneAndNotByID(int id,String phone){
+        return this.companyDao.getByPhoneAndNotById(id,phone);
+    }
+
+    @Transactional
+    public Object getByFieldName(Class<?> aClass, String objectName, String fieldName, String value){
+        return this.companyDao.getByFieldName(aClass,objectName,fieldName,value);
+    }
+    @Transactional
+    public Object getByFieldNameAndNotById(Class<?> aClass, String objectName, String fieldName, String value,int id){
+        return this.companyDao.getByFieldNameAndNotById(aClass,objectName,fieldName,value,id);
     }
 
 

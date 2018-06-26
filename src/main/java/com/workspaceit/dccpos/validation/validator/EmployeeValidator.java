@@ -1,6 +1,8 @@
 package com.workspaceit.dccpos.validation.validator;
 
 import com.workspaceit.dccpos.entity.Employee;
+import com.workspaceit.dccpos.entity.PersonalInformation;
+import com.workspaceit.dccpos.exception.EntityNotFound;
 import com.workspaceit.dccpos.service.EmployeeService;
 import com.workspaceit.dccpos.validation.form.employee.EmployeeCreateForm;
 import com.workspaceit.dccpos.validation.form.employee.EmployeeUpdateForm;
@@ -30,8 +32,11 @@ public class EmployeeValidator {
     }
 
     public void validate(EmployeeCreateForm employeeForm, Errors error){
-
-        this.validateUniqueEmployeeId(employeeForm.getEmployeeId(),error);
+        if(!error.hasFieldErrors("employeeId")
+                && employeeForm.getEmployeeId()!=null
+                && !employeeForm.getEmployeeId().trim().equals("")){
+            this.validateUniqueEmployeeId(employeeForm.getEmployeeId(),error);
+        }
 
         if(employeeForm.getPersonalInfo()!=null){
             this.personalInfoValidator.validate("personalInfo",employeeForm.getPersonalInfo(),error);
@@ -41,20 +46,33 @@ public class EmployeeValidator {
             this.authCredentialValidator.validate("authCredential",employeeForm.getAuthCredential(),error);
         }
     }
-    public void validateUpdate(int id, EmployeeUpdateForm employeeForm, Errors error){
-        this.validateEmployeeIdUsedByOthers(employeeForm.getEmployeeId(),id,error);
+    public void validateUpdate(int id, EmployeeUpdateForm employeeForm, Errors error) throws EntityNotFound {
+        Employee employee = this.employeeService.getEmployee(id);
+        PersonalInformation personalInformation = employee.getPersonalInformation();
+        if(personalInformation==null)throw new EntityNotFound("Personal Information not found on employee id"+id);
+
+        if(!error.hasFieldErrors("employeeId")
+                && employeeForm.getEmployeeId()!=null
+                && !employeeForm.getEmployeeId().trim().equals("")){
+
+            this.validateEmployeeIdUsedByOthers(employeeForm.getEmployeeId(),id,error);
+        }
         if(employeeForm.getPersonalInfo()!=null){
-            this.personalInfoValidator.validateUpdate("personalInfo",employeeForm.getPersonalInfo(),error);
+            this.personalInfoValidator.validateUpdate("personalInfo",personalInformation.getId(),employeeForm.getPersonalInfo(),error);
         }
     }
     public void validateUniqueEmployeeId(String employeeId, Errors error){
-        Employee employee =  this.employeeService.getByEmployeeId(employeeId);
+        if(employeeId==null)return;
+
+        Employee employee =  this.employeeService.getByEmployeeId(employeeId.trim());
         if(employee!=null){
             error.rejectValue("employeeId","Employee Id already been used by employee : "+employee.getPersonalInformation().getFullName());
         }
     }
     public void validateEmployeeIdUsedByOthers(String employeeId,int id, Errors error){
-        Employee employee =  this.employeeService.getByEmployeeIdAndNotById(employeeId,id);
+        if(employeeId==null)return;
+
+        Employee employee =  this.employeeService.getByEmployeeIdAndNotById(employeeId.trim(),id);
         if(employee!=null){
             error.rejectValue("employeeId","Employee Id already been used by employee : "+employee.getPersonalInformation().getFullName());
         }

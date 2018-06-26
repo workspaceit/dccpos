@@ -63,16 +63,18 @@ public class SupplierEndPoint {
                                     @Valid SupplierUpdateForm supplierUpdateForm, BindingResult bindingResult){
 
         ServiceResponse serviceResponse = ServiceResponse.getInstance();
-        this.supplierValidator.validateUpdate(id,supplierUpdateForm,bindingResult);
-
-        if(bindingResult.hasErrors()){
-            serviceResponse.bindValidationError(bindingResult);
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
-        }
-
-
         Supplier supplier;
         try {
+            this.supplierValidator.validateUpdate(id,supplierUpdateForm,bindingResult);
+
+            if(bindingResult.hasErrors()){
+                serviceResponse.bindValidationError(bindingResult);
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
+            }
+
+
+
+
             supplier = this.supplierService.edit(id,supplierUpdateForm);
         } catch (EntityNotFound entityNotFound) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ServiceResponse.getMsgInMap(entityNotFound.getMessage()));

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public class ResetPasswordTokenDao extends BaseDao {
 
     public ResetPasswordToken findByToken(String token){
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = this.getCurrentSession();
         ResetPasswordToken passwordResetToken = (ResetPasswordToken) session.createQuery("FROM ResetPasswordToken where token=:token")
                 .setParameter("token",token)
                 .setMaxResults(1)
@@ -16,7 +16,7 @@ public class ResetPasswordTokenDao extends BaseDao {
         return passwordResetToken;
     }
     public ResetPasswordToken findByAuthCredentialId(int authCredentialId){
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = this.getCurrentSession();
         ResetPasswordToken passwordResetToken = (ResetPasswordToken) session.createQuery("FROM ResetPasswordToken where authCredential.id=:authCredentialId")
                 .setParameter("authCredentialId",authCredentialId)
                 .setMaxResults(1)

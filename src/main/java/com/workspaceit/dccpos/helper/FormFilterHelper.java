@@ -27,7 +27,7 @@ public class FormFilterHelper {
             String methodName = method.getName();
             String methodNameWithOutSetGet = method.getName().replaceFirst("get","");
 
-            if (methodName.startsWith("get") && !methodName.endsWith("Class")){
+            if (methodName.startsWith("getByFieldName") && !methodName.endsWith("Class")){
                 try {
                     Object fieldVal = method.invoke(obj);
                     methodValueMap.put(methodNameWithOutSetGet,fieldVal);

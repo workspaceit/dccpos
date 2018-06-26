@@ -56,10 +56,17 @@ public class WholesalerService {
     public Wholesaler getByWholesalerId(String employeeId){
         return this.wholesalerDao.getByWholesalerId(employeeId);
     }
-
+    @Transactional
+    public Wholesaler getByCompanyName(String name){
+        return this.wholesalerDao.getByCompanyName(name);
+    }
     @Transactional
     public Wholesaler getByWholesalerIdAndNotById(String employeeId,int id){
         return this.wholesalerDao.getByWholesalerAndNotById(employeeId,id);
+    }
+    @Transactional
+    public Wholesaler getByNameAndNotById(int id,String name){
+        return this.wholesalerDao.getByNameAndNotById(id,name);
     }
     @Transactional(rollbackFor = Exception.class)
     public Wholesaler create(WholesalerCreateForm wholesalerCreateForm){

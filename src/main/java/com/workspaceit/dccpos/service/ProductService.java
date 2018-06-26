@@ -114,6 +114,14 @@ public class ProductService {
         return this.productDao.findByBarcodeAndNotById(id,barcode);
     }
 
+    @Transactional
+    public Product getByName(String name){
+        return this.productDao.findByName(name);
+    }
+    @Transactional
+    public Product getByNameAndNotById(int id,String name){
+        return this.productDao.findByNameAndNotById(id,name);
+    }
 
     @Transactional
     public List<Product> getByNameLike(String nameLike,int limit, int offset){

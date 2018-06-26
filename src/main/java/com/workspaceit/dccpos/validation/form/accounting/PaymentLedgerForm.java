@@ -5,12 +5,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class PaymentLedgerForm {
-    @NotNull(message = "Ledger Id required")
-    @Min(value = 0,message = "Ledger Id required")
+    @NotNull(message = "Ledger required")
+    @Min(value = 1,message = "Ledger required")
     private Integer ledgerId;
 
-    @NotNull(message = "Amount required")
-    @Min(value = 1,message = "Amount can't be less equal to zero")
+    @NotNull(message = "Payment amount required")
+    @Min(value = 1,message = "Payment amount can't be less equal to zero")
     private Double amount;
 
     public Integer getLedgerId() {

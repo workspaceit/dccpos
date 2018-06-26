@@ -19,7 +19,7 @@ public class FormToNameValuePair {
        List<BasicNameValuePair> listOfPair = new ArrayList<>();
        for(Method method:methods){
            String methodName = method.getName();
-           if (methodName.startsWith("get") && !methodName.endsWith("Class")){
+           if (methodName.startsWith("getByFieldName") && !methodName.endsWith("Class")){
                try {
                    String fieldName = methodName.substring(3);
                    fieldName = fieldName.substring(0,1).toLowerCase()+fieldName.substring(1);

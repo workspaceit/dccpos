@@ -35,4 +35,19 @@ public class WholesalerDao extends BaseDao{
                 .setMaxResults(1)
                 .uniqueResult();
     }
+    public Wholesaler getByCompanyName(String name){
+        Session session = this.getCurrentSession();
+        return (Wholesaler)session.createQuery(" FROM Wholesaler sp where sp.company.name =:name")
+                .setParameter("name",name)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+    public Wholesaler getByNameAndNotById(int id,String name){
+        Session session = this.getCurrentSession();
+        return (Wholesaler)session.createQuery(" FROM Wholesaler sp where id!=:id and sp.company.name =:name")
+                .setParameter("name",name)
+                .setParameter("id",id)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
 }

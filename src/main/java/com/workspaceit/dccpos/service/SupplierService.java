@@ -44,6 +44,31 @@ public class SupplierService {
         return this.supplierDao.getById(id);
     }
     @Transactional
+    public Supplier getByCompanyTitle(String companyTitle){
+        return this.supplierDao.getByCompanyTitle(companyTitle);
+    }
+    @Transactional
+    public Supplier getByCompanyEmail(String companyEmail){
+        return this.supplierDao.getByCompanyEmail(companyEmail);
+    }
+
+    @Transactional
+    public Supplier getByCompanyPhone(String companyPhone){
+        return this.supplierDao.getByCompanyPhone(companyPhone);
+    }
+    @Transactional
+    public Supplier getByCompanyTitleAndNotById(int id,String companyTitle){
+        return this.supplierDao.getByCompanyTitleAndNotById(id,companyTitle);
+    }
+    @Transactional
+    public Supplier getByCompanyEmailAndNotById(int id,String companyEmail){
+        return this.supplierDao.getByCompanyEmailAndNotById(id,companyEmail);
+    }
+    @Transactional
+    public Supplier getByCompanyPhoneAndNotById(int id,String companyEmail){
+        return this.supplierDao.getByCompanyPhoneAndNotById(id,companyEmail);
+    }
+    @Transactional
     public Supplier getSupplier(int id) throws EntityNotFound {
         Supplier supplier =  this.getById(id);
 

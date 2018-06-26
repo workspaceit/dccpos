@@ -1,10 +1,9 @@
 package com.workspaceit.dccpos.dao;
 
 
-import com.workspaceit.dccpos.helper.NumberHelper;
+import com.workspaceit.dccpos.helper .NumberHelper;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
@@ -16,14 +15,14 @@ import java.util.Collection;
 public class BaseDao {
 
 
-    protected SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
     protected SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
     @Autowired
     protected void setSessionFactory(SessionFactory sessionFactory) {
-        System.out.println(" ***** **** *** ** * SessionFactory Is Created * ** *** **** *****");
+        System.out.println(" ***** **** *** ** * SessionFactory Autowired For '"+this.getClass().getSimpleName()+"' * ** *** **** *****");
         this.sessionFactory = sessionFactory;
     }
     public void save(Object obj){

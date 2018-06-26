@@ -26,6 +26,10 @@ public class PersonalInformationService {
     public void setPersonalInformationDao(PersonalInformationDao personalInformationDao) {
         this.personalInformationDao = personalInformationDao;
     }
+    @Autowired
+    public void setAddressService(AddressService addressService) {
+        this.addressService = addressService;
+    }
 
 
     public PersonalInformation getPersonalInformation(int id) throws EntityNotFound {
@@ -39,9 +43,17 @@ public class PersonalInformationService {
     public PersonalInformation getById(int id){
         return this.personalInformationDao.getById(id);
     }
-    @Autowired
-    public void setAddressService(AddressService addressService) {
-        this.addressService = addressService;
+    public PersonalInformation getByEmail(String email){
+        return this.personalInformationDao.getByEmail(email);
+    }
+    public PersonalInformation getByPhone(String phone){
+        return this.personalInformationDao.getByPhone(phone);
+    }
+    public PersonalInformation getByEmailNotById(int id,String email){
+        return this.personalInformationDao.getByEmailNotById(id,email);
+    }
+    public PersonalInformation getByPhoneNotById(int id,String phone){
+        return this.personalInformationDao.getByPhoneNotById(id,phone);
     }
 
     public PersonalInformation create(PersonalInfoCreateForm personalInfoForm,COMPANY_ROLE role){

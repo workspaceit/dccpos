@@ -36,20 +36,10 @@ public class ProductValidator {
     }
 
     public void validate(ProductCreateForm productCreateForm, Errors error){
-        if(!error.hasFieldErrors("categoryId") && productCreateForm.getCategoryId()!=null){
-            this.validateCategory(productCreateForm.getCategoryId(),error);
+
+        if(!error.hasFieldErrors("name") && productCreateForm.getName()!=null){
+            this.validateUniqueName(productCreateForm.getName(),error);
         }
-        if(!error.hasFieldErrors("weight")){
-            this.validateWeight(productCreateForm.getWeight(),productCreateForm.getWeightUnit(),error);
-        }
-        if(!error.hasFieldErrors("barcode") && productCreateForm.getCategoryId()!=null){
-            this.validateUniqueBarcode(productCreateForm.getBarcode(),error);
-        }
-        if(!error.hasFieldErrors("imageToken") && productCreateForm.getImageToken()!=null && productCreateForm.getImageToken()>0){
-            this.validateImageToken(productCreateForm.getImageToken(),error);
-        }
-    }
-    public void validateForUpdate(int id,ProductUpdateForm productCreateForm, Errors error){
         if(!error.hasFieldErrors("categoryId") && productCreateForm.getCategoryId()!=null){
             this.validateCategory(productCreateForm.getCategoryId(),error);
         }
@@ -57,8 +47,29 @@ public class ProductValidator {
             this.validateWeight(productCreateForm.getWeight(),productCreateForm.getWeightUnit(),error);
         }
         if(!error.hasFieldErrors("barcode")
-                && ( productCreateForm.getBarcode()!=null &&  !productCreateForm.getBarcode().trim().equals("") ) ){
-            this.validateUniqueBarcodeUsedByOthers(id,productCreateForm.getBarcode(),error);
+                && productCreateForm.getBarcode()!=null
+                && !productCreateForm.getBarcode().trim().equals("")){
+            this.validateUniqueBarcode(productCreateForm.getBarcode(),error);
+        }
+        if(!error.hasFieldErrors("imageToken")
+                && productCreateForm.getImageToken()!=null
+                && productCreateForm.getImageToken()>0){
+            this.validateImageToken(productCreateForm.getImageToken(),error);
+        }
+    }
+    public void validateForUpdate(int id,ProductUpdateForm productUpdateForm, Errors error){
+        if(!error.hasFieldErrors("categoryId") && productUpdateForm.getCategoryId()!=null){
+            this.validateCategory(productUpdateForm.getCategoryId(),error);
+        }
+        if(!error.hasFieldErrors("weight")){
+            this.validateWeight(productUpdateForm.getWeight(),productUpdateForm.getWeightUnit(),error);
+        }
+        if(!error.hasFieldErrors("barcode")
+                && ( productUpdateForm.getBarcode()!=null &&  !productUpdateForm.getBarcode().trim().equals("") ) ){
+            this.validateUniqueBarcodeUsedByOthers(id,productUpdateForm.getBarcode(),error);
+        }
+        if(!error.hasFieldErrors("name") && productUpdateForm.getName()!=null){
+            this.validateUniqueNameUsedByOthers(id,productUpdateForm.getName(),error);
         }
     }
     public void validateImageToken(Integer imageToken,Errors error){
@@ -84,17 +95,36 @@ public class ProductValidator {
 
     }
     public void validateUniqueBarcode(String barcode, Errors error){
-        Product product = this.productService.getByBarcode(barcode);
+        if(barcode==null)return;
+
+        Product product = this.productService.getByBarcode(barcode.trim());
         if(product!=null){
             error.rejectValue("barcode","Barcode already been used in product : "+product.getName());
         }
 
     }
     public void validateUniqueBarcodeUsedByOthers(int id,String barcode, Errors error){
-        Product product = this.productService.getByBarcodeAndNotById(id,barcode);
+        if(barcode==null)return;
+
+        Product product = this.productService.getByBarcodeAndNotById(id,barcode.trim());
         if(product!=null){
             error.rejectValue("barcode","Barcode already been used in product : "+product.getName());
         }
-
     }
+    public void validateUniqueName(String productName,Errors errors){
+        if(productName==null)return;
+        Product product = this.productService.getByName(productName.trim());
+        if(product!=null){
+            errors.rejectValue("name","Product name already been used");
+        }
+    }
+    public void validateUniqueNameUsedByOthers(int id,String name, Errors error){
+        if(name==null)return;
+        Product product = this.productService.getByNameAndNotById(id,name.trim());
+        if(product!=null){
+            error.rejectValue("name","Product name already been used ");
+        }
+    }
+
+
 }

@@ -85,6 +85,13 @@ public class ProductDao extends BaseDao{
                 .setMaxResults(1)
                 .uniqueResult();
     }
+    public Product findByName(String name){
+        Session session = this.getCurrentSession();
+        return (Product)session.createQuery(" FROM Product p where p.name =:nameLike")
+                .setParameter("nameLike",name)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
     public Product findByInventoryId(long id){
         Session session = this.getCurrentSession();
         return (Product)session.createQuery("select distinct p FROM Product p " +
@@ -112,6 +119,14 @@ public class ProductDao extends BaseDao{
         Session session = this.getCurrentSession();
         return (Product)session.createQuery(" FROM Product p where p.barcode =:barcode")
                 .setParameter("barcode",barcode)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+    public Product findByNameAndNotById(int id,String name){
+        Session session = this.getCurrentSession();
+        return (Product)session.createQuery(" FROM Product p where p.id!=:id and p.name =:name")
+                .setParameter("name",name)
+                .setParameter("id",id)
                 .setMaxResults(1)
                 .uniqueResult();
     }

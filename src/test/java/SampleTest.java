@@ -1,14 +1,9 @@
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workspaceit.dccpos.config.WebConfig;
-import com.workspaceit.dccpos.constant.accounting.ACCOUNTING_ENTRY;
-import com.workspaceit.dccpos.dataModel.report.ProfitAndLossReport;
-import com.workspaceit.dccpos.entity.accounting.Ledger;
+import com.workspaceit.dccpos.entity.Wholesaler;
 import com.workspaceit.dccpos.helper.FormToNameValuePair;
-import com.workspaceit.dccpos.service.accounting.EntryItemService;
-import com.workspaceit.dccpos.service.accounting.LedgerService;
-import com.workspaceit.dccpos.service.accounting.ReportService;
+import com.workspaceit.dccpos.service.CompanyService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import resetendpointTest.BaseTest;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebConfig.class})
@@ -35,9 +27,7 @@ public class SampleTest extends BaseTest {
     private FormToNameValuePair formToNameValuePair;
 
     @Autowired
-   private LedgerService ledgerService;
-    @Autowired
-    private EntryItemService entryItemService;
+    CompanyService companyService;
 
     @Autowired
     public void setWac(WebApplicationContext wac) {
@@ -56,14 +46,9 @@ public class SampleTest extends BaseTest {
     @Test
     @Transactional(rollbackFor = Exception.class)
     public void test() throws Exception {
-        Ledger ledger = ledgerService.getLedger(6);
-        System.out.println(ledger.getOpeningBalanceEntryType());
-
-
-        double drAmount = this.entryItemService.getSum(ledger.getId(), ACCOUNTING_ENTRY.DR);
-        double crAmount = this.entryItemService.getSum(ledger.getId(), ACCOUNTING_ENTRY.CR);
-        System.out.println(drAmount);
-        System.out.println(crAmount);
+        Wholesaler wholesaler = (Wholesaler)companyService
+                .getByFieldName(Wholesaler.class,"company","email","a@a.com");
+        System.out.println(wholesaler.getId());
 
     }
 }

@@ -69,7 +69,7 @@ public class EmployeeEndpointTest extends BaseTest{
     public void allEmployee() throws Exception {
 
         MvcResult result = mockMvc.perform(
-                get(this.authUri+"/employee/get-all"))
+                get(this.authUri+"/employee/getByFieldName-all"))
                 .andExpect(status().isOk()).andReturn();
     }
 }

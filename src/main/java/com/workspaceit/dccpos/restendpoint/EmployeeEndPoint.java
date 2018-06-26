@@ -59,16 +59,15 @@ public class EmployeeEndPoint {
                                     @Valid EmployeeUpdateForm employeeForm, BindingResult bindingResult){
 
         ServiceResponse serviceResponse = ServiceResponse.getInstance();
-        this.employeeValidator.validateUpdate(id,employeeForm,bindingResult);
-
-        if(bindingResult.hasErrors()){
-            serviceResponse.bindValidationError(bindingResult);
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
-        }
-
-
         Employee employee;
         try {
+            this.employeeValidator.validateUpdate(id,employeeForm,bindingResult);
+
+            if(bindingResult.hasErrors()){
+                serviceResponse.bindValidationError(bindingResult);
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(serviceResponse.getFormError());
+            }
+
             employee = this.employeeService.edit(id,employeeForm);
         } catch (EntityNotFound entityNotFound) {
             entityNotFound.printStackTrace();
