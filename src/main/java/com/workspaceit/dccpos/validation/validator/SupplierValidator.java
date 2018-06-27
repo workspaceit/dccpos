@@ -124,7 +124,7 @@ public class SupplierValidator {
         if(title==null)return;
         Supplier supplier = this.supplierService.getByCompanyTitleAndNotById(id,title.trim());
         if(supplier!=null){
-            errors.rejectValue(prefix+"title","title already been used");
+            errors.rejectValue(prefix+"title","Title already been used");
         }
     }
 

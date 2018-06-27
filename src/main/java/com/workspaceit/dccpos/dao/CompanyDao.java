@@ -76,10 +76,11 @@ public class CompanyDao extends BaseDao{
                 .uniqueResult();
     }
     public Object getByFieldNameAndNotById(Class<?> cls, String objectName, String fieldName, String value,int id){
+
         Session session = this.getCurrentSession();
         return session.createQuery(" FROM "+cls.getSimpleName()+" cls where " +
-                "cls."+objectName+"."+fieldName+" =:val"+
-                "and cls.id=:id")
+                " cls."+objectName+"."+fieldName+" =:val "+
+                " and cls.id!=:id")
                 .setParameter("val",value)
                 .setParameter("id",id)
                 .setMaxResults(1)

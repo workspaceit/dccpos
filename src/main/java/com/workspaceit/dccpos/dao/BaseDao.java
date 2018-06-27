@@ -1,6 +1,7 @@
 package com.workspaceit.dccpos.dao;
 
 
+import com.workspaceit.dccpos.entity.Employee;
 import com.workspaceit.dccpos.helper .NumberHelper;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -99,4 +100,6 @@ public class BaseDao {
         Object minId =this.getCurrentSession().createQuery("select min(id) from "+entityName).uniqueResult();
         return NumberHelper.getLong(minId);
     }
+
+
 }

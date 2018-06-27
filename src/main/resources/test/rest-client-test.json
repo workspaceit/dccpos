@@ -6,7 +6,7 @@
       "type": "Project",
       "description": "",
       "id": "c4226841-a12e-441a-b046-9b49f4080e2d",
-      "lastModified": "2018-06-22T18:36:22.167+06:00",
+      "lastModified": "2018-06-27T17:59:43.464+06:00",
       "name": "POS"
     },
     {
@@ -21,7 +21,7 @@
       "type": "Scenario",
       "description": "",
       "id": "28508267-c995-4a6a-9e04-19a0c55423ca",
-      "lastModified": "2018-06-22T18:35:00.261+06:00",
+      "lastModified": "2018-06-25T11:34:50.770+06:00",
       "name": "Endpoints",
       "requestOrder": [
         "AUTHENTICATION",
@@ -108,7 +108,8 @@
         "Consumer [ Get All ]",
         "Consumer [ Request Form ]",
         "Report [ Profit & Loss ]",
-        "Report [ Balance Sheet ] "
+        "Report [ Balance Sheet ] ",
+        "Wholesaler-Update 1"
       ],
       "parentId": "bd8b3e61-d30e-4350-8631-704fabab67dc"
     },
@@ -545,7 +546,7 @@
               "enabled": true,
               "type": "Text",
               "name": "authCredential.email",
-              "value": "admin42433@admin.com"
+              "value": "admindf@admin.com"
             },
             {
               "enabled": true,
@@ -603,7 +604,7 @@
         "path": "/auth/api/employee/create"
       },
       "id": "c1e98b24-4ac3-4de7-ab32-9f510cface42",
-      "lastModified": "2018-06-06T15:36:09.462+06:00",
+      "lastModified": "2018-06-25T11:37:00.456+06:00",
       "name": "Employee-Create",
       "headers": [
         {
@@ -1283,7 +1284,7 @@
               "enabled": true,
               "type": "Text",
               "name": "company.email",
-              "value": "sp@supplier.com"
+              "value": "sp1@supplier.com"
             }
           ]
         },
@@ -1305,7 +1306,7 @@
       },
       "description": "",
       "id": "3c298c18-31d7-4045-9736-7b036e1163e1",
-      "lastModified": "2018-06-13T14:24:52.518+06:00",
+      "lastModified": "2018-06-26T19:11:55.792+06:00",
       "name": "Supplier Create 2",
       "headers": [
         {
@@ -2758,7 +2759,7 @@
               "enabled": true,
               "type": "Text",
               "name": "weightUnit",
-              "value": "KG"
+              "value": "GM"
             },
             {
               "enabled": true,
@@ -2784,7 +2785,7 @@
         "path": "/auth/api/product/update/1"
       },
       "id": "f85848a6-5d5f-4625-b676-937a3cb3f91e",
-      "lastModified": "2018-06-06T14:10:45.791+06:00",
+      "lastModified": "2018-06-27T17:59:43.464+06:00",
       "name": "Product update",
       "headers": [
         {
@@ -2810,6 +2811,30 @@
           "subject": "ResponseHeader",
           "path": "Access-Control-Allow-Origin",
           "value": "*"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.name",
+          "value": "Choco Bar"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.category.id",
+          "value": "2"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.weight",
+          "value": "23"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseJsonBody",
+          "path": "$.weightUnit",
+          "value": "GM"
         }
       ],
       "metaInfo": {},
@@ -3687,7 +3712,7 @@
         "path": "/auth/api/entry/make/investment/cash"
       },
       "id": "2608986d-5135-4582-a7af-ed8b116a21f1",
-      "lastModified": "2018-06-22T12:21:49.097+06:00",
+      "lastModified": "2018-06-25T19:08:52.574+06:00",
       "name": "Make Investment ",
       "headers": [
         {
@@ -3781,7 +3806,7 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":20000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1000000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":10000000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":10000000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":10000000000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":20000000},\n                                 {\"ledgerId\":5,\"amount\":400000000}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":4799999}\n    \n}"
+        "textBody": "{\n  \"shipment\":{\n    \"trackingId\":\"\",\n    \"supplierId\":1,\n    \"cost\":{ \"CF\":1, \"LABOR\":4, \"CARRYING\":1.5},\n    \"purchaseDate\":1524120976260\n    },\n  \"inventories\":[\n    {\"productId\":1,\"purchasePrice\":20000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":10},\n    {\"productId\":1,\"purchasePrice\":1000000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":2},\n    {\"productId\":2,\"purchasePrice\":10000000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":20},\n    {\"productId\":2,\"purchasePrice\":1000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":10000000,\"status\":\"GOOD\",\"sellingPrice\":102,\"purchaseQuantity\":1},\n    {\"productId\":3,\"purchasePrice\":10000000000,\"status\":\"DAMAGED\",\"sellingPrice\":310,\"purchaseQuantity\":3}\n  ],\n   \"productPricePaymentAccount\":[\n              \t\t\t\t\t {\"ledgerId\":3,\"amount\":4546546645},\n                                 {\"ledgerId\":5,\"amount\":400000000}\n                              ],\n   \"shippingCostPaymentAccount\":{\"ledgerId\":3,\"amount\":4799999}\n    \n}"
       },
       "headersType": "Raw",
       "uri": {
@@ -3797,7 +3822,7 @@
         "path": "/auth/api/shipment/create"
       },
       "id": "d2c1e873-4a11-4105-9d64-df6967ed0266",
-      "lastModified": "2018-05-21T13:49:45.949+06:00",
+      "lastModified": "2018-06-25T16:04:47.850+06:00",
       "name": "Shipment Create C:2 [ Insufficient Balance]",
       "headers": [
         {
@@ -5690,6 +5715,94 @@
       "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
     },
     {
+      "uriEditor": true,
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "encoding": "application/x-www-form-urlencoded",
+          "items": [
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.title",
+              "value": "Uni Mert"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.address",
+              "value": "Road 8, House 16. Nikunja 2,Dhaka"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.phone",
+              "value": "3214"
+            },
+            {
+              "enabled": true,
+              "type": "Text",
+              "name": "company.email",
+              "value": "sdf@df.com"
+            }
+          ]
+        },
+        "bodyType": "Form",
+        "autoSetLength": true,
+        "textBody": "username=p@pmc.com&password=123456&client_id=pmc-app-client&client_secret=f6c3d96bc05036e738f0899ba149f447924b3a09&grant_type=password"
+      },
+      "headersType": "Raw",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "{scheme}"
+        },
+        "host": "{url}",
+        "path": "/auth/api/wholesaler/update/1"
+      },
+      "id": "c48e6089-3ce1-41ea-becb-1eadd7a5fcac",
+      "lastModified": "2018-06-22T18:34:55.189+06:00",
+      "name": "Wholesaler-Update 1",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/x-www-form-urlencoded"
+        },
+        {
+          "enabled": true,
+          "name": "Authorization",
+          "value": "Bearer ${\"POS\".\"API\".\"Endpoints\".\"AUTHENTICATION\".\"response\".\"body\".\"access_token\"}"
+        }
+      ],
+      "assertions": [
+        {
+          "comparison": "Equals",
+          "subject": "ResponseStatus",
+          "path": "code",
+          "value": "200"
+        },
+        {
+          "comparison": "Equals",
+          "subject": "ResponseHeader",
+          "path": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ],
+      "metaInfo": {
+        "IS_FROM_HISTORY": null
+      },
+      "parentId": "28508267-c995-4a6a-9e04-19a0c55423ca"
+    },
+    {
       "type": "Context",
       "id": "1e271b29-f1ad-4501-8920-55a46a23fa6b",
       "lastModified": "2018-04-30T11:52:37.398+06:00",
@@ -5710,13 +5823,13 @@
     {
       "type": "Context",
       "id": "064aa11f-92f3-4473-aacb-47a6171e14fd",
-      "lastModified": "2018-04-30T18:31:57.194+06:00",
+      "lastModified": "2018-06-25T11:35:08.816+06:00",
       "name": "Local Live",
       "variables": [
         {
           "enabled": true,
           "name": "url",
-          "value": "http://192.168.1.18:8080/dccpos"
+          "value": "http://192.168.1.67:8080/dccpos"
         },
         {
           "enabled": true,

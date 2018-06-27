@@ -104,14 +104,14 @@ public class WholesalerValidator {
         if(companyTitle==null)return;
         Wholesaler Wholesaler =  (Wholesaler)this.companyService.getByFieldName(Wholesaler.class,"company","title",companyTitle);
         if(Wholesaler!=null){
-            error.rejectValue(prefix+"title","Wholesaler name already been used");
+            error.rejectValue(prefix+"title","Title already been used");
         }
     }
     public void validateUniqueEmail(String prefix,String companyEmail, Errors error){
         if(companyEmail==null)return;
         Wholesaler Wholesaler =  (Wholesaler)this.companyService.getByFieldName(Wholesaler.class,"company","email",companyEmail);
         if(Wholesaler!=null){
-            error.rejectValue(prefix+"email","Wholesaler email already been used");
+            error.rejectValue(prefix+"email","Email already been used");
         }
     }
 
@@ -119,7 +119,7 @@ public class WholesalerValidator {
         if(companyPhone==null)return;
         Wholesaler Wholesaler =  (Wholesaler)this.companyService.getByFieldName(Wholesaler.class,"company","phone",companyPhone);
         if(Wholesaler!=null){
-            error.rejectValue(prefix+"phone","Wholesaler phone already been used");
+            error.rejectValue(prefix+"phone","Phone already been used");
         }
     }
 
@@ -127,14 +127,14 @@ public class WholesalerValidator {
         if(companyTitle==null)return;
         Wholesaler Wholesaler =  (Wholesaler)this.companyService.getByFieldNameAndNotById(Wholesaler.class,"company","title",companyTitle,id);
         if(Wholesaler!=null){
-            error.rejectValue(prefix+"title","Wholesaler name already been used");
+            error.rejectValue(prefix+"title","Title already been used");
         }
     }
     public void validateUniqueEmailAndNotById(String prefix, int id, String companyEmail, Errors error){
         if(companyEmail==null)return;
         Wholesaler Wholesaler =  (Wholesaler)this.companyService.getByFieldNameAndNotById(Wholesaler.class,"company","email",companyEmail,id);
         if(Wholesaler!=null){
-            error.rejectValue(prefix+"email","Wholesaler email already been used");
+            error.rejectValue(prefix+"email","Email already been used");
         }
     }
 
@@ -142,7 +142,7 @@ public class WholesalerValidator {
         if(companyPhone==null)return;
         Wholesaler Wholesaler =  (Wholesaler)this.companyService.getByFieldNameAndNotById(Wholesaler.class,"company","phone",companyPhone,id);
         if(Wholesaler!=null){
-            error.rejectValue(prefix+"phone","Wholesaler phone already been used");
+            error.rejectValue(prefix+"phone","Phone already been used");
         }
     }
 

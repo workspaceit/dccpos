@@ -6,11 +6,11 @@ import java.util.Date;
 
 public class TransactionForm {
     @Valid
-    @NotNull
+    @NotNull(message = "Select a beneficial account")
     private PaymentLedgerForm beneficial;
 
     @Valid
-    @NotNull
+    @NotNull(message = "Select a bank or cash account")
     private PaymentLedgerForm[] cashOrBank;
 
     private String narration;
